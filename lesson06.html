@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>智驾小车 第6课 · 红外遥控</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#1A1A1A;overflow:hidden;
+    font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+  #stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;
+    transform-origin:center center;background:#FFFFFF;
+    box-shadow:0 0 60px rgba(0,0,0,.5);overflow:hidden}
+  .slide{position:absolute;inset:0;padding:74px 150px;display:none;
+    flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .slide.pad{padding-top:60px;padding-bottom:60px}
+
+  .bar{position:absolute;left:0;top:0;width:100%;height:14px;background:#E36414}
+
+  .kicker{font-size:20px;font-weight:700;color:#E36414;letter-spacing:.04em;
+    margin:6px 0 10px}
+  h1{font-size:50px;font-weight:700;color:#0F4C5C;line-height:1.2;margin-bottom:46px}
+
+  ul{list-style:none;margin-top:6px}
+  li{font-size:37px;line-height:1.45;color:#1F2937;margin-bottom:26px;
+    padding-left:44px;position:relative}
+  li:before{content:"▪";position:absolute;left:2px;top:-2px;color:#E36414;
+    font-weight:700}
+
+  .q{font-size:37px;line-height:1.45;color:#1F2937;background:#E6F2F4;
+    border-radius:10px;padding:18px 30px;margin-bottom:14px;font-weight:400}
+  .q .n{color:#E36414;font-weight:700;margin-right:14px}
+
+  .ans{font-size:34px;line-height:1.5;color:#0F4C5C;background:#F2F8F9;
+    border-left:8px solid #E36414;padding:16px 26px;margin:-2px 0 22px 26px;
+    border-radius:0 8px 8px 0}
+  .hint{font-size:34px;line-height:1.5;color:#8A6A16;background:#FBF1D8;
+    border-left:8px solid #D9A21B;padding:18px 26px;margin:14px 0;
+    border-radius:0 8px 8px 0}
+
+  .code{font-family:Consolas,"Courier New",monospace;font-size:33px;line-height:1.7;
+    background:#0B121A;border-radius:12px;padding:34px 40px;color:#D7E3EA}
+
+  .cols{display:flex;gap:38px;margin-top:10px;margin-bottom:10px}
+  a.vid{display:inline-block;align-self:flex-start;margin-top:34px;
+    font-size:33px;color:#FFFFFF;background:#E36414;text-decoration:none;
+    padding:18px 34px;border-radius:10px}
+  a.vid:hover{background:#C9550B}
+  .card{flex:1;background:#F2F8F9;border-radius:12px;padding:28px 32px;
+    font-size:33px;line-height:1.5;color:#1F2937}
+  .card b{display:block;color:#0F4C5C;font-size:29px;margin-bottom:10px}
+
+  .sub{font-size:33px;color:#6B7280;line-height:1.5;margin-top:18px}
+
+  /* 遮挡：内容先藏起来，只留一张"盖着"的卡 */
+  .reveal{color:transparent!important;user-select:none;position:relative;
+    transition:color .25s ease}
+  .reveal::after{content:"?";position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    color:#BCC9CD;font-size:30px;font-weight:300;
+    background-color:#F1F6F7;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(15,76,92,.05) 0 12px,transparent 12px 24px);
+    border-radius:8px}
+  .code.reveal::after{color:#46606E;background-color:#0E1822;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(255,255,255,.05) 0 12px,transparent 12px 24px)}
+  ul.reveal::after{color:#C6D1D4;background-color:#FFFFFF;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(15,76,92,.04) 0 12px,transparent 12px 24px)}
+  .reveal.show{color:inherit!important}
+  .ans.reveal.show{color:#0F4C5C!important}
+  .code.reveal.show{color:#D7E3EA!important}
+  .hint.reveal.show{color:#8A6A16!important}
+  ul.reveal.show li{color:#1F2937!important}
+  .reveal.show::after{display:none}
+
+  /* 封面 */
+  .cover{background:#0F4C5C;flex-direction:row;align-items:center;
+    justify-content:space-between;padding:0 120px 0 150px}
+  .cover-left{max-width:760px}
+  .cover-art{width:430px;height:430px;flex:0 0 auto}
+  .cover h1{color:#FFFFFF;font-size:78px;margin-bottom:26px}
+  .cover .kicker{color:#BFD9DF;font-size:22px;margin-bottom:18px;letter-spacing:.1em}
+  .cover .sub{color:#BFD9DF;font-size:30px;margin-top:0}
+  .cover .bar{background:#E36414}
+
+  #foot{position:absolute;left:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #pager{position:absolute;right:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #hint{position:absolute;right:72px;bottom:52px;font-size:15px;color:#C2C9CB;
+    letter-spacing:.12em;transition:opacity .3s}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="slide cover on">
+    <div class="bar"></div>
+    <div class="cover-left">
+      <div class="kicker">智驾小车 · 第 6 课</div>
+      <h1>红外遥控</h1>
+      <div class="sub">不用拉线，用一个遥控器让小车听你的<br>2026-10-30 · 周五 · 55 分钟</div>
+    </div>
+    <div class="cover-art">
+      <svg viewBox="0 0 420 420" fill="none">
+        <circle cx="72" cy="210" r="11" fill="#E36414"/>
+        <path d="M112 152 A82 82 0 0 1 112 268" stroke="#E36414" stroke-width="9" stroke-linecap="round" opacity=".9"/>
+        <path d="M152 112 A132 132 0 0 1 152 308" stroke="#E36414" stroke-width="9" stroke-linecap="round" opacity=".55"/>
+        <path d="M192 72 A182 182 0 0 1 192 348" stroke="#E36414" stroke-width="9" stroke-linecap="round" opacity=".32"/>
+        <path d="M232 32 A232 232 0 0 1 232 388" stroke="#E36414" stroke-width="9" stroke-linecap="round" opacity=".16"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">今天</div>
+    <h1>本课只做三件事</h1>
+    <ul>
+      <li>认识：遥控器发出的到底是什么</li>
+      <li>看见：按一下，屏幕上出现一个数字</li>
+      <li>用起来：让灯亮，让车走</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">复习 · 上节课</div>
+    <h1>三个问题</h1>
+    <div class="q"><span class="n">Q1</span>读距离那块积木，如果不放进「重复执行」，屏幕上会怎样？</div>
+    <div class="ans reveal">只读一次，屏幕一直停在第一个数字上，不会变。</div>
+    <div class="q"><span class="n">Q2</span>报警的时候，是蜂鸣器自己会「看」距离吗？</div>
+    <div class="ans reveal">不会。是程序先判断「距离 &lt; 阈值」，判断成立才让蜂鸣器响。</div>
+    <div class="q"><span class="n">Q3</span>想让报警「响一下、停一下」，要加什么积木？</div>
+    <div class="ans reveal">加一个「等待」积木，放在响和停之间。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">导入</div>
+    <h1>电视遥控器，隔着墙还能按吗？</h1>
+    <p class="sub">先别急着答——想想遥控器发出去的是什么，那个东西能不能穿墙。</p>
+    <div class="hint reveal">提示：它发的不是声音，是「光」。光遇到墙会怎样？</div>
+    <div class="ans reveal">不能。遥控器发的是红外光，被墙挡住了。<br>红外光在人眼看不到的「红光之外」，所以叫红外。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">原理</div>
+    <h1>一个键 ＝ 一个数字</h1>
+    <ul>
+      <li>遥控器按键：发出一串一闪一闪的红外光</li>
+      <li>接收头：把这一串闪，翻译成一个数字</li>
+      <li>程序只做一件事：数字等于几，就干什么</li>
+      <li>没按键的时候，读出来是 0</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 1 · 认识</div>
+    <h1>找到车上的「耳朵」</h1>
+    <div class="cols">
+      <div class="card"><b>红外接收头</b>黑色小凸起，朝上或朝前，用它接信号</div>
+      <div class="card"><b>遥控器</b>对准接收头，别对着屏幕，一米内最稳</div>
+    </div>
+    <a class="vid" href="https://www.bilibili.com/video/BV1AM411t7Nc/" target="_blank" rel="noopener">▶ 点这里看短片：一帧红外信号有多复杂</a>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 2 · 看见</div>
+    <h1>先把数字显示到屏幕上</h1>
+    <div class="code reveal">重复执行：<br>&nbsp;&nbsp;红外值 ＝ 读取红外接收值<br>&nbsp;&nbsp;如果 红外值 ≠ 0 ：<br>&nbsp;&nbsp;&nbsp;&nbsp;屏幕上显示 红外值</div>
+    <p class="sub">按下不同的键，屏幕上的数字就会变。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 2 · 注意</div>
+    <h1>两个坑，先说清楚</h1>
+    <ul>
+      <li>白墙、天花板会反射红外 → 读数乱跳时，用手挡在接收管上方</li>
+      <li>遥控器是通用的 → 一个人按，全班的车都会收到</li>
+    </ul>
+    <p class="hint">所以：不在空旷处乱按；演示时统一「我按，你们看屏幕」。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 3 · 控灯</div>
+    <h1>按一下，灯就变</h1>
+    <div class="code reveal">如果 红外接收值为[绿键]？ ： 点亮小灯<br>如果 红外接收值为[全灭]？ ： 全部灯灭</div>
+    <p class="sub">下拉框里直接选按键，不用记数字。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 4 · 行车</div>
+    <h1>按键 → 小车动</h1>
+    <div class="code reveal">[↑] 前进　速度 100<br>[↓] 后退　速度 100<br>[齿轮] 停止</div>
+    <p class="sub">速度统一 100——忽快忽慢你控制不住。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 5 · 点动</div>
+    <h1>按一下，只走一小段</h1>
+    <ul>
+      <li>每按一次：走 0.25 秒就停 ≈ 转过 30°</li>
+      <li>按三次 ≈ 转 90°，正好拐一个直角</li>
+      <li>转弯要直接控制左右电机，一个正转一个反转</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">调试</div>
+    <h1>按了，车没反应。</h1>
+    <p class="sub" style="font-size:37px;color:#1F2937">你打算先查哪里？先自己找两分钟。</p>
+    <ul class="reveal" style="margin-top:26px">
+      <li>拨码开关，有没有拨到「遥控」那一侧</li>
+      <li>小车的拓展底座，电源有没有按开</li>
+      <li>遥控器有没有对准接收头</li>
+      <li>屏幕上的数字，和判断里选的那个键对不对得上</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">挑战</div>
+    <h1>它正好转 90 度吗？</h1>
+    <ul>
+      <li>调「等待」的时长，让它一次转得刚刚好</li>
+      <li>或者两辆车比赛：从起点遥控开到终点</li>
+    </ul>
+    <p class="sub">只给已经能稳定控制的同学，不加时。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">收尾</div>
+    <h1>三个问题</h1>
+    <div class="q"><span class="n">Q1</span>遥控器发出的，到底是什么？</div>
+    <div class="ans reveal">红外光，而且是一串按编码闪的光。</div>
+    <div class="q"><span class="n">Q2</span>按了没反应，先查哪两处？</div>
+    <div class="ans reveal">拨码开关是不是「遥控」侧；底座电源有没有开机。</div>
+    <div class="q"><span class="n">Q3</span>点动模式下，车为什么会自己停？</div>
+    <div class="ans reveal">程序里每个动作后面都写了「等待 0.25 秒，然后停止」。</div>
+  </section>
+
+  <div id="foot">智驾小车 第6课 · 红外遥控 · 博世凯 2026-10-30</div>
+  <div id="hint">空格 揭晓</div>
+  <div id="pager"></div>
+</div>
+
+<script>
+const stage=document.getElementById('stage');
+const slides=[...document.querySelectorAll('.slide')];
+const pager=document.getElementById('pager');
+const hint=document.getElementById('hint');
+let i=0;
+
+function fit(){
+  const s=Math.min(innerWidth/1600,innerHeight/900);
+  stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+}
+addEventListener('resize',fit); fit();
+
+function paint(){
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  slides[i].querySelectorAll('.reveal').forEach(e=>e.classList.remove('show'));
+  pager.textContent=(i+1)+' / '+slides.length;
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+function go(d){ i=Math.max(0,Math.min(slides.length-1,i+d)); paint(); }
+function reveal(){
+  const n=slides[i].querySelector('.reveal:not(.show)');
+  if(n) n.classList.add('show');
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+addEventListener('keydown',e=>{
+  if(['ArrowRight','PageDown'].includes(e.key)){e.preventDefault();go(1)}
+  else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(-1)}
+  else if(e.key===' '||e.key==='Enter'){e.preventDefault();reveal()}
+  else if(e.key==='a'||e.key==='A'){e.preventDefault();slides[i].querySelectorAll('.reveal').forEach(x=>x.classList.add('show'));hint.style.opacity=0}
+  else if(e.key==='Home'){i=0;paint()}
+  else if(e.key==='End'){i=slides.length-1;paint()}
+  else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+});
+stage.addEventListener('click',reveal);
+paint();
+</script>
+</body>
+</html>
