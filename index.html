@@ -3,21 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>课件</title>
+<title>课程资料</title>
 <style>
-  body{font-family:"Microsoft YaHei",sans-serif;max-width:640px;margin:64px auto;
-       padding:0 22px;color:#1F2937;background:#FAF8F3}
-  h1{color:#0F4C5C;font-size:30px;margin-bottom:8px}
-  p{color:#6B7280;font-size:15px;margin-bottom:26px}
-  a{display:block;padding:18px 24px;margin:14px 0;background:#E36414;color:#fff;
-    text-decoration:none;border-radius:10px;font-size:19px}
-  a:hover{background:#C9550B}
+  *{box-sizing:border-box}
+  body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;max-width:720px;
+       margin:0 auto;padding:48px 22px 60px;color:#1F2937;background:#FAF8F3}
+  h1{color:#0F4C5C;font-size:32px;margin-bottom:6px}
+  .lead{color:#6B7280;font-size:16px;margin-bottom:8px}
+  .keep{color:#8A6A16;background:#FBF1D8;border-left:5px solid #D9A21B;
+        padding:10px 14px;border-radius:0 8px 8px 0;font-size:14px;margin:18px 0 34px}
+  h2{color:#E36414;font-size:18px;letter-spacing:.04em;margin:34px 0 10px}
+  a.card{display:block;padding:20px 22px;margin:12px 0;background:#fff;
+         border:1px solid #E3ECEE;border-left:6px solid #E36414;border-radius:10px;
+         text-decoration:none;color:#1F2937}
+  a.card:hover{background:#F5FAFB}
+  a.card b{display:block;color:#0F4C5C;font-size:20px;margin-bottom:6px}
+  a.card span{color:#6B7280;font-size:14px;line-height:1.5}
+  .meta{margin-top:10px;color:#9AA6A9;font-size:13px}
+  .tip{margin-top:44px;padding-top:16px;border-top:1px solid #E3ECEE;
+       color:#9AA6A9;font-size:13px;line-height:1.7}
 </style>
 </head>
 <body>
-  <h1>课件</h1>
-  <p>投屏用，点开即全屏播放。← → 翻页，空格 揭晓答案，F 全屏。</p>
-  <a href="lesson06.html">智驾小车 · 第 6 课 红外遥控</a>
-  <a href="wro01.html">古迹文明 WRO · 第 1 课 比赛规则</a>
+  <h1>课程资料</h1>
+  <p class="lead">点开就能看，不用登录。</p>
+  <p class="keep">建议把这个页面存进浏览器收藏夹，上课直接打开。</p>
+
+  <h2>古迹文明 · WRO 2026 集训</h2>
+  <a class="card" href="wro01.html">
+    <b>第 1 课 · 比赛规则</b>
+    <span>比什么、175 分从哪来、先练哪几项 · 场地全景图 · 比赛视频</span>
+  </a>
+
+  <h2>智驾小车</h2>
+  <a class="card" href="lesson06.html">
+    <b>第 6 课 · 红外遥控</b>
+    <span>遥控器发出什么、一个键对应一个数字、用按键控制小车</span>
+  </a>
+
+  <p class="tip">
+    操作：← → 翻页，空格 揭晓答案，F 全屏。<br>
+    手机也能看；打不开时刷新一次，或换个浏览器。
+  </p>
+
+  <p class="meta">最后更新：2026-11-06</p>
 </body>
 </html>
