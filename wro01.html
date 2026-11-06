@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>古迹文明 · 第1课 比赛规则</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#1A1A1A;overflow:hidden;
+    font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+  #stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;
+    transform-origin:center center;background:#FFFFFF;
+    box-shadow:0 0 60px rgba(0,0,0,.5);overflow:hidden}
+  .slide{position:absolute;inset:0;padding:70px 140px;display:none;
+    flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .slide.pad{padding-top:56px;padding-bottom:56px}
+
+  .bar{position:absolute;left:0;top:0;width:100%;height:14px;background:#E36414}
+
+  .kicker{font-size:20px;font-weight:700;color:#E36414;letter-spacing:.04em;
+    margin:6px 0 10px}
+  h1{font-size:50px;font-weight:700;color:#0F4C5C;line-height:1.2;margin-bottom:40px}
+
+  ul{list-style:none;margin-top:6px}
+  li{font-size:36px;line-height:1.45;color:#1F2937;margin-bottom:24px;
+    padding-left:44px;position:relative}
+  li:before{content:"▪";position:absolute;left:2px;top:-2px;color:#E36414;
+    font-weight:700}
+
+  .q{font-size:36px;line-height:1.45;color:#1F2937;background:#E6F2F4;
+    border-radius:10px;padding:18px 30px;margin-bottom:14px;font-weight:400}
+  .q .n{color:#E36414;font-weight:700;margin-right:14px}
+
+  .ans{font-size:33px;line-height:1.5;color:#0F4C5C;background:#F2F8F9;
+    border-left:8px solid #E36414;padding:16px 26px;margin:-2px 0 22px 26px;
+    border-radius:0 8px 8px 0}
+  .hint{font-size:33px;line-height:1.5;color:#8A6A16;background:#FBF1D8;
+    border-left:8px solid #D9A21B;padding:18px 26px;margin:14px 0;
+    border-radius:0 8px 8px 0}
+
+  .cols{display:flex;gap:34px;margin-top:10px;margin-bottom:10px}
+  .card{flex:1;background:#F2F8F9;border-radius:12px;padding:26px 30px;
+    font-size:32px;line-height:1.5;color:#1F2937}
+  .card b{display:block;color:#0F4C5C;font-size:28px;margin-bottom:10px}
+
+  .sub{font-size:32px;color:#6B7280;line-height:1.5;margin-top:16px}
+
+  table{width:100%;border-collapse:collapse;font-size:27px;color:#1F2937}
+  th{background:#0F4C5C;color:#fff;font-weight:700;padding:12px 14px;text-align:left}
+  td{padding:11px 14px;border-bottom:1px solid #E3ECEE}
+  tr:nth-child(even) td{background:#F5FAFB}
+  td.num{text-align:center;color:#E36414;font-weight:700;white-space:nowrap}
+  tr.total td{background:#FBF1D8;color:#0F4C5C;font-weight:700}
+
+  .big{font-size:64px;font-weight:700;color:#E36414;line-height:1.1}
+
+  .reveal{color:transparent!important;user-select:none;position:relative;
+    transition:color .25s ease}
+  .reveal::after{content:"?";position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    color:#BCC9CD;font-size:30px;font-weight:300;
+    background-color:#F1F6F7;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(15,76,92,.05) 0 12px,transparent 12px 24px);
+    border-radius:8px}
+  ul.reveal::after{color:#C6D1D4;background-color:#FFFFFF;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(15,76,92,.04) 0 12px,transparent 12px 24px)}
+  .reveal.show{color:inherit!important}
+  .ans.reveal.show{color:#0F4C5C!important}
+  ul.reveal.show li{color:#1F2937!important}
+  .reveal.show::after{display:none}
+
+  .cover{background:#0F4C5C;flex-direction:row;align-items:center;
+    justify-content:space-between;padding:0 110px 0 140px}
+  .cover-left{max-width:820px}
+  .cover-art{width:400px;height:400px;flex:0 0 auto}
+  .cover h1{color:#FFFFFF;font-size:72px;margin-bottom:24px}
+  .cover .kicker{color:#BFD9DF;font-size:22px;margin-bottom:18px;letter-spacing:.1em}
+  .cover .sub{color:#BFD9DF;font-size:28px;margin-top:0}
+  .cover .bar{background:#E36414}
+
+  #foot{position:absolute;left:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #pager{position:absolute;right:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #hint{position:absolute;right:72px;bottom:52px;font-size:15px;color:#C2C9CB;
+    letter-spacing:.12em;transition:opacity .3s}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="slide cover on">
+    <div class="bar"></div>
+    <div class="cover-left">
+      <div class="kicker">WRO 2026 · 初小组 · 机器人任务赛</div>
+      <h1>古迹文明</h1>
+      <div class="sub">第一课：先把比赛规则看懂<br>2026-11-07 · 周六</div>
+    </div>
+    <div class="cover-art">
+      <svg viewBox="0 0 420 420" fill="none">
+        <rect x="70" y="250" width="280" height="16" rx="4" fill="#E36414" opacity=".9"/>
+        <rect x="86" y="140" width="26" height="110" rx="4" fill="#E36414" opacity=".55"/>
+        <rect x="146" y="120" width="26" height="130" rx="4" fill="#E36414" opacity=".75"/>
+        <rect x="206" y="140" width="26" height="110" rx="4" fill="#E36414" opacity=".55"/>
+        <rect x="266" y="120" width="26" height="130" rx="4" fill="#E36414" opacity=".75"/>
+        <path d="M70 120 L210 52 L350 120" stroke="#E36414" stroke-width="12"
+          stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>
+        <circle cx="210" cy="330" r="34" stroke="#E36414" stroke-width="10" opacity=".7"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">今天</div>
+    <h1>这节课只做三件事</h1>
+    <ul>
+      <li>看懂：比赛到底比什么</li>
+      <li>算清：每一分从哪来</li>
+      <li>定下：我们先练哪几项</li>
+    </ul>
+    <p class="sub">今天不搭车、不编程，先把“往哪使劲”弄明白。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">基本盘</div>
+    <h1>四个数字，先记住</h1>
+    <div class="cols">
+      <div class="card"><b>每轮时间</b><span style="font-size:52px;color:#E36414;font-weight:700">2 分钟</span></div>
+      <div class="card"><b>比赛轮数</b><span style="font-size:52px;color:#E36414;font-weight:700">2 轮</span></div>
+      <div class="card"><b>两轮总分</b><span style="font-size:44px;color:#E36414;font-weight:700">相加</span></div>
+      <div class="card"><b>满分</b><span style="font-size:52px;color:#E36414;font-weight:700">175</span></div>
+    </div>
+    <p class="sub">一队 2–4 人，1 名教练；用的是图形编程。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">故事背景</div>
+    <h1>你在守护一座博物馆</h1>
+    <ul>
+      <li>把散落在四方的古物，安全送进中央博物馆</li>
+      <li>帮当地人：挪船屋、开水闸、修水道</li>
+      <li>再踢一场古老的球赛，把奖杯赢回来</li>
+    </ul>
+    <p class="hint">比赛结束那一刻，场地是什么样，就按什么样算分。</p>
+  </section>
+
+  <section class="slide pad" style="justify-content:flex-start;padding-top:38px">
+    <div class="bar"></div>
+    <div class="kicker">场地 · 全景图</div>
+    <h1 style="margin-bottom:12px">一块场地，五个区域</h1>
+    <img src="images/field.jpg" alt="场地全景与区域标注"
+      style="max-width:100%;max-height:610px;display:block;margin:0 auto;border-radius:12px">
+    <p class="sub" style="margin-top:14px;font-size:26px">四个角各有一个安全区；中间圆圈是博物馆，也是停车区。</p>
+  </section>
+
+  <section class="slide pad" style="justify-content:flex-start;padding-top:38px">
+    <div class="bar"></div>
+    <div class="kicker">场地 · 任务品</div>
+    <h1 style="margin-bottom:12px">每样东西，摆在哪</h1>
+    <img src="images/items.jpg" alt="任务品在场地上的实际位置"
+      style="max-width:100%;max-height:610px;display:block;margin:0 auto;border-radius:12px">
+    <p class="sub" style="margin-top:14px;font-size:26px">先认位置，再讲任务——后面每节课都对着这张图说。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">分数 · 全表</div>
+    <h1>175 分，从这 8 项来</h1>
+    <table>
+      <tr><th>任务</th><th style="width:120px">单个</th><th style="width:120px">最高</th></tr>
+      <tr><td>石柱 → 万神殿安全区，直立</td><td class="num">10</td><td class="num">10</td></tr>
+      <tr><td>水闸移出水道（2 个）</td><td class="num">15</td><td class="num">30</td></tr>
+      <tr><td>两个球推离球门、落地（2 个）</td><td class="num">15</td><td class="num">30</td></tr>
+      <tr><td>两球落地后，奖杯进安全区直立</td><td class="num">10</td><td class="num">10</td></tr>
+      <tr><td>船屋进指定湖色区域</td><td class="num">10</td><td class="num">15</td></tr>
+      <tr><td>珍宝送进博物馆（4 件）</td><td class="num">10</td><td class="num">40</td></tr>
+      <tr><td>四件珍宝全到，额外加分</td><td class="num">—</td><td class="num">10</td></tr>
+      <tr><td>机器人停进中央圆区</td><td class="num">10</td><td class="num">10</td></tr>
+      <tr><td>两架水车全程没被碰动</td><td class="num">10</td><td class="num">20</td></tr>
+      <tr class="total"><td>满分</td><td class="num"></td><td class="num">175</td></tr>
+    </table>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">计分 · 三条铁律</div>
+    <h1>做完了，也可能不算</h1>
+    <ul>
+      <li>只认比赛结束时，场地上的样子</li>
+      <li>放对了又被撞出来 → 结束没归位，不算</li>
+      <li>压线算区内（安全区、博物馆都这样）</li>
+    </ul>
+    <p class="hint">所以最后几秒别乱动：先稳住已经拿到的分。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">扣分</div>
+    <h1>两种扣分，别踩</h1>
+    <div class="cols">
+      <div class="card"><b>奇琴伊察的环被撞离原位</b><span style="font-size:50px;color:#C0392B;font-weight:700">−15 / 个</span></div>
+      <div class="card"><b>安全区外碰机器人或任务品</b><span style="font-size:50px;color:#C0392B;font-weight:700">−1 / 次</span></div>
+    </div>
+    <p class="sub">扣到 0 为止，不会变成负分；但白送的分没了。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">容易忽略的分</div>
+    <h1>不做事也能拿分？</h1>
+    <ul>
+      <li>两架水车一直没被碰 → 白拿 20 分</li>
+      <li>四件珍宝全进博物馆 → 再多 10 分</li>
+      <li>最后把车开进中央圆圈停好 → 10 分</li>
+    </ul>
+    <p class="hint">停靠 10 分有个前提：这一轮至少完成过一项别的任务。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">策略 · 我们的顺序</div>
+    <h1>先练哪几项？</h1>
+    <table>
+      <tr><th>优先级</th><th>任务</th><th style="width:150px">分值</th><th>理由</th></tr>
+      <tr><td class="num">1</td><td>四件珍宝送博物馆</td><td class="num">40 + 10</td><td>不用机械臂，路线固定，最容易练稳</td></tr>
+      <tr><td class="num">2</td><td>停靠中央圆区</td><td class="num">10</td><td>顺路，最后一步</td></tr>
+      <tr><td class="num">3</td><td>两个水闸移出水道</td><td class="num">30</td><td>动作简单，但要走对位置</td></tr>
+      <tr><td class="num">4</td><td>球赛＋奖杯</td><td class="num">40</td><td>路径长，先练再提速</td></tr>
+      <tr><td class="num">5</td><td>石柱、船屋</td><td class="num">10 + 15</td><td>船屋要看随机指示器，最后补</td></tr>
+    </table>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">机器人规矩</div>
+    <h1>这六条，比赛时会被查</h1>
+    <ul style="font-size:32px">
+      <li>启动前，机器人不超过 25cm × 25cm × 25cm</li>
+      <li>每队场上只能有 1 台机器人</li>
+      <li>每次出发，从安全角或中央停靠区开始</li>
+      <li>只能图形编程，不能遥控开车</li>
+      <li>比赛中不许加零件、拆零件</li>
+      <li>停靠分必须自己开进去，手放进去不算</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">本课动手</div>
+    <h1>纸上先打一仗</h1>
+    <ul>
+      <li>画一张自己的“得分路线图”：按什么顺序跑</li>
+      <li>写出“我前 3 个要拿的分”</li>
+      <li>说一个你最担心的任务，为什么</li>
+    </ul>
+    <p class="sub">对照刚才的全景图，把路线画出来；点位不准没关系，先把顺序定下来。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">收尾</div>
+    <h1>三个问题</h1>
+    <div class="q"><span class="n">Q1</span>一轮多长时间？一共跑几轮？</div>
+    <div class="ans reveal">每轮 2 分钟，共两轮，两轮分数相加。</div>
+    <div class="q"><span class="n">Q2</span>做对了，但结束时又被撞出来，算分吗？</div>
+    <div class="ans reveal">不算。只认比赛结束那一刻场地的样子。</div>
+    <div class="q"><span class="n">Q3</span>哪一项最容易先拿到分？</div>
+    <div class="ans reveal">四件珍宝送博物馆，40 分，不用机械臂。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">下节课</div>
+    <h1>下一次：先把车搭稳</h1>
+    <ul>
+      <li>认识器材：控制器、电机、传感器怎么连</li>
+      <li>先让车走直、走准、停得住</li>
+      <li>对照场地图，开始练第一项任务：送珍宝</li>
+    </ul>
+  </section>
+
+  <div id="foot">古迹文明 · 集训第1课 · 比赛规则 · 2026-11-07</div>
+  <div id="hint">空格 揭晓</div>
+  <div id="pager"></div>
+</div>
+
+<script>
+const stage=document.getElementById('stage');
+const slides=[...document.querySelectorAll('.slide')];
+const pager=document.getElementById('pager');
+const hint=document.getElementById('hint');
+let i=0;
+
+function fit(){
+  const s=Math.min(innerWidth/1600,innerHeight/900);
+  stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+}
+addEventListener('resize',fit); fit();
+
+function paint(){
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  slides[i].querySelectorAll('.reveal').forEach(e=>e.classList.remove('show'));
+  pager.textContent=(i+1)+' / '+slides.length;
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+function go(d){ i=Math.max(0,Math.min(slides.length-1,i+d)); paint(); }
+function reveal(){
+  const n=slides[i].querySelector('.reveal:not(.show)');
+  if(n) n.classList.add('show');
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+addEventListener('keydown',e=>{
+  if(['ArrowRight','PageDown'].includes(e.key)){e.preventDefault();go(1)}
+  else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(-1)}
+  else if(e.key===' '||e.key==='Enter'){e.preventDefault();reveal()}
+  else if(e.key==='a'||e.key==='A'){e.preventDefault();slides[i].querySelectorAll('.reveal').forEach(x=>x.classList.add('show'));hint.style.opacity=0}
+  else if(e.key==='Home'){i=0;paint()}
+  else if(e.key==='End'){i=slides.length-1;paint()}
+  else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+});
+stage.addEventListener('click',reveal);
+paint();
+</script>
+</body>
+</html>
