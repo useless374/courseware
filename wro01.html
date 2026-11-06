@@ -84,6 +84,13 @@
   #pager{position:absolute;right:72px;bottom:22px;font-size:17px;color:#6B7280}
   #hint{position:absolute;right:72px;bottom:52px;font-size:15px;color:#C2C9CB;
     letter-spacing:.12em;transition:opacity .3s}
+  #nav{position:fixed;right:18px;bottom:18px;display:none;gap:12px;z-index:10}
+  #nav button{width:64px;height:64px;border-radius:50%;border:0;
+    background:rgba(15,76,92,.85);color:#fff;font-size:34px;line-height:1}
+  #rotate{position:fixed;inset:0;background:#0F4C5C;color:#fff;display:none;
+    align-items:center;justify-content:center;font-size:20px;z-index:20}
+  @media (max-width:900px){#nav{display:flex}}
+  @media (max-width:900px) and (orientation:portrait){#rotate{display:flex}}
 </style>
 </head>
 <body>
@@ -359,6 +366,8 @@
     </ul>
   </section>
 
+    <div id="nav"><button id="prev" aria-label="上一页">‹</button><button id="next" aria-label="下一页">›</button></div>
+  <div id="rotate" onclick="this.style.display='none'">把手机横过来看，更清楚<br><br><span style="font-size:15px;opacity:.7">点一下继续</span></div>
   <div id="foot">古迹文明 · 集训第1课 · 比赛规则 · 2026-11-07</div>
   <div id="hint">空格 揭晓</div>
   <div id="pager"></div>
@@ -398,7 +407,18 @@ addEventListener('keydown',e=>{
   else if(e.key==='End'){i=slides.length-1;paint()}
   else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
 });
-stage.addEventListener('click',reveal);
+let _lastTouch=0;
+stage.addEventListener('click',()=>{ if(Date.now()-_lastTouch<600) return; reveal(); });
+let _sx=0,_sy=0;
+stage.addEventListener('touchstart',e=>{const t=e.touches[0];_sx=t.clientX;_sy=t.clientY;},{passive:true});
+stage.addEventListener('touchend',e=>{
+  _lastTouch=Date.now();
+  const t=e.changedTouches[0], dx=t.clientX-_sx, dy=t.clientY-_sy;
+  if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)){ go(dx<0?1:-1); }
+  else { reveal(); }
+},{passive:true});
+document.getElementById('prev').onclick=()=>go(-1);
+document.getElementById('next').onclick=()=>go(1);
 paint();
 </script>
 </body>
