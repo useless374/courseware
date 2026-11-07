@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>古迹文明 · 第1课 比赛规则</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
@@ -368,7 +368,7 @@
   </section>
 
     <div id="nav"><button id="prev" aria-label="上一页">‹</button><button id="next" aria-label="下一页">›</button></div>
-  <div id="rotate" onclick="this.style.display='none'">把手机横过来看，更清楚<br><br><span style="font-size:15px;opacity:.7">点一下继续</span></div>
+  <div id="rotate" onclick="this.dataset.off=1;this.style.display='none'">把手机横过来看，更清楚<br><br><span style="font-size:15px;opacity:.7">点一下继续</span></div>
   <div id="foot">古迹文明 · 集训第1课 · 比赛规则 · 2026-11-07</div>
   <div id="hint">空格 揭晓</div>
   <div id="pager"></div>
@@ -381,11 +381,24 @@ const pager=document.getElementById('pager');
 const hint=document.getElementById('hint');
 let i=0;
 
-function fit(){
-  const s=Math.min(innerWidth/1600,innerHeight/900);
-  stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+function view(){
+  const v=window.visualViewport;
+  return {w:v?v.width:innerWidth,h:v?v.height:innerHeight};
 }
-addEventListener('resize',fit); fit();
+function fit(){
+  const {w,h}=view();
+  const s=Math.min(w/1600,h/900);
+  stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+  const rot=document.getElementById('rotate');
+  if(rot) rot.style.display=(!rot.dataset.off && h>w && w<=1000)?'flex':'none';
+}
+addEventListener('resize',fit);
+addEventListener('orientationchange',()=>setTimeout(fit,200));
+if(window.visualViewport){
+  visualViewport.addEventListener('resize',fit);
+  visualViewport.addEventListener('scroll',fit);
+}
+fit();
 
 function paint(){
   slides.forEach((s,k)=>s.classList.toggle('on',k===i));
