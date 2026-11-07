@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>WeDo 一级 第3课 · 三轮脚踏车</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#1A1A1A;overflow:hidden;
+    font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+  #stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;
+    transform-origin:center center;background:#FFFFFF;
+    box-shadow:0 0 60px rgba(0,0,0,.5);overflow:hidden}
+  .slide{position:absolute;inset:0;padding:74px 150px;display:none;
+    flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .slide.pad{padding-top:60px;padding-bottom:60px}
+
+  .bar{position:absolute;left:0;top:0;width:100%;height:14px;background:#5A8F29}
+
+  .kicker{font-size:20px;font-weight:700;color:#5A8F29;letter-spacing:.04em;
+    margin:6px 0 10px}
+  h1{font-size:50px;font-weight:700;color:#0F4C5C;line-height:1.2;margin-bottom:46px}
+
+  ul{list-style:none;margin-top:6px}
+  li{font-size:37px;line-height:1.45;color:#1F2937;margin-bottom:26px;
+    padding-left:44px;position:relative}
+  li:before{content:"▪";position:absolute;left:2px;top:-2px;color:#5A8F29;
+    font-weight:700}
+
+  .q{font-size:37px;line-height:1.45;color:#1F2937;background:#EDF5E1;
+    border-radius:10px;padding:18px 30px;margin-bottom:14px;font-weight:400}
+  .q .n{color:#5A8F29;font-weight:700;margin-right:14px}
+
+  .ans{font-size:34px;line-height:1.5;color:#0F4C5C;background:#F2F8F9;
+    border-left:8px solid #5A8F29;padding:16px 26px;margin:-2px 0 22px 26px;
+    border-radius:0 8px 8px 0}
+  .hint{font-size:34px;line-height:1.5;color:#8A6A16;background:#FBF1D8;
+    border-left:8px solid #D9A21B;padding:18px 26px;margin:14px 0;
+    borderRadius:0 8px 8px 0}
+
+  .code{font-family:Consolas,"Courier New",monospace;font-size:33px;line-height:1.7;
+    background:#0B121A;border-radius:12px;padding:34px 40px;color:#D7E3EA}
+
+  .cols{display:flex;gap:38px;margin-top:10px;margin-bottom:10px}
+  .card{flex:1;background:#F4F9EC;border-radius:12px;padding:28px 32px;
+    font-size:33px;line-height:1.5;color:#1F2937}
+  .card b{display:block;color:#0F4C5C;font-size:29px;margin-bottom:10px}
+
+  .sub{font-size:33px;color:#6B7280;line-height:1.5;margin-top:18px}
+
+  /* 遮挡 */
+  .reveal{color:transparent!important;user-select:none;position:relative;
+    transition:color .25s ease}
+  .reveal::after{content:"?";position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    color:#BCC9CD;font-size:30px;font-weight:300;
+    background-color:#F1F6F7;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(15,76,92,.05) 0 12px,transparent 12px 24px);
+    border-radius:8px}
+  .code.reveal::after{color:#46606E;background-color:#0E1822;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(255,255,.05) 0 12px,transparent 12px 24px)}
+  ul.reveal::after{color:#C6D1D4;background-color:#FFFFFF;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(15,76,92,.04) 0 12px,transparent 12px 24px)}
+  .reveal.show{color:inherit!important}
+  .ans.reveal.show{color:#0F4C5C!important}
+  .code.reveal.show{color:#D7E3EA!important}
+  .hint.reveal.show{color:#8A6A16!important}
+  ul.reveal.show li{color:#1F2937!important}
+  .reveal.show::after{display:none}
+
+  /* 封面 */
+  .cover{background:#0F4C5C;flex-direction:row;align-items:center;
+    justify-content:space-between;padding:0 120px 0 150px}
+  .cover-left{max-width:760px}
+  .cover-art{width:430px;height:430px;flex:0 0 auto}
+  .cover h1{color:#FFFFFF;font-size:78px;margin-bottom:26px}
+  .cover .kicker{color:#BFD9DF;font-size:22px;margin-bottom:18px;letter-spacing:.1em}
+  .cover .sub{color:#BFD9DF;font-size:30px;margin-top:0}
+  .cover .bar{background:#5A8F29}
+
+  #home{position:absolute;right:72px;top:26px;font-size:16px;color:#0F4C5C;
+    text-decoration:none;background:rgba(255,255,255,.8);padding:7px 16px;
+    border-radius:20px;letter-spacing:.04em}
+  #home:hover{background:#fff}
+  #foot{position:absolute;left:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #pager{position:absolute;right:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #hint{position:absolute;right:72px;bottom:52px;font-size:15px;color:#C2C9CB;
+    letter-spacing:.12em;transition:opacity .3s}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="slide cover on">
+    <div class="bar"></div>
+    <div class="cover-left">
+      <div class="kicker">WEEDO 一级 · 第 3 课</div>
+      <h1>三轮脚踏车</h1>
+      <div class="sub">三个轮子为什么不会倒？<br>电机装在后面，车怎么往前走</div>
+    </div>
+    <div class="cover-art">
+      <svg viewBox="0 0 420 420" fill="none">
+        <circle cx="120" cy="300" r="55" stroke="#9CCC52" stroke-width="14"/>
+        <circle cx="310" cy="300" r="55" stroke="#9CCC52" stroke-width="14"/>
+        <circle cx="215" cy="120" r="40" stroke="#9CCC52" stroke-width="14"/>
+        <path d="M120 300 L215 120 L310 300" stroke="#9CCC52" stroke-width="10" opacity=".55"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">今天</div>
+    <h1>本课只做三件事</h1>
+    <ul>
+      <li>搭：12 步，把车和驾驶员装起来</li>
+      <li>看懂：电机的转，怎么拐个弯传给后轮</li>
+      <li>开起来：写程序让车跑、让车停</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">复习 · 前两课</div>
+    <h1>三个问题</h1>
+    <div class="q"><span class="n">Q1</span>十字轴插进电机孔里，电机一转，轴会怎样？</div>
+    <div class="ans reveal">跟着一起转。轴把电机的力气传出去。</div>
+    <div class="q"><span class="n">Q2</span>两个齿轮咬在一起，一个转，另一个呢？</div>
+    <div class="ans reveal">跟着转，但方向相反。</div>
+    <div class="q"><span class="n">Q3</span>梁上的孔，除了插轴还能干嘛？</div>
+    <div class="ans reveal">用黑销把梁和别的零件连起来，拼成车架。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">导入</div>
+    <h1>自行车两个轮，停着会倒。<br>三轮车为什么不倒？</h1>
+    <p class="sub">先看地上——三个轮子着地的位置，连起来是什么形状。</p>
+    <div class="hint reveal">提示：在纸上点三个点，能不能连成一个稳稳的面？</div>
+    <div class="ans reveal">三个轮子着地是三个点，三个点确定一个面，<br>车身的重心落在这个三角形里，就不会倒。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">认识 · 整车分三块</div>
+    <h1>先认人，再动手</h1>
+    <div class="cols">
+      <div class="card"><b>前轮（1个）</b>在前面，只管方向和支撑</div>
+      <div class="card"><b>后轮（2个）</b>电机在后面，带着后轮转</div>
+      <div class="card"><b>车把 + 驾驶员</b>两根扶手架在前面，小鸟坐中间</div>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">搭建 单元1 · 第 1-2 步</div>
+    <h1>先拼车架</h1>
+    <ul>
+      <li>两根最长的带孔梁，平行摆好——这是车的两条边</li>
+      <li>橘色小板在中间把两根梁拉住，橘色长条垫后面</li>
+      <li>两块弧形件装在最前面，是前轮的「挡泥板」</li>
+    </ul>
+    <p class="hint">❌ 两根梁不平行，一前一后错开 → 后面轮子装不上，现在就得对齐。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">搭建 单元2 · 第 3 步</div>
+    <h1>装上智能集线器</h1>
+    <ul>
+      <li>白色大块就是集线器：电池、开关、大脑都在里面</li>
+      <li>底下先垫一块橘色板，再把它压装到车架上</li>
+      <li>按一下侧面，绿灯亮 = 有电、可以连</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">搭建 单元3 · 第 4-6 步</div>
+    <h1>驾驶员上车</h1>
+    <ul>
+      <li>蓝白积木一层层往上叠，是小鸟的身体</li>
+      <li>白色 2×2 砖贴两只眼睛，橘色斜砖是嘴</li>
+      <li>两侧灰色短轴先插好——等会儿车把要架在这上面</li>
+    </ul>
+    <p class="sub">第6步的四块小黄砖，先在车后拼一条备用，下一步要用。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">搭建 单元4 · 第 7-9 步（最难）</div>
+    <h1>电机 · 齿轮 · 轮子</h1>
+    <ul>
+      <li>灰色电机装在车尾，轴上插<b>冠状齿轮</b>（边上带尖齿的黑轮）</li>
+      <li>后轴穿过车架，轴上小齿轮和冠状齿轮咬在一起</li>
+      <li>两个大后轮压装到后轴；前轮装到前叉中间</li>
+    </ul>
+    <p class="hint">两个齿轮中间不能留缝，也不能顶死——用手转一下后轮，顺不顺？</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">原理 · 本课核心</div>
+    <h1>力气在这里拐了个弯</h1>
+    <ul>
+      <li>电机的轴朝<b>下</b>，轮子的轴朝<b>横</b>——两根轴互相垂直</li>
+      <li>冠状齿轮的齿长在边上，正好把转动拐 90° 传出去</li>
+      <li>这叫「改变传动方向」：电机转 → 后轮转</li>
+    </ul>
+    <p class="sub">后轮带着整车走，叫<b>后轮驱动</b>；前轮只负责撑住和转向。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">搭建 单元5 · 第 10-12 步</div>
+    <h1>架起车把</h1>
+    <ul>
+      <li>两根绿色长梁，一头连小鸟旁边的灰轴，一头连前面的竖梁</li>
+      <li>两根竖梁用黑销固定，底部正好夹住前轮两边</li>
+      <li>装完用手推车走一圈：三块着地、不歪不倒 = 合格</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">编程</div>
+    <h1>让车自己跑起来</h1>
+    <div class="code reveal">开始：<br>&nbsp;&nbsp;电机 这个方向 · 功率 8<br>&nbsp;&nbsp;等待 3 秒<br>&nbsp;&nbsp;电机 停止</div>
+    <p class="sub">功率别拉满：8 挡最稳，车太快冲出桌子，你来不及抓。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">调试</div>
+    <h1>电机在响，车不走。</h1>
+    <p class="sub" style="font-size:37px;color:#1F2937">先自己找两分钟，按顺序查：</p>
+    <ul class="reveal">
+      <li>两个齿轮到底咬上没有，有没有漏装、错位</</li>
+      <li>后轴上的轮子，是不是压到位了</li>
+      <li>手转后轮，是顺滑还是卡住</li>
+      <li>程序里电机方向，是不是选反了</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">挑战</div>
+    <h1>再进一步</h1>
+    <ul>
+      <li>两辆三轮车比赛：谁走得直、谁先到终点</li>
+      <li>改功率和等待秒数，让车正好开到线就停</li>
+      <li>想想：如果想让车<b>碰到人自己停</b>，还要加一个什么零件？</li>
+    </ul>
+    <p class="hint reveal">提示：一个会「看距离」的传感器——运动传感器。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">收尾</div>
+    <h1>三个问题</h1>
+    <div class="q"><span class="n">Q1</span>三轮车为什么停着也不倒？</div>
+    <div class="ans reveal">三个轮子着地是三个点，确定一个稳当的面。</div>
+    <div class="q"><span class="n">Q2</span>冠状齿轮在这里起什么作用？</div>
+    <div class="ans reveal">把电机的转动拐 90°，传给横着的后轮轴。</div>
+    <div class="q"><span class="n">Q3</span>电机响但车不走，先查哪里？</div>
+    <div class="ans reveal">先查两个齿轮有没有咬上，再查后轴和轮子。</div>
+  </section>
+
+  <div id="foot">WeDo 一级 第3课 · 三轮脚踏车</div>
+  <a id="home" href="index.html">← 全部课件</a>
+  <div id="hint">空格 揭晓</div>
+  <div id="pager"></div>
+</div>
+
+<script>
+const stage=document.getElementById('stage');
+const slides=[...document.querySelectorAll('.slide')];
+const pager=document.getElementById('pager');
+const hint=document.getElementById('hint');
+let i=0;
+
+function fit(){
+  const s=Math.min(innerWidth/1600,innerHeight/900);
+  stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+}
+addEventListener('resize',fit); fit();
+
+function paint(){
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  slides[i].querySelectorAll('.reveal').forEach(e=>e.classList.remove('show'));
+  pager.textContent=(i+1)+' / '+slides.length;
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+function go(d){ i=Math.max(0,Math.min(slides.length-1,i+d)); paint(); }
+function reveal(){
+  const n=slides[i].querySelector('.reveal:not(.show)');
+  if(n) n.classList.add('show');
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+addEventListener('keydown',e=>{
+  if(['ArrowRight','PageDown'].includes(e.key)){e.preventDefault();go(1)}
+  else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(-1)}
+  else if(e.key===' '||e.key==='Enter'){e.preventDefault();reveal()}
+  else if(e.key==='a'||e.key==='A'){e.preventDefault();slides[i].querySelectorAll('.reveal').forEach(x=>x.classList.add('show'));hint.style.opacity=0}
+  else if(e.key==='Home'){i=0;paint()}
+  else if(e.key==='End'){i=slides.length-1;paint()}
+  else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+});
+stage.addEventListener('click',reveal);
+paint();
+</script>
+</body>
+</html>
