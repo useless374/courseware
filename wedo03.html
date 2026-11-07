@@ -307,7 +307,12 @@ let i=0;
 
 function view(){
   const v=window.visualViewport;
-  return {w:v?v.width:innerWidth,h:v?v.height:innerHeight};
+  // min 收口：桌面UA模式 innerWidth 会虚胖(1200+)，screen.width 才是设备真实宽
+  const w=Math.min(innerWidth, v?v.width:innerWidth,
+        screen.width||innerWidth);
+  const h=Math.min(innerHeight, v?v.height:innerHeight,
+        screen.height||innerHeight);
+  return {w,h};
 }
 function fit(){
   const {w,h}=view();
