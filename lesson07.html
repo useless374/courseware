@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>打砖块 · TurboWarp 中班</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#1A1A1A;overflow:hidden;
+    font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+  #stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;
+    transform-origin:center center;background:#FFFFFF;
+    box-shadow:0 0 60px rgba(0,0,0,.5);overflow:hidden}
+  .slide{position:absolute;inset:0;padding:74px 150px;display:none;
+    flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .slide.pad{padding-top:60px;padding-bottom:60px}
+
+  .bar{position:absolute;left:0;top:0;width:100%;height:14px;background:#E36414}
+
+  .kicker{font-size:20px;font-weight:700;color:#E36414;letter-spacing:.04em;
+    margin:6px 0 10px}
+  h1{font-size:50px;font-weight:700;color:#0F4C5C;line-height:1.2;margin-bottom:42px}
+
+  ul{list-style:none;margin-top:6px}
+  li{font-size:36px;line-height:1.45;color:#1F2937;margin-bottom:22px;
+    padding-left:44px;position:relative}
+  li:before{content:"▪";position:absolute;left:2px;top:-2px;color:#E36414;
+    font-weight:700}
+
+  .q{font-size:36px;line-height:1.45;color:#1F2937;background:#E6F2F4;
+    border-radius:10px;padding:18px 30px;margin-bottom:14px;font-weight:400}
+  .q .n{color:#E36414;font-weight:700;margin-right:14px}
+
+  .ans{font-size:33px;line-height:1.5;color:#0F4C5C;background:#F2F8F9;
+    border-left:8px solid #E36414;padding:16px 26px;margin:-2px 0 20px 26px;
+    border-radius:0 8px 8px 0}
+  .hint{font-size:33px;line-height:1.5;color:#8A6A16;background:#FBF1D8;
+    border-left:8px solid #D9A21B;padding:18px 26px;margin:14px 0;
+    border-radius:0 8px 8px 0}
+
+  .code{font-family:Consolas,"Courier New",monospace;font-size:32px;line-height:1.65;
+    background:#0B121A;border-radius:12px;padding:30px 40px;color:#D7E3EA}
+  .code.sm{font-size:29px;line-height:1.55;padding:24px 36px}
+
+  .cols{display:flex;gap:34px;margin-top:10px;margin-bottom:10px}
+  .cols3{display:flex;gap:26px;margin-top:6px}
+  .card{flex:1;background:#F2F8F9;border-radius:12px;padding:24px 28px;
+    font-size:31px;line-height:1.5;color:#1F2937}
+  .card b{display:block;color:#0F4C5C;font-size:28px;margin-bottom:8px}
+  .card small{display:block;color:#6B7280;font-size:24px;margin-top:6px}
+
+  .sub{font-size:32px;color:#6B7280;line-height:1.5;margin-top:16px}
+
+  /* 遮挡：内容先藏起来，只留一张"盖着"的卡 */
+  .reveal{color:transparent!important;user-select:none;position:relative;
+    transition:color .25s ease}
+  .reveal::after{content:"?";position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    color:#BCC9CD;font-size:30px;font-weight:300;
+    background-color:#F1F6F7;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(15,76,92,.05) 0 12px,transparent 12px 24px);
+    border-radius:8px}
+  .code.reveal::after{color:#46606E;background-color:#0E1822;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(255,255,255,.05) 0 12px,transparent 12px 24px)}
+  ul.reveal::after{color:#C6D1D4;background-color:#FFFFFF;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(15,76,92,.04) 0 12px,transparent 12px 24px)}
+  .reveal.show{color:inherit!important}
+  .ans.reveal.show{color:#0F4C5C!important}
+  .code.reveal.show{color:#D7E3EA!important}
+  .hint.reveal.show{color:#8A6A16!important}
+  ul.reveal.show li{color:#1F2937!important}
+  .reveal.show::after{display:none}
+
+  /* 封面 */
+  .cover{background:#0F4C5C;flex-direction:row;align-items:center;
+    justify-content:space-between;padding:0 120px 0 150px}
+  .cover-left{max-width:760px}
+  .cover-art{width:430px;height:430px;flex:0 0 auto}
+  .cover h1{color:#FFFFFF;font-size:78px;margin-bottom:26px}
+  .cover .kicker{color:#BFD9DF;font-size:22px;margin-bottom:18px;letter-spacing:.1em}
+  .cover .sub{color:#BFD9DF;font-size:30px;margin-top:0}
+  .cover .bar{background:#E36414}
+
+  /* 返回入口：只有知道的人才找得到——右上角一个小点，鼠标放上去才显形 */
+  #home{position:absolute;right:10px;top:8px;width:52px;height:44px;
+    display:flex;align-items:flex-start;justify-content:flex-end;
+    text-decoration:none;font-size:15px;color:#0F4C5C;z-index:5}
+  #home i{width:9px;height:9px;border-radius:50%;background:#E36414;
+    opacity:.18;margin:6px 8px 0 0;font-style:normal}
+  #home:hover i{opacity:.55}
+  #foot{position:absolute;left:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #pager{position:absolute;right:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #hint{position:absolute;right:72px;bottom:52px;font-size:15px;color:#C2C9CB;
+    letter-spacing:.12em;transition:opacity .3s}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="slide cover on">
+    <div class="bar"></div>
+    <div class="cover-left">
+      <div class="kicker">TurboWarp 中班</div>
+      <h1>打砖块</h1>
+      <div class="sub">一块板、一颗球，把 16 块砖全打掉<br>2026-11-08 · 周日 · 90 分钟</div>
+    </div>
+    <div class="cover-art">
+      <svg viewBox="0 0 420 420" fill="none">
+        <rect x="60" y="60" width="62" height="26" rx="5" fill="#E36414" opacity=".95"/>
+        <rect x="134" y="60" width="62" height="26" rx="5" fill="#E36414" opacity=".75"/>
+        <rect x="208" y="60" width="62" height="26" rx="5" fill="#E36414" opacity=".55"/>
+        <rect x="282" y="60" width="62" height="26" rx="5" fill="#E36414" opacity=".35"/>
+        <rect x="60" y="98" width="62" height="26" rx="5" fill="#E36414" opacity=".75"/>
+        <rect x="134" y="98" width="62" height="26" rx="5" fill="#E36414" opacity=".55"/>
+        <rect x="208" y="98" width="62" height="26" rx="5" fill="#E36414" opacity=".35"/>
+        <rect x="282" y="98" width="62" height="26" rx="5" fill="#E36414" opacity=".2"/>
+        <rect x="60" y="136" width="62" height="26" rx="5" fill="#E36414" opacity=".55"/>
+        <rect x="134" y="136" width="62" height="26" rx="5" fill="#E36414" opacity=".35"/>
+        <rect x="208" y="136" width="62" height="26" rx="5" fill="#E36414" opacity=".2"/>
+        <rect x="282" y="136" width="62" height="26" rx="5" fill="#E36414" opacity=".12"/>
+        <circle cx="200" cy="230" r="17" fill="#0F4C5C"/>
+        <path d="M150 262 L186 244 L214 244 L250 262" stroke="#0F4C5C" stroke-width="5" stroke-linecap="round" opacity=".5"/>
+        <rect x="132" y="330" width="156" height="24" rx="10" fill="#0F4C5C"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">今天</div>
+    <h1>做完你会拥有一个完整游戏</h1>
+    <ul>
+      <li>键盘控制木板左右接球队</li>
+      <li>球会自己飞、碰壁和木板会反弹</li>
+      <li>16 块砖，打掉一块记一分，打完就赢</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">复习 · 疫情防卫战 / 赛车</div>
+    <h1>三个老朋友</h1>
+    <div class="q"><span class="n">Q1</span>克隆体跟本体是什么关系？</div>
+    <div class="ans reveal">克隆体是本体的一份拷贝，出生时造型、位置都跟本体一样；本体删除了，克隆体还能在。</div>
+    <div class="q"><span class="n">Q2</span>变量是干什么的？</div>
+    <div class="ans reveal">一块所有角色共用的黑板，用来记数字，比如分数。</div>
+    <div class="q"><span class="n">Q3</span>「碰到边缘就反弹」认识吗？</div>
+    <div class="ans reveal">角色走到舞台边自动转向，不会飞出屏幕——今天小球就靠它。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">导入</div>
+    <h1>先看老师玩 30 秒</h1>
+    <ul>
+      <li>球碰到墙和木板，会怎样？</li>
+      <li>砖被球碰到，会怎样？分数呢？</li>
+      <li>什么情况算赢？什么情况算输？</li>
+    </ul>
+    <p class="sub">只看不说，看完带着这三个问题开工。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">程序全景</div>
+    <h1>六个角色，各干一件事</h1>
+    <div class="cols3">
+      <div class="card"><b>舞台</b>切封面和战场背景</div>
+      <div class="card"><b>木板</b>左右移动，接住球</div>
+      <div class="card"><b>小球</b>飞、反弹、漏了判输</div>
+    </div>
+    <div class="cols3" style="margin-top:22px">
+      <div class="card"><b>砖块</b>铺成 4×4 砖阵，被打中消失</div>
+      <div class="card"><b>开始 / 成功 / 失败</b>只是三张图片<small>本来没有脚本，拓展再用</small></div>
+      <div class="card"><b>一共</b>3 个全局变量<small>x、y、分数，没有列表</small></div>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">变量速查</div>
+    <h1>三个变量，各管一摊</h1>
+    <div class="cols3">
+      <div class="card"><b>x</b>铺砖光标的横坐标<small>初值 -160，铺一块 +100，换行归位</small></div>
+      <div class="card"><b>y</b>铺砖光标的纵坐标<small>初值 150，铺完一行 -60</small></div>
+      <div class="card"><b>分数</b>打掉了几块砖<small>初值 0，碰一块 +1，到 16 通关</small></div>
+    </div>
+    <p class="hint">x、y 只在「铺砖那一小段」当光标用，不是球和木板的坐标。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 1 · 木板</div>
+    <h1>两个箭头键，各推一把</h1>
+    <div class="code reveal">移到 (0, -160)<br>重复执行：<br>&nbsp;&nbsp;如果 按下左键？ x 增加 -20<br>&nbsp;&nbsp;如果 按下右键？ x 增加 20</div>
+    <p class="sub">是「x 增加」，不是「移到 x」——一下移到 -20 木板会瞬移。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 2 · 小球出发</div>
+    <h1>定个朝上的随机角度飞出去</h1>
+    <div class="code reveal">旋转方式设为 左右翻转<br>移到 (0, -140)<br>面向 (在 20 到 60 间随机选数) 方向<br>等待 0.5 秒<br>重复执行：移动 10 步；碰到边缘就反弹</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 2 · 为什么</div>
+    <h1>随机为什么只写 20 到 60？</h1>
+    <div class="q">写成「0 到 180 随机」会怎样？</div>
+    <div class="ans reveal">球可能朝下开，一出发就落地输了。20–60 都是朝上偏一点的方向，保证开球一定往上飞。</div>
+    <div class="hint">「左右翻转」别忘了：不然球飞着飞着造型会倒栽葱。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 3 · 反弹（全课最大卡点）</div>
+    <h1>照镜子：180 减方向</h1>
+    <div class="code reveal">重复执行：<br>&nbsp;&nbsp;移动 10 步；碰到边缘就反弹<br>&nbsp;&nbsp;如果 (碰到 砖块？ 或 碰到 木板？)：<br>&nbsp;&nbsp;&nbsp;&nbsp;面向 (180 － 方向) 方向</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 3 · 人话</div>
+    <h1>进来多少度，出去多少度</h1>
+    <ul>
+      <li>球朝上 45° 撞砖 → 180－45＝135°，朝下弹走</li>
+      <li>方向以正上方为 0°，转一圈 360°</li>
+      <li>「方向」是侦测里蓝色椭圆积木，不是手打数字</li>
+    </ul>
+    <p class="hint">别用「面向鼠标」凑——鼠标不动球就不会弹了。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 4 · 铺砖阵</div>
+    <h1>光标从左上角走，一块一复制</h1>
+    <div class="code sm reveal">分数=0；x=-160；y=150；隐藏<br>重复 4 次：<br>&nbsp;&nbsp;重复 4 次：移到 (x, y)；克隆自己；x 增加 100<br>&nbsp;&nbsp;x 设为 -160；y 增加 -60</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 4 · 两个循环各管什么</div>
+    <div class="cols">
+      <div class="card"><b>内层 4 次</b>铺一行的 4 块：每克隆一块，光标右移 100</div>
+      <div class="card"><b>外层 4 次</b>铺 4 行：一行铺完光标归左、下降 60</div>
+    </div>
+    <p class="hint">三个初始值必须写在循环前面；换行忘归位 x，第二行会从右边开始。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 5 · 碰砖消失计分</div>
+    <h1>脚本写在克隆体身上</h1>
+    <div class="code reveal">当作为克隆体启动时：显示<br>重复执行：<br>&nbsp;&nbsp;如果 碰到 小球？：<br>&nbsp;&nbsp;&nbsp;&nbsp;分数 增加 1；删除此克隆体</div>
+    <p class="sub">「当作为克隆体启动时」是帽子积木——直接挂在本体绿旗下，克隆出生不会执行。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 6 · 胜负收口</div>
+    <h1>两条停机线，都要做</h1>
+    <div class="cols">
+      <div class="card"><b>赢：砖块本体</b>第二根绿旗：重复执行：如果 分数=16，等 1 秒后停止全部</div>
+      <div class="card"><b>输：小球</b>重复执行：如果 y 坐标 &lt; -160，等 0.01 秒后停止全部</div>
+    </div>
+    <p class="hint">为什么=16 要放在砖块本体？最后一块砖消失时克隆体全没了，只有本体一直在，判断才不落空。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">调试</div>
+    <h1>出问题，先查这三处</h1>
+    <ul class="reveal">
+      <li>球不反弹：脚本挂在「当作为克隆体启动」上了吗？「方向」找对了吗？</li>
+      <li>砖不消分：碰砖脚本写在克隆体身上，还是错挂在本体绿旗下？</li>
+      <li>打完不停：=16 的判断在砖块本体；停止用的是「停止全部」</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">挑战 · 只给提前打完的</div>
+    <h1>还能再进一步</h1>
+    <ul>
+      <li>加广播：赢/输时让「成功 / 失败」图片显示出来</li>
+      <li>砖块加血量：碰一次换深色造型，碰两次才消失</li>
+      <li>球速调快，或砖阵铺成 5 行</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">收尾</div>
+    <h1>三个问题带走</h1>
+    <div class="q"><span class="n">Q1</span>碰木板为什么写「180－方向」就能反弹？</div>
+    <div class="ans reveal">进来多少度出去多少度，镜面反弹就是 180 减当前方向。</div>
+    <div class="q"><span class="n">Q2</span>分数=16 的判断为什么放砖块本体？</div>
+    <div class="ans reveal">最后一块砖消失后克隆体全没了，只有本体常驻，判断不会落空。</div>
+    <div class="q"><span class="n">Q3</span>两个 4 次循环各管什么？</div>
+    <div class="ans reveal">外层管 4 行（换行下降），内层管每行 4 块（右移铺砖）。</div>
+  </section>
+
+  <a id="home" href="index.html" title=""><i></i></a>
+  <div id="foot">打砖块 · TurboWarp 中班 · 2026-11-08</div>
+  <div id="hint">空格 揭晓</div>
+  <div id="pager"></div>
+</div>
+
+<script>
+const stage=document.getElementById('stage');
+const slides=[...document.querySelectorAll('.slide')];
+const pager=document.getElementById('pager');
+const hint=document.getElementById('hint');
+let i=0;
+
+function fit(){
+  const s=Math.min(innerWidth/1600,innerHeight/900);
+  stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+}
+addEventListener('resize',fit); fit();
+
+function paint(){
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  slides[i].querySelectorAll('.reveal').forEach(e=>e.classList.remove('show'));
+  pager.textContent=(i+1)+' / '+slides.length;
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+function go(d){ i=Math.max(0,Math.min(slides.length-1,i+d)); paint(); }
+function reveal(){
+  const n=slides[i].querySelector('.reveal:not(.show)');
+  if(n) n.classList.add('show');
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+addEventListener('keydown',e=>{
+  if(['ArrowRight','PageDown'].includes(e.key)){e.preventDefault();go(1)}
+  else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(-1)}
+  else if(e.key===' '||e.key==='Enter'){e.preventDefault();reveal()}
+  else if(e.key==='a'||e.key==='A'){e.preventDefault();slides[i].querySelectorAll('.reveal').forEach(x=>x.classList.add('show'));hint.style.opacity=0}
+  else if(e.key==='Home'){i=0;paint()}
+  else if(e.key==='End'){i=slides.length-1;paint()}
+  else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+});
+stage.addEventListener('click',reveal);
+paint();
+</script>
+</body>
+</html>
