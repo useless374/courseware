@@ -133,8 +133,8 @@
     <h1>本课只做三件事</h1>
     <ul>
       <li>搭：12 步，把车和驾驶员装起来</li>
-      <li>看懂：电机的转，怎么拐个弯传给后轮</li>
-      <li>开起来：写程序让车跑、让车停</li>
+      <li>看懂：电机的转，怎么通过齿轮传给后轮</li>
+      <li>开起来：让车跑起来，再配上自己录的声音</li>
     </ul>
   </section>
 
@@ -214,8 +214,8 @@
     <img class="build" src="images/wedo03/p08.jpg" alt="第7步">
     <h1>电机 · 齿轮 · 轮子</h1>
     <ul>
-      <li>灰色电机装在车尾，轴上插<b>冠状齿轮</b>（边上带尖齿的黑轮）</li>
-      <li>后轴穿过车架，轴上小齿轮和冠状齿轮咬在一起</li>
+      <li>灰色电机装在车尾，轴上插一个<b>普通圆柱齿轮</b></li>
+      <li>后轴穿过车架，轴上齿轮和电机齿轮<b>平行对齐</b>、互相咬合</li>
       <li>两个大后轮压装到后轴；前轮装到前叉中间</li>
     </ul>
     <p class="hint">两个齿轮中间不能留缝，也不能顶死——用手转一下后轮，顺不顺？</p>
@@ -224,13 +224,13 @@
   <section class="slide pad">
     <div class="bar"></div>
     <div class="kicker">原理 · 本课核心</div>
-    <h1>力气在这里拐了个弯</h1>
+    <h1>两根轴并排，齿轮咬着走</h1>
     <ul>
-      <li>电机的轴朝<b>下</b>，轮子的轴朝<b>横</b>——两根轴互相垂直</li>
-      <li>冠状齿轮的齿长在边上，正好把转动拐 90° 传出去</li>
-      <li>这叫「改变传动方向」：电机转 → 后轮转</li>
+      <li>电机轴和后轴<b>互相平行</b>，都是横着的</li>
+      <li>两个圆柱齿轮在同一个平面咬在一起，电机一转就带着后轴转</li>
+      <li>这叫「平行传动」：电机转 → 齿轮转 → 后轮转</li>
     </ul>
-    <p class="sub">后轮带着整车走，叫<b>后轮驱动</b>；前轮只负责撑住和转向。</p>
+    <p class="sub">两个齿轮转起来方向相反；后轮带着整车走叫<b>后轮驱动</b>，前轮只负责撑住和转向。</p>
   </section>
 
   <section class="slide pad withimg">
@@ -248,9 +248,9 @@
   <section class="slide pad">
     <div class="bar"></div>
     <div class="kicker">编程</div>
-    <h1>让车自己跑起来</h1>
-    <div class="code reveal">开始：<br>&nbsp;&nbsp;电机 这个方向 · 功率 8<br>&nbsp;&nbsp;等待 3 秒<br>&nbsp;&nbsp;电机 停止</div>
-    <p class="sub">功率别拉满：8 挡最稳，车太快冲出桌子，你来不及抓。</p>
+    <h1>让车跑，再配上自己的声音</h1>
+    <div class="code reveal">开始：<br>&nbsp;&nbsp;播放声音「自己录的音」<br>&nbsp;&nbsp;电机 这个方向 · 功率 8<br>&nbsp;&nbsp;等待 3 秒<br>&nbsp;&nbsp;电机 停止</div>
+    <p class="sub">录音模块：点麦克风，自己录一句喇叭声/加油声，拖到程序里。<br>每个人的程序都可以不一样——声音、功率、秒数自己定。功率别拉满，8 挡最稳。</p>
   </section>
 
   <section class="slide pad">
@@ -259,7 +259,7 @@
     <h1>电机在响，车不走。</h1>
     <p class="sub" style="font-size:37px;color:#1F2937">先自己找两分钟，按顺序查：</p>
     <ul class="reveal">
-      <li>两个齿轮到底咬上没有，有没有漏装、错位</</li>
+      <li>两个齿轮到底咬上没有，有没有漏装、错位</li>
       <li>后轴上的轮子，是不是压到位了</li>
       <li>手转后轮，是顺滑还是卡住</li>
       <li>程序里电机方向，是不是选反了</li>
@@ -284,8 +284,8 @@
     <h1>三个问题</h1>
     <div class="q"><span class="n">Q1</span>三轮车为什么停着也不倒？</div>
     <div class="ans reveal">三个轮子着地是三个点，确定一个稳当的面。</div>
-    <div class="q"><span class="n">Q2</span>冠状齿轮在这里起什么作用？</div>
-    <div class="ans reveal">把电机的转动拐 90°，传给横着的后轮轴。</div>
+    <div class="q"><span class="n">Q2</span>齿轮在这里起什么作用？</div>
+    <div class="ans reveal">电机齿轮和后轴齿轮平行咬合，把转动传给后轮。</div>
     <div class="q"><span class="n">Q3</span>电机响但车不走，先查哪里？</div>
     <div class="ans reveal">先查两个齿轮有没有咬上，再查后轴和轮子。</div>
   </section>
