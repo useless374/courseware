@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>智驾小车 第7课 · 车辆碰撞检测</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#1A1A1A;overflow:hidden;
+    font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+  #stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;
+    transform-origin:center center;background:#FFFFFF;
+    box-shadow:0 0 60px rgba(0,0,0,.5);overflow:hidden}
+  .slide{position:absolute;inset:0;padding:74px 150px;display:none;
+    flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .slide.pad{padding-top:60px;padding-bottom:60px}
+
+  .bar{position:absolute;left:0;top:0;width:100%;height:14px;background:#E36414}
+
+  .kicker{font-size:20px;font-weight:700;color:#E36414;letter-spacing:.04em;
+    margin:6px 0 10px}
+  h1{font-size:50px;font-weight:700;color:#0F4C5C;line-height:1.2;margin-bottom:46px}
+
+  ul{list-style:none;margin-top:6px}
+  li{font-size:37px;line-height:1.45;color:#1F2937;margin-bottom:26px;
+    padding-left:44px;position:relative}
+  li:before{content:"▪";position:absolute;left:2px;top:-2px;color:#E36414;
+    font-weight:700}
+
+  .q{font-size:37px;line-height:1.45;color:#1F2937;background:#E6F2F4;
+    border-radius:10px;padding:18px 30px;margin-bottom:14px;font-weight:400}
+  .q .n{color:#E36414;font-weight:700;margin-right:14px}
+
+  .ans{font-size:34px;line-height:1.5;color:#0F4C5C;background:#F2F8F9;
+    border-left:8px solid #E36414;padding:16px 26px;margin:-2px 0 22px 26px;
+    border-radius:0 8px 8px 0}
+  .hint{font-size:34px;line-height:1.5;color:#8A6A16;background:#FBF1D8;
+    border-left:8px solid #D9A21B;padding:18px 26px;margin:14px 0;
+    border-radius:0 8px 8px 0}
+
+  .code{font-family:Consolas,"Courier New",monospace;font-size:33px;line-height:1.7;
+    background:#0B121A;border-radius:12px;padding:34px 40px;color:#D7E3EA}
+
+  .cols{display:flex;gap:38px;margin-top:10px;margin-bottom:10px}
+  a.vid{display:inline-block;align-self:flex-start;margin-top:34px;
+    font-size:33px;color:#FFFFFF;background:#E36414;text-decoration:none;
+    padding:18px 34px;border-radius:10px}
+  a.vid:hover{background:#C9550B}
+  .card{flex:1;background:#F2F8F9;border-radius:12px;padding:28px 32px;
+    font-size:33px;line-height:1.5;color:#1F2937}
+  .card b{display:block;color:#0F4C5C;font-size:29px;margin-bottom:10px}
+
+  .sub{font-size:33px;color:#6B7280;line-height:1.5;margin-top:18px}
+
+  /* 遮挡：内容先藏起来，只留一张"盖着"的卡 */
+  .reveal{color:transparent!important;user-select:none;position:relative;
+    transition:color .25s ease}
+  .reveal::after{content:"?";position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    color:#BCC9CD;font-size:30px;font-weight:300;
+    background-color:#F1F6F7;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(15,76,92,.05) 0 12px,transparent 12px 24px);
+    border-radius:8px}
+  .code.reveal::after{color:#46606E;background-color:#0E1822;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(255,255,255,.05) 0 12px,transparent 12px 24px)}
+  ul.reveal::after{color:#C6D1D4;background-color:#FFFFFF;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(15,76,92,.04) 0 12px,transparent 12px 24px)}
+  .reveal.show{color:inherit!important;user-select:auto!important}
+  .ans.reveal.show{color:#0F4C5C!important}
+  .code.reveal.show{color:#D7E3EA!important}
+  .hint.reveal.show{color:#8A6A16!important}
+  ul.reveal.show li{color:#1F2937!important}
+  .reveal.show::after{display:none}
+
+  /* 封面 */
+  .cover{background:#0F4C5C;flex-direction:row;align-items:center;
+    justify-content:space-between;padding:0 120px 0 150px}
+  .cover-left{max-width:800px}
+  .cover-art{width:460px;height:460px;flex:0 0 auto}
+  .cover h1{color:#FFFFFF;font-size:70px;margin-bottom:26px}
+  .cover .kicker{color:#BFD9DF;font-size:22px;margin-bottom:18px;letter-spacing:.1em}
+  .cover .sub{color:#BFD9DF;font-size:30px;margin-top:0}
+  .cover .bar{background:#E36414}
+
+  /* 返回入口：右上角一个小点，知道的人才找得到 */
+  #home{position:absolute;right:10px;top:8px;width:52px;height:44px;z-index:5;
+    display:flex;align-items:flex-start;justify-content:flex-end;text-decoration:none}
+  #home i{width:9px;height:9px;border-radius:50%;background:#E36414;
+    opacity:.18;margin:6px 8px 0 0;font-style:normal}
+  #home:hover i{opacity:.55}
+  #foot{position:absolute;left:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #pager{position:absolute;right:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #hint{position:absolute;right:72px;bottom:52px;font-size:15px;color:#C2C9CB;
+    letter-spacing:.12em;transition:opacity .3s}
+  #nav{position:fixed;right:18px;bottom:18px;display:none;gap:12px;z-index:10}
+  #nav button{width:64px;height:64px;border-radius:50%;border:0;
+    background:rgba(15,76,92,.85);color:#fff;font-size:34px;line-height:1}
+  #rotate{position:fixed;inset:0;background:#0F4C5C;color:#fff;display:none;
+    align-items:center;justify-content:center;text-align:center;font-size:20px;z-index:20}
+  @media (max-width:900px){#nav{display:flex}}
+  @media (max-width:900px) and (orientation:portrait){#rotate{display:flex}}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="slide cover on">
+    <div class="bar"></div>
+    <div class="cover-left">
+      <div class="kicker">智驾小车 · 第 7 课</div>
+      <h1>车辆碰撞检测</h1>
+      <div class="sub">车撞墙了，它自己知道吗？<br>2026-11-13 · 周五 · 55 分钟</div>
+    </div>
+    <div class="cover-art">
+      <svg viewBox="0 0 460 460" fill="none">
+        <path d="M20 300 H120 L150 300 L175 120 L200 380 L225 300 H290 L310 240 L330 300 H440"
+              stroke="#E36414" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M20 300 H440" stroke="#BFD9DF" stroke-width="4" stroke-dasharray="10 12" opacity=".5"/>
+        <circle cx="175" cy="120" r="14" fill="#E36414"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">今天</div>
+    <h1>本课只做三件事</h1>
+    <ul>
+      <li>看见：小车走起来，加速度在屏幕上跳</li>
+      <li>找线：多大的跳，才算「撞了」</li>
+      <li>用起来：撞了 → 停车 + 闪灯</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">复习 · 上节课</div>
+    <h1>三个问题</h1>
+    <div class="q"><span class="n">Q1</span>遥控器按一下，小车收到的其实是什么？</div>
+    <div class="ans reveal">一个数字。遥控器发光，接收头把它翻译成数字。</div>
+    <div class="q"><span class="n">Q2</span>按了车没动，先查哪两处？</div>
+    <div class="ans reveal">拨码开关是不是「遥控」侧；底座电源有没有开机。</div>
+    <div class="q"><span class="n">Q3</span>上节课的小车，撞到墙它知道吗？</div>
+    <div class="ans reveal">不知道。它只会「前进」，没有感觉，撞了也继续转电机。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">导入</div>
+    <h1>汽车撞了，安全气囊 0.02 秒就弹出来</h1>
+    <p class="sub">它怎么知道「这是撞了」，而不是「过了一个坑」？</p>
+    <div class="hint reveal">提示：撞车的一瞬间，车会突然「停住」。停得越猛，变化越大。</div>
+    <div class="ans reveal">靠<b>加速度的突变</b>：传感器每时每刻在量车速的变化，<br>一瞬间变化太大，就判定为碰撞。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">原理</div>
+    <h1>一条线，看出撞没撞</h1>
+    <div class="cols">
+      <div class="card"><b>正常行驶</b>加速度在 0 附近小幅波动<br>起步、停车 ≈ 800</div>
+      <div class="card"><b>撞墙瞬间</b>加速度突然冲到 1500 左右<br>一个尖尖的峰</div>
+    </div>
+    <p class="hint">所以要找一条线（阈值）：平时不越过它，撞了才越过。<br>本课设 1100——比起步停车的 800 高，比撞墙的 1500 低。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 1 · 复习</div>
+    <h1>先把遥控三个动作搭好</h1>
+    <div class="code reveal">循环执行：<br>&nbsp;&nbsp;如果 红外接收值 = [↑] → 小车前进 速度 200<br>&nbsp;&nbsp;如果 红外接收值 = [↓] → 小车后退 速度 200<br>&nbsp;&nbsp;如果 红外接收值 = [■] → 小车停止</div>
+    <p class="sub">上节课做过的，快速过一遍；今天它只是「让车动起来」的工具。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 2 · 看见</div>
+    <h1>把加速度画成一条线</h1>
+    <div class="code reveal">设置 X = 0<br>循环执行：<br>&nbsp;&nbsp;画点 x = X，y = 映射(加速度X, 从 [-1200, 1200] 到 [0, 64])<br>&nbsp;&nbsp;X = X + 0.5<br>&nbsp;&nbsp;如果 X &gt; 128 → 屏幕全黑，X = 0<br>&nbsp;&nbsp;等待 0.01 秒</div>
+    <p class="sub">横着走的是时间，竖着跳的是加速度——一个「心电图」。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 2 · 坑</div>
+    <h1>两个地方最容易画不出来</h1>
+    <ul class="reveal">
+      <li>映射范围写错：必须 <b>-1200 ~ 1200 → 0 ~ 64</b>，数值会跑到屏幕外</li>
+      <li>忘了清零：X 超过 128 要「屏幕全黑 + X 归 0」，不然线冲出屏幕就不见了</li>
+    </ul>
+    <p class="hint">屏幕没有线，先把这两处对一遍，再怀疑传感器。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 3 · 找线</div>
+    <h1>把最大的那个数记下来</h1>
+    <div class="code reveal">设置 maxX = 10<br>循环执行：<br>&nbsp;&nbsp;如果 绝对值(加速度X) &gt; maxX → maxX = 绝对值(加速度X)<br>&nbsp;&nbsp;屏幕显示 maxX 在第 1 行</div>
+    <p class="sub">先遥控撞墙，看数字冲到多少；再遥控「启动—停止」，看数字到多少。</p>
+    <p class="hint">实测：撞墙 ≈1500，起步/停车 ≈800 → 阈值定 <b>1100</b>。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 4 · 反应</div>
+    <h1>超过 1100：停车，闪灯</h1>
+    <div class="code reveal">如果 绝对值(加速度X) &gt; 1100：<br>&nbsp;&nbsp;小车停止<br>&nbsp;&nbsp;重复 5 次：<br>&nbsp;&nbsp;&nbsp;&nbsp;灯 0/1/2 亮红色<br>&nbsp;&nbsp;&nbsp;&nbsp;等待 0.5 秒<br>&nbsp;&nbsp;&nbsp;&nbsp;全部灯灭<br>&nbsp;&nbsp;&nbsp;&nbsp;等待 0.5 秒</div>
+    <p class="sub">这就是「事故报警」：车停住，灯闪，告诉别人我撞了。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">关键坑</div>
+    <h1>停车本身，也会被当成「撞了」</h1>
+    <ul>
+      <li>急停的一瞬间，加速度也会冲高 → 又触发一次报警</li>
+      <li>结果：灯停不下来，一直闪</li>
+    </ul>
+    <p class="hint reveal">解法：判断到碰撞后，先「等待 0.5 秒」或设一个「已报警」标志，等车停稳再继续检测。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">调试</div>
+    <h1>撞了，但没停。先查哪里？</h1>
+    <p class="sub" style="font-size:37px;color:#1F2937">先自己找两分钟。</p>
+    <ul class="reveal" style="margin-top:26px">
+      <li>阈值是不是设太高（屏幕上 maxX 撞墙时是多少？）</li>
+      <li>比较的是不是「绝对值」——倒车撞墙是负数</li>
+      <li>判断有没有放进「重复执行」里，只判一次不会生效</li>
+      <li>碰撞后有没有先等待，被停车尖峰反复触发</li>
+      <li>车没放平 / 传感器松动，读数一直乱跳</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">挑战</div>
+    <h1>让它分得清「轻碰」和「撞墙」</h1>
+    <ul>
+      <li>调阈值：手轻碰一下就停，还是只有撞墙才停？</li>
+      <li>加个「警报声」：撞了蜂鸣器也响</li>
+      <li>加分项：撞完 3 秒后自动恢复遥控，能继续开</li>
+    </ul>
+    <p class="sub">只给已经稳定跑通的同学，不额外加时。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">收尾</div>
+    <h1>三个问题</h1>
+    <div class="q"><span class="n">Q1</span>小车靠什么知道「自己撞了」？</div>
+    <div class="ans reveal">加速度突然变得很大，超过我们设的阈值。</div>
+    <div class="q"><span class="n">Q2</span>阈值为什么不能设成 800？</div>
+    <div class="ans reveal">起步和停车就有 800，会误报；要设在 800 和 1500 之间。</div>
+    <div class="q"><span class="n">Q3</span>为什么撞完要先等一会儿再检测？</div>
+    <div class="ans reveal">急停本身也会产生尖峰，不等就会被自己的停车再次触发。</div>
+  </section>
+
+  <div id="nav"><button id="prev" aria-label="上一页">‹</button><button id="next" aria-label="下一页">›</button></div>
+  <div id="rotate" onclick="this.dataset.off=1;this.style.display='none'">把手机横过来看，更清楚<br><br><span style="font-size:15px;opacity:.7">点一下继续</span></div>
+  <div id="foot">智驾小车 第7课 · 车辆碰撞检测 · 博世凯 2026-11-13</div>
+  <a id="home" href="index.html"><i></i></a>
+  <div id="hint">空格 揭晓</div>
+  <div id="pager"></div>
+</div>
+
+<script>
+const stage=document.getElementById('stage');
+const slides=[...document.querySelectorAll('.slide')];
+const pager=document.getElementById('pager');
+const hint=document.getElementById('hint');
+let i=0;
+
+function view(){
+  const v=window.visualViewport;
+  // min 收口：桌面UA模式 innerWidth 会虚胖(1200+)，screen.width 才是设备真实宽
+  const w=Math.min(innerWidth, v?v.width:innerWidth,
+        screen.width||innerWidth);
+  const h=Math.min(innerHeight, v?v.height:innerHeight,
+        screen.height||innerHeight);
+  return {w,h};
+}
+function fit(){
+  const {w,h}=view();
+  const s=Math.min(w/1600,h/900);
+  stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+  const rot=document.getElementById('rotate');
+  if(rot) rot.style.display=(!rot.dataset.off && h>w && w<=1000)?'flex':'none';
+}
+addEventListener('resize',fit);
+addEventListener('orientationchange',()=>setTimeout(fit,200));
+if(window.visualViewport){
+  visualViewport.addEventListener('resize',fit);
+  visualViewport.addEventListener('scroll',fit);
+}
+fit();
+
+function paint(){
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  slides[i].querySelectorAll('.reveal').forEach(e=>e.classList.remove('show'));
+  pager.textContent=(i+1)+' / '+slides.length;
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+function go(d){ i=Math.max(0,Math.min(slides.length-1,i+d)); paint(); }
+function reveal(){
+  const n=slides[i].querySelector('.reveal:not(.show)');
+  if(n) n.classList.add('show');
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+addEventListener('keydown',e=>{
+  if(['ArrowRight','PageDown'].includes(e.key)){e.preventDefault();go(1)}
+  else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(-1)}
+  else if(e.key===' '||e.key==='Enter'){e.preventDefault();reveal()}
+  else if(e.key==='a'||e.key==='A'){e.preventDefault();slides[i].querySelectorAll('.reveal').forEach(x=>x.classList.add('show'));hint.style.opacity=0}
+  else if(e.key==='Home'){i=0;paint()}
+  else if(e.key==='End'){i=slides.length-1;paint()}
+  else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+});
+let _lastTouch=0;
+stage.addEventListener('click',()=>{ if(Date.now()-_lastTouch<600) return; reveal(); });
+let _sx=0,_sy=0;
+stage.addEventListener('touchstart',e=>{const t=e.touches[0];_sx=t.clientX;_sy=t.clientY;},{passive:true});
+stage.addEventListener('touchend',e=>{
+  _lastTouch=Date.now();
+  const t=e.changedTouches[0], dx=t.clientX-_sx, dy=t.clientY-_sy;
+  if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)){ go(dx<0?1:-1); }
+  else { reveal(); }
+},{passive:true});
+document.getElementById('prev').onclick=()=>go(-1);
+document.getElementById('next').onclick=()=>go(1);
+paint();
+</script>
+</body>
+</html>
