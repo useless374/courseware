@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>古迹文明集训 第2课 · 底盘定型 + 珍宝推送 + 停靠</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#1A1A1A;overflow:hidden;
+    font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+  #stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;
+    transform-origin:center center;background:#FFFFFF;
+    box-shadow:0 0 60px rgba(0,0,0,.5);overflow:hidden}
+  .slide{position:absolute;inset:0;padding:74px 150px;display:none;
+    flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .slide.pad{padding-top:60px;padding-bottom:60px}
+
+  .bar{position:absolute;left:0;top:0;width:100%;height:14px;background:#E36414}
+
+  .kicker{font-size:20px;font-weight:700;color:#E36414;letter-spacing:.04em;
+    margin:6px 0 10px}
+  h1{font-size:50px;font-weight:700;color:#0F4C5C;line-height:1.2;margin-bottom:46px}
+
+  ul{list-style:none;margin-top:6px}
+  li{font-size:37px;line-height:1.45;color:#1F2937;margin-bottom:26px;
+    padding-left:44px;position:relative}
+  li:before{content:"▪";position:absolute;left:2px;top:-2px;color:#E36414;
+    font-weight:700}
+
+  .q{font-size:37px;line-height:1.45;color:#1F2937;background:#E6F2F4;
+    border-radius:10px;padding:18px 30px;margin-bottom:14px;font-weight:400}
+  .q .n{color:#E36414;font-weight:700;margin-right:14px}
+
+  .ans{font-size:34px;line-height:1.5;color:#0F4C5C;background:#F2F8F9;
+    border-left:8px solid #E36414;padding:16px 26px;margin:-2px 0 22px 26px;
+    border-radius:0 8px 8px 0}
+  .hint{font-size:34px;line-height:1.5;color:#8A6A16;background:#FBF1D8;
+    border-left:8px solid #D9A21B;padding:18px 26px;margin:14px 0;
+    border-radius:0 8px 8px 0}
+
+  .code{font-family:Consolas,"Courier New",monospace;font-size:33px;line-height:1.7;
+    background:#0B121A;border-radius:12px;padding:34px 40px;color:#D7E3EA}
+
+  .cols{display:flex;gap:38px;margin-top:10px;margin-bottom:10px}
+  .card{flex:1;background:#F2F8F9;border-radius:12px;padding:28px 32px;
+    font-size:33px;line-height:1.5;color:#1F2937}
+  .card b{display:block;color:#0F4C5C;font-size:29px;margin-bottom:10px}
+
+  .sub{font-size:33px;color:#6B7280;line-height:1.5;margin-top:18px}
+
+  .reveal{color:transparent!important;user-select:none;position:relative;
+    transition:color .25s ease}
+  .reveal::after{content:"?";position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    color:#BCC9CD;font-size:30px;font-weight:300;
+    background-color:#F1F6F7;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(15,76,92,.05) 0 12px,transparent 12px 24px);
+    border-radius:8px}
+  .code.reveal::after{color:#46606E;background-color:#0E1822;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(255,255,255,.05) 0 12px,transparent 12px 24px)}
+  ul.reveal::after{color:#C6D1D4;background-color:#FFFFFF;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(15,76,92,.04) 0 12px,transparent 12px 24px)}
+  .reveal.show{color:inherit!important}
+  .ans.reveal.show{color:#0F4C5C!important}
+  .code.reveal.show{color:#D7E3EA!important}
+  .hint.reveal.show{color:#8A6A16!important}
+  ul.reveal.show li{color:#1F2937!important}
+  .reveal.show{user-select:auto!important}
+  .reveal.show::after{display:none}
+
+  .cover{background:#0F4C5C;flex-direction:row;align-items:center;
+    justify-content:space-between;padding:0 120px 0 150px}
+  .cover-left{max-width:820px}
+  .cover-art{width:430px;height:430px;flex:0 0 auto}
+  .cover h1{color:#FFFFFF;font-size:72px;margin-bottom:26px}
+  .cover .kicker{color:#BFD9DF;font-size:22px;margin-bottom:18px;letter-spacing:.1em}
+  .cover .sub{color:#BFD9DF;font-size:30px;margin-top:0}
+  .cover .bar{background:#E36414}
+
+  #home{position:absolute;right:10px;top:8px;width:52px;height:44px;z-index:5;
+    display:flex;align-items:flex-start;justify-content:flex-end;text-decoration:none}
+  #home i{width:9px;height:9px;border-radius:50%;background:#E36414;
+    display:block;margin:10px 14px 0 0}
+  #home:hover i{opacity:.55}
+  #foot{position:absolute;left:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #pager{position:absolute;right:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #hint{position:absolute;right:72px;bottom:52px;font-size:15px;color:#C2C9CB;
+    letter-spacing:.12em;transition:opacity .3s}
+  #nav{position:fixed;right:18px;bottom:18px;display:none;gap:12px;z-index:10}
+  #nav button{width:64px;height:64px;border-radius:50%;border:0;
+    background:rgba(15,76,92,.85);color:#fff;font-size:34px;line-height:1}
+  #rotate{position:fixed;inset:0;background:#0F4C5C;color:#fff;display:none;
+    align-items:center;justify-content:center;text-align:center;font-size:20px;z-index:20}
+  @media (max-width:900px){#nav{display:flex}}
+  @media (max-width:900px) and (orientation:portrait){#rotate{display:flex}}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="slide cover on">
+    <div class="bar"></div>
+    <div class="cover-left">
+      <div class="kicker">古迹文明 · 第 2 课</div>
+      <h1>底盘定型<br>珍宝推送<br>停靠</h1>
+      <div class="sub">把四角的东西，推回中央博物馆</div>
+    </div>
+    <div class="cover-art">
+      <svg viewBox="0 0 420 420" fill="none">
+        <rect x="70" y="70" width="280" height="280" rx="10" stroke="#E36414" stroke-width="8" opacity=".28"/>
+        <circle cx="210" cy="210" r="76" stroke="#E36414" stroke-width="9" opacity=".9"/>
+        <circle cx="210" cy="210" r="26" fill="#E36414"/>
+        <path d="M92 92 L150 150" stroke="#BFD9DF" stroke-width="7" stroke-linecap="round" opacity=".5"/>
+        <path d="M328 92 L270 150" stroke="#BFD9DF" stroke-width="7" stroke-linecap="round" opacity=".5"/>
+        <path d="M92 328 L150 270" stroke="#BFD9DF" stroke-width="7" stroke-linecap="round" opacity=".5"/>
+        <path d="M328 328 L270 270" stroke="#BFD9DF" stroke-width="7" stroke-linecap="round" opacity=".5"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">今天</div>
+    <h1>这节课只练三件事</h1>
+    <ul>
+      <li>底盘改好：加一块推板，尺寸不超标</li>
+      <li>把 1 件珍宝推进中央博物馆</li>
+      <li>推完，车自己开回中央圈停住</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">复习 · 三条规则</div>
+    <h1>先记住这三条</h1>
+    <div class="q"><span class="n">1</span>一轮 2 分钟，一共两轮，两轮分数相加。这意味着什么？</div>
+    <div class="ans reveal">不是「成功一次」就行，要两次都稳。</div>
+    <div class="q"><span class="n">2</span>车停在安全区里的时候，能不能用手搬它？</div>
+    <div class="ans reveal">能。可以搬到另一个安全区，但只能搬车，不能碰任务道具。</div>
+    <div class="q"><span class="n">3</span>想拿到停靠那 10 分，有什么前提？</div>
+    <div class="ans reveal">至少先完成一项任务得分，而且必须车自己开进去，手搬不算。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">导入</div>
+    <h1>为什么不能用车身去怼？</h1>
+    <p class="sub">先想两分钟：车头直接顶过去，和用一块板子推，差在哪？</p>
+    <div class="hint reveal">提示：想想珍宝被顶歪了、滚到旁边去了，会怎样。</div>
+    <div class="ans reveal">车身窄、接触面小，一顶就翻。推板宽、挨着地，能把东西「兜」着走。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">底盘 · 改造</div>
+    <h1>推板三要点</h1>
+    <ul>
+      <li>比珍宝宽：两边多出一点，推起来不从侧面溜</li>
+      <li>离地不超过 5 毫米：太高会从珍宝上面滑过去</li>
+      <li>装得牢：两轮比赛中间不许改结构</li>
+    </ul>
+    <p class="sub">上节课搭好的四驱车别拆，只在前面加东西。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">底盘 · 尺寸</div>
+    <h1>启动前量一次</h1>
+    <div class="cols">
+      <div class="card"><b>长</b>≤ 250 mm</div>
+      <div class="card"><b>宽</b>≤ 250 mm</div>
+      <div class="card"><b>高</b>≤ 250 mm</div>
+    </div>
+    <p class="hint">连推板、连线一起量，不是只量车身。超了就要在启动前改，比赛中不许改。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">推送 · 动作</div>
+    <h1>推的时候，车怎么走</h1>
+    <ul>
+      <li>正对着珍宝，从它后面推</li>
+      <li>推板贴住，别猛冲——慢而稳，珍宝才不滚</li>
+      <li>一直推到中央博物馆区，完全进去再停</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">推送 · 算分</div>
+    <h1>怎样才算「推进去了」</h1>
+    <div class="q"><span class="n">Q</span>珍宝压在博物馆区的边线上，算不算？</div>
+    <div class="ans reveal">算。边线属于区域里面，只要完全在区内、碰到场地就行。</div>
+    <div class="q"><span class="n">Q</span>四件全推进去，有额外加分吗？</div>
+    <div class="ans reveal">有，四件都到的再加 10 分。所以后面要练四角连运。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">标定 · 关键方法</div>
+    <h1>用秒表，不用眼睛</h1>
+    <ul>
+      <li>场地没有边框，车走歪了没有东西挡</li>
+      <li>WeDo 的电机也读不回转了多少</li>
+      <li>只能固定起点、固定朝向，记下走几秒</li>
+    </ul>
+    <p class="hint">每次记同一个位置起跑，秒数写在路线卡上，别凭感觉。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">停靠</div>
+    <h1>把车开回家</h1>
+    <ul>
+      <li>推完珍宝，车要自己开回中央圆圈</li>
+      <li>整个车身都要进圈，连线可以在外面</li>
+      <li>停稳了告诉裁判：本轮任务完成</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">练习 · 分工</div>
+    <h1>三个人怎么轮</h1>
+    <div class="cols">
+      <div class="card"><b>摆场</b>把珍宝放回原位，摆正</div>
+      <div class="card"><b>放车</b>对着线放，按开始</div>
+      <div class="card"><b>计时</b>掐秒表，记秒数</div>
+    </div>
+    <p class="sub">每轮换一个人，三个人都要会摆、会放、会记。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">调试</div>
+    <h1>珍宝推歪了，先查哪里？</h1>
+    <p class="sub" style="font-size:37px;color:#1F2937">先自己找两分钟，别急着改程序。</p>
+    <ul class="reveal" style="margin-top:26px">
+      <li>车的起点有没有摆正，偏一点点后面就差很多</li>
+      <li>推板是不是比珍宝窄，从侧面溜过去了</li>
+      <li>推板离地太高，压不住珍宝</li>
+      <li>速度太快，珍宝被撞得滚出去</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">挑战</div>
+    <h1>连续三次，成两次</h1>
+    <ul>
+      <li>同一件珍宝，推三次，至少进两次</li>
+      <li>推完还能自己停进中央圈</li>
+      <li>秒数写进路线卡，下个人照你的卡跑一次</li>
+    </ul>
+    <p class="sub">做到的同学，试试换另一个角再跑一遍。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">收尾</div>
+    <h1>三个问题</h1>
+    <div class="q"><span class="n">Q1</span>推板为什么要比珍宝宽、还要贴近地面？</div>
+    <div class="ans reveal">宽才不会从侧面溜，贴地才不会从上面滑过去。</div>
+    <div class="q"><span class="n">Q2</span>为什么每段路都要记秒数？</div>
+    <div class="ans reveal">场地没有边框、电机也读不回转了多少，只能靠固定起点加计时。</div>
+    <div class="q"><span class="n">Q3</span>车停进中央圈，为什么不能用手搬？</div>
+    <div class="ans reveal">手搬进去不算分，必须车自己开进去。</div>
+  </section>
+
+  <div id="nav"><button id="prev" aria-label="上一页">‹</button><button id="next" aria-label="下一页">›</button></div>
+  <div id="rotate" onclick="this.dataset.off=1;this.style.display='none'">把手机横过来看，更清楚<br><br><span style="font-size:15px;opacity:.7">点一下继续</span></div>
+  <div id="foot">古迹文明集训 第2课 · 底盘定型 + 珍宝推送 + 停靠 · 周六班 2026-11-14</div>
+  <a id="home" href="index.html"><i></i></a>
+  <div id="hint">空格 揭晓</div>
+  <div id="pager"></div>
+</div>
+
+<script>
+const stage=document.getElementById('stage');
+const slides=[...document.querySelectorAll('.slide')];
+const pager=document.getElementById('pager');
+const hint=document.getElementById('hint');
+let i=0;
+
+function view(){
+  const v=window.visualViewport;
+  const w=Math.min(innerWidth, v?v.width:innerWidth, screen.width||innerWidth);
+  const h=Math.min(innerHeight, v?v.height:innerHeight, screen.height||innerHeight);
+  return {w,h};
+}
+function fit(){
+  const {w,h}=view();
+  const s=Math.min(w/1600,h/900);
+  stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+  const rot=document.getElementById('rotate');
+  if(rot) rot.style.display=(!rot.dataset.off && h>w && w<=1000)?'flex':'none';
+}
+addEventListener('resize',fit);
+addEventListener('orientationchange',()=>setTimeout(fit,200));
+if(window.visualViewport){
+  visualViewport.addEventListener('resize',fit);
+  visualViewport.addEventListener('scroll',fit);
+}
+fit();
+
+function paint(){
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  slides[i].querySelectorAll('.reveal').forEach(e=>e.classList.remove('show'));
+  pager.textContent=(i+1)+' / '+slides.length;
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+function go(d){ i=Math.max(0,Math.min(slides.length-1,i+d)); paint(); }
+function reveal(){
+  const n=slides[i].querySelector('.reveal:not(.show)');
+  if(n) n.classList.add('show');
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+addEventListener('keydown',e=>{
+  if(['ArrowRight','PageDown'].includes(e.key)){e.preventDefault();go(1)}
+  else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(-1)}
+  else if(e.key===' '||e.key==='Enter'){e.preventDefault();reveal()}
+  else if(e.key==='a'||e.key==='A'){e.preventDefault();slides[i].querySelectorAll('.reveal').forEach(x=>x.classList.add('show'));hint.style.opacity=0}
+  else if(e.key==='Home'){i=0;paint()}
+  else if(e.key==='End'){i=slides.length-1;paint()}
+  else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+});
+let _lastTouch=0;
+stage.addEventListener('click',()=>{ if(Date.now()-_lastTouch<600) return; reveal(); });
+let _sx=0,_sy=0;
+stage.addEventListener('touchstart',e=>{const t=e.touches[0];_sx=t.clientX;_sy=t.clientY;},{passive:true});
+stage.addEventListener('touchend',e=>{
+  _lastTouch=Date.now();
+  const t=e.changedTouches[0], dx=t.clientX-_sx, dy=t.clientY-_sy;
+  if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)){ go(dx<0?1:-1); }
+  else { reveal(); }
+},{passive:true});
+document.getElementById('prev').onclick=()=>go(-1);
+document.getElementById('next').onclick=()=>go(1);
+paint();
+</script>
+</body>
+</html>
