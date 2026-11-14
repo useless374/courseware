@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WeDo 一级 · 连发皮筋枪</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#1A1A1A;overflow:hidden;
+    font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+  #stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;
+    transform-origin:center center;background:#FFFFFF;
+    box-shadow:0 0 60px rgba(0,0,0,.5);overflow:hidden}
+  .slide{position:absolute;inset:0;padding:74px 150px;display:none;
+    flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .slide.pad{padding-top:60px;padding-bottom:60px}
+  .bar{position:absolute;left:0;top:0;width:100%;height:14px;background:#E36414}
+  .kicker{font-size:20px;font-weight:700;color:#E36414;letter-spacing:.04em;margin:6px 0 10px}
+  h1{font-size:50px;font-weight:700;color:#0F4C5C;line-height:1.2;margin-bottom:46px}
+  ul{list-style:none;margin-top:6px}
+  li{font-size:37px;line-height:1.45;color:#1F2937;margin-bottom:26px;padding-left:44px;position:relative}
+  li:before{content:"▪";position:absolute;left:2px;top:-2px;color:#E36414;font-weight:700}
+  .q{font-size:37px;line-height:1.45;color:#1F2937;background:#E6F2F4;border-radius:10px;padding:18px 30px;margin-bottom:14px}
+  .q .n{color:#E36414;font-weight:700;margin-right:14px}
+  .ans{font-size:34px;line-height:1.5;color:#0F4C5C;background:#F2F8F9;border-left:8px solid #E36414;padding:16px 26px;margin:-2px 0 22px 26px;border-radius:0 8px 8px 0}
+  .hint{font-size:34px;line-height:1.5;color:#8A6A16;background:#FBF1D8;border-left:8px solid #D9A21B;padding:18px 26px;margin:14px 0;border-radius:0 8px 8px 0}
+  .code{font-family:Consolas,"Courier New",monospace;font-size:33px;line-height:1.7;background:#0B121A;border-radius:12px;padding:34px 40px;color:#D7E3EA}
+  .cols{display:flex;gap:38px;margin-top:10px;margin-bottom:10px}
+  .card{flex:1;background:#F2F8F9;border-radius:12px;padding:28px 32px;font-size:33px;line-height:1.5;color:#1F2937}
+  .card b{display:block;color:#0F4C5C;font-size:29px;margin-bottom:10px}
+  .sub{font-size:33px;color:#6B7280;line-height:1.5;margin-top:18px}
+  .reveal{color:transparent!important;user-select:none;position:relative;transition:color .25s ease}
+  .reveal::after{content:"?";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#BCC9CD;font-size:30px;font-weight:300;background-color:#F1F6F7;background-image:repeating-linear-gradient(135deg,rgba(15,76,92,.05) 0 12px,transparent 12px 24px);border-radius:8px}
+  .code.reveal::after{color:#46606E;background-color:#0E1822;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 12px,transparent 12px 24px)}
+  ul.reveal::after{color:#C6D1D4;background-color:#FFFFFF;background-image:repeating-linear-gradient(135deg,rgba(15,76,92,.04) 0 12px,transparent 12px 24px)}
+  .reveal.show{color:inherit!important}
+  .ans.reveal.show{color:#0F4C5C!important}
+  .code.reveal.show{color:#D7E3EA!important}
+  .hint.reveal.show{color:#8A6A16!important}
+  ul.reveal.show li{color:#1F2937!important}
+  .reveal.show{user-select:auto!important}
+  .reveal.show::after{display:none}
+  .cover{background:#0F4C5C;flex-direction:row;align-items:center;justify-content:space-between;padding:0 120px 0 150px}
+  .cover-left{max-width:820px}
+  .cover-art{width:430px;height:430px;flex:0 0 auto}
+  .cover h1{color:#FFFFFF;font-size:78px;margin-bottom:26px}
+  .cover .kicker{color:#BFD9DF;font-size:22px;margin-bottom:18px;letter-spacing:.1em}
+  .cover .sub{color:#BFD9DF;font-size:30px;margin-top:0}
+  .cover .bar{background:#E36414}
+  #home{position:absolute;right:10px;top:8px;width:52px;height:44px;z-index:5;display:flex;align-items:flex-start;justify-content:flex-end;text-decoration:none}
+  #home i{width:9px;height:9px;border-radius:50%;background:#E36414;display:block;margin:10px 14px 0 0}
+  #home:hover i{opacity:.55}
+  #foot{position:absolute;left:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #pager{position:absolute;right:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #hint{position:absolute;right:72px;bottom:52px;font-size:15px;color:#C2C9CB;letter-spacing:.12em;transition:opacity .3s}
+  #nav{position:fixed;right:18px;bottom:18px;display:none;gap:12px;z-index:10}
+  #nav button{width:64px;height:64px;border-radius:50%;border:0;background:rgba(15,76,92,.85);color:#fff;font-size:34px;line-height:1}
+  #rotate{position:fixed;inset:0;background:#0F4C5C;color:#fff;display:none;align-items:center;justify-content:center;text-align:center;font-size:20px;z-index:20}
+  @media (max-width:900px){#nav{display:flex}}
+  @media (max-width:900px) and (orientation:portrait){#rotate{display:flex}}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="slide cover on">
+    <div class="bar"></div>
+    <div class="cover-left">
+      <div class="kicker">WeDo 一级</div>
+      <h1>连发皮筋枪</h1>
+      <div class="sub">橡皮筋存着劲，电机负责「松手」</div>
+    </div>
+    <div class="cover-art">
+      <svg viewBox="0 0 420 420" fill="none">
+        <path d="M60 210 H330" stroke="#BFD9DF" stroke-width="14" stroke-linecap="round" opacity=".5"/>
+        <path d="M330 210 L250 150" stroke="#E36414" stroke-width="12" stroke-linecap="round"/>
+        <path d="M330 210 L250 270" stroke="#E36414" stroke-width="12" stroke-linecap="round"/>
+        <circle cx="120" cy="210" r="34" stroke="#E36414" stroke-width="9"/>
+        <circle cx="120" cy="210" r="10" fill="#E36414"/>
+        <path d="M60 160 A60 60 0 0 1 60 260" stroke="#E36414" stroke-width="6" opacity=".6"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">今天</div>
+    <h1>三件事</h1>
+    <ul>
+      <li>照着第 1 到第 16 步，把枪搭出来</li>
+      <li>手动扣一次，看皮筋怎么飞出去</li>
+      <li>写程序，让电机替你扣扳机</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">认识零件</div>
+    <h1>这次用到的四个东西</h1>
+    <div class="cols">
+      <div class="card"><b>长梁</b>当枪管和枪身</div>
+      <div class="card"><b>销</b>把梁连起来，可转的、固定的要分清</div>
+    </div>
+    <div class="cols">
+      <div class="card"><b>电机</b>只有它自己能转</div>
+      <div class="card"><b>橡皮筋</b>提供飞出去的力气</div>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">导入</div>
+    <h1>皮筋是被什么推出去的？</h1>
+    <p class="sub">枪里没有弹簧，也没有气。先想两分钟。</p>
+    <div class="hint reveal">提示：拉长了的橡皮筋，松手那一下它在做什么？</div>
+    <div class="ans reveal">是橡皮筋自己弹回去。拉长时它存了劲，松手就把劲放出来。<br>电机做的只是「松手」这个动作。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">搭建 · 分段</div>
+    <h1>16 步拆成四段</h1>
+    <ul>
+      <li>第 1–4 步：枪身底板</li>
+      <li>第 5–9 步：枪管和支架</li>
+      <li>第 10–13 步：扳机和电机位</li>
+      <li>第 14–16 步：装皮筋、接线</li>
+    </ul>
+    <p class="sub">每段搭完先检查一遍再往下走，别一口气搭到底。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">搭建 · 关键</div>
+    <h1>三个地方最容易错</h1>
+    <ul>
+      <li>销插错孔位：枪管会歪，皮筋挂不上</li>
+      <li>可转销当成固定销：扳机扣不动</li>
+      <li>电机轴上的齿轮没咬住：转了半天不发射</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">试射 · 手动</div>
+    <h1>先别接电机</h1>
+    <ul>
+      <li>皮筋挂到位，用手把扳机慢慢扣下去</li>
+      <li>看皮筋是不是顺着枪管方向飞出去</li>
+      <li>飞歪了，先调枪管，不是调程序</li>
+    </ul>
+    <p class="hint">手动都打不准，装电机只会更乱。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">安全</div>
+    <h1>三条必须守</h1>
+    <ul>
+      <li>枪口始终朝空地，不对人、不对脸</li>
+      <li>不发射时手不放扳机位置</li>
+      <li>同组的人站在枪口后方</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">程序 · 第一版</div>
+    <h1>按一下，打一发</h1>
+    <div class="code reveal">当 按下 按钮<br>&nbsp;&nbsp;电机 正转 速度 8<br>&nbsp;&nbsp;等待 0.5 秒<br>&nbsp;&nbsp;电机 停止</div>
+    <p class="sub">先确认「转多久正好松开一次」，这个时间是试出来的，不是猜的。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">程序 · 连发</div>
+    <h1>让它一发接一发</h1>
+    <div class="code reveal">当 按下 按钮<br>&nbsp;&nbsp;重复 5 次<br>&nbsp;&nbsp;&nbsp;&nbsp;电机 正转 速度 8<br>&nbsp;&nbsp;&nbsp;&nbsp;等待 0.5 秒<br>&nbsp;&nbsp;&nbsp;&nbsp;电机 停止<br>&nbsp;&nbsp;&nbsp;&nbsp;等待 0.3 秒</div>
+    <p class="sub">那个 0.3 秒是留给下一个皮筋归位的，太短会卡住。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">调试</div>
+    <h1>电机转了，皮筋没出来。</h1>
+    <p class="sub" style="font-size:37px;color:#1F2937">先自己找两分钟。</p>
+    <ul class="reveal" style="margin-top:26px">
+      <li>齿轮有没有咬住电机轴，是不是在原地空转</li>
+      <li>皮筋有没有挂进那个卡槽</li>
+      <li>转动时间太短，还没松到位就停了</li>
+      <li>转动时间太长，一次放出去好几根</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">挑战</div>
+    <h1>打靶</h1>
+    <ul>
+      <li>三米外摆三个纸杯，一枪一个</li>
+      <li>调的是角度和发射节奏，不是加皮筋</li>
+      <li>连发 5 发，中 3 个算过</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">收尾</div>
+    <h1>三个问题</h1>
+    <div class="q"><span class="n">Q1</span>皮筋飞出去，靠的是谁给的劲？</div>
+    <div class="ans reveal">橡皮筋自己弹回去的劲，电机只负责松开它。</div>
+    <div class="q"><span class="n">Q2</span>电机转了却不发射，先查哪里？</div>
+    <div class="ans reveal">齿轮有没有咬住轴，皮筋是不是挂在卡槽里。</div>
+    <div class="q"><span class="n">Q3</span>连发为什么要留一段等待？</div>
+    <div class="ans reveal">让下一个皮筋有时间归位，不然会卡住。</div>
+  </section>
+
+  <div id="nav"><button id="prev" aria-label="上一页">‹</button><button id="next" aria-label="下一页">›</button></div>
+  <div id="rotate" onclick="this.dataset.off=1;this.style.display='none'">把手机横过来看，更清楚<br><br><span style="font-size:15px;opacity:.7">点一下继续</span></div>
+  <div id="foot">WeDo 一级 · 连发皮筋枪</div>
+  <a id="home" href="index.html"><i></i></a>
+  <div id="hint">空格 揭晓</div>
+  <div id="pager"></div>
+</div>
+
+<script>
+const stage=document.getElementById('stage');
+const slides=[...document.querySelectorAll('.slide')];
+const pager=document.getElementById('pager');
+const hint=document.getElementById('hint');
+let i=0;
+function view(){
+  const v=window.visualViewport;
+  const w=Math.min(innerWidth, v?v.width:innerWidth, screen.width||innerWidth);
+  const h=Math.min(innerHeight, v?v.height:innerHeight, screen.height||innerHeight);
+  return {w,h};
+}
+function fit(){
+  const {w,h}=view();
+  const s=Math.min(w/1600,h/900);
+  stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+  const rot=document.getElementById('rotate');
+  if(rot) rot.style.display=(!rot.dataset.off && h>w && w<=1000)?'flex':'none';
+}
+addEventListener('resize',fit);
+addEventListener('orientationchange',()=>setTimeout(fit,200));
+if(window.visualViewport){
+  visualViewport.addEventListener('resize',fit);
+  visualViewport.addEventListener('scroll',fit);
+}
+fit();
+function paint(){
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  slides[i].querySelectorAll('.reveal').forEach(e=>e.classList.remove('show'));
+  pager.textContent=(i+1)+' / '+slides.length;
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+function go(d){ i=Math.max(0,Math.min(slides.length-1,i+d)); paint(); }
+function reveal(){
+  const n=slides[i].querySelector('.reveal:not(.show)');
+  if(n) n.classList.add('show');
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+addEventListener('keydown',e=>{
+  if(['ArrowRight','PageDown'].includes(e.key)){e.preventDefault();go(1)}
+  else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(-1)}
+  else if(e.key===' '||e.key==='Enter'){e.preventDefault();reveal()}
+  else if(e.key==='a'||e.key==='A'){e.preventDefault();slides[i].querySelectorAll('.reveal').forEach(x=>x.classList.add('show'));hint.style.opacity=0}
+  else if(e.key==='Home'){i=0;paint()}
+  else if(e.key==='End'){i=slides.length-1;paint()}
+  else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+});
+let _lastTouch=0;
+stage.addEventListener('click',()=>{ if(Date.now()-_lastTouch<600) return; reveal(); });
+let _sx=0,_sy=0;
+stage.addEventListener('touchstart',e=>{const t=e.touches[0];_sx=t.clientX;_sy=t.clientY;},{passive:true});
+stage.addEventListener('touchend',e=>{
+  _lastTouch=Date.now();
+  const t=e.changedTouches[0], dx=t.clientX-_sx, dy=t.clientY-_sy;
+  if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)){ go(dx<0?1:-1); }
+  else { reveal(); }
+},{passive:true});
+document.getElementById('prev').onclick=()=>go(-1);
+document.getElementById('next').onclick=()=>go(1);
+paint();
+</script>
+</body>
+</html>
