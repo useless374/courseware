@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>飞机大战 · TurboWarp 中班（备选）</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#1A1A1A;overflow:hidden;
+    font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+  #stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;
+    transform-origin:center center;background:#FFFFFF;
+    box-shadow:0 0 60px rgba(0,0,0,.5);overflow:hidden}
+  .slide{position:absolute;inset:0;padding:74px 150px;display:none;
+    flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .slide.pad{padding-top:60px;padding-bottom:60px}
+
+  .bar{position:absolute;left:0;top:0;width:100%;height:14px;background:#E36414}
+
+  .kicker{font-size:20px;font-weight:700;color:#E36414;letter-spacing:.04em;
+    margin:6px 0 10px}
+  h1{font-size:50px;font-weight:700;color:#0F4C5C;line-height:1.2;margin-bottom:42px}
+
+  ul{list-style:none;margin-top:6px}
+  li{font-size:36px;line-height:1.45;color:#1F2937;margin-bottom:22px;
+    padding-left:44px;position:relative}
+  li:before{content:"▪";position:absolute;left:2px;top:-2px;color:#E36414;
+    font-weight:700}
+
+  .q{font-size:36px;line-height:1.45;color:#1F2937;background:#E6F2F4;
+    border-radius:10px;padding:18px 30px;margin-bottom:14px;font-weight:400}
+  .q .n{color:#E36414;font-weight:700;margin-right:14px}
+
+  .ans{font-size:33px;line-height:1.5;color:#0F4C5C;background:#F2F8F9;
+    border-left:8px solid #E36414;padding:16px 26px;margin:-2px 0 20px 26px;
+    border-radius:0 8px 8px 0}
+  .hint{font-size:33px;line-height:1.5;color:#8A6A16;background:#FBF1D8;
+    border-left:8px solid #D9A21B;padding:18px 26px;margin:14px 0;
+    border-radius:0 8px 8px 0}
+
+  .code{font-family:Consolas,"Courier New",monospace;font-size:32px;line-height:1.65;
+    background:#0B121A;border-radius:12px;padding:30px 40px;color:#D7E3EA}
+  .code.sm{font-size:29px;line-height:1.55;padding:24px 36px}
+
+  .cols{display:flex;gap:34px;margin-top:10px;margin-bottom:10px}
+  .cols3{display:flex;gap:26px;margin-top:6px}
+  .card{flex:1;background:#F2F8F9;border-radius:12px;padding:24px 28px;
+    font-size:31px;line-height:1.5;color:#1F2937}
+  .card b{display:block;color:#0F4C5C;font-size:28px;margin-bottom:8px}
+  .card small{display:block;color:#6B7280;font-size:24px;margin-top:6px}
+
+  .sub{font-size:32px;color:#6B7280;line-height:1.5;margin-top:16px}
+
+  table{width:100%;border-collapse:collapse;margin-top:8px}
+  th,td{font-size:28px;line-height:1.45;padding:11px 16px;text-align:left;
+    border-bottom:1px solid #DCE6E8}
+  th{color:#0F4C5C;background:#F2F8F9}
+
+  /* 遮挡：内容先藏起来，只留一张"盖着"的卡 */
+  .reveal{color:transparent!important;user-select:none;position:relative;
+    transition:color .25s ease}
+  .reveal::after{content:"?";position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    color:#BCC9CD;font-size:30px;font-weight:300;
+    background-color:#F1F6F7;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(15,76,92,.05) 0 12px,transparent 12px 24px);
+    border-radius:8px}
+  .code.reveal::after{color:#46606E;background-color:#0E1822;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(255,255,255,.05) 0 12px,transparent 12px 24px)}
+  ul.reveal::after{color:#C6D1D4;background-color:#FFFFFF;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(15,76,92,.04) 0 12px,transparent 12px 24px)}
+  .reveal.show{color:inherit!important;user-select:auto!important}
+  .ans.reveal.show{color:#0F4C5C!important}
+  .code.reveal.show{color:#D7E3EA!important}
+  .hint.reveal.show{color:#8A6A16!important}
+  ul.reveal.show li{color:#1F2937!important}
+  .reveal.show::after{display:none}
+
+  /* 封面 */
+  .cover{background:#0F4C5C;flex-direction:row;align-items:center;
+    justify-content:space-between;padding:0 120px 0 150px}
+  .cover-left{max-width:760px}
+  .cover-art{width:430px;height:430px;flex:0 0 auto}
+  .cover h1{color:#FFFFFF;font-size:78px;margin-bottom:26px}
+  .cover .kicker{color:#BFD9DF;font-size:22px;margin-bottom:18px;letter-spacing:.1em}
+  .cover .sub{color:#BFD9DF;font-size:30px;margin-top:0}
+  .cover .bar{background:#E36414}
+
+  /* 返回入口：只有知道的人才找得到——右上角一个小点，鼠标放上去才显形 */
+  #home{position:absolute;right:10px;top:8px;width:52px;height:44px;
+    display:flex;align-items:flex-start;justify-content:flex-end;
+    text-decoration:none;font-size:15px;color:#0F4C5C;z-index:5}
+  #home i{width:9px;height:9px;border-radius:50%;background:#E36414;
+    opacity:.18;margin:6px 8px 0 0;font-style:normal}
+  #home:hover i{opacity:.55}
+  #foot{position:absolute;left:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #pager{position:absolute;right:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #hint{position:absolute;right:72px;bottom:52px;font-size:15px;color:#C2C9CB;
+    letter-spacing:.12em;transition:opacity .3s}
+  #nav{position:fixed;right:18px;bottom:18px;display:none;gap:12px;z-index:10}
+  #nav button{width:64px;height:64px;border-radius:50%;border:0;
+    background:rgba(15,76,92,.85);color:#fff;font-size:34px;line-height:1}
+  #rotate{position:fixed;inset:0;background:#0F4C5C;color:#fff;display:none;
+    align-items:center;justify-content:center;font-size:20px;z-index:20}
+  @media (max-width:900px){#nav{display:flex}}
+  @media (max-width:900px) and (orientation:portrait){#rotate{display:flex}}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="slide cover on">
+    <div class="bar"></div>
+    <div class="cover-left">
+      <div class="kicker">TurboWarp 中班 · 备选课</div>
+      <h1>飞机大战</h1>
+      <div class="sub">方向键开飞机，子弹自动打<br>打中 11 架敌机就过关</div>
+    </div>
+    <div class="cover-art">
+      <svg viewBox="0 0 420 420" fill="none">
+        <rect x="0" y="0" width="420" height="420" fill="#0F4C5C"/>
+        <g fill="#BFD9DF" opacity=".5">
+          <circle cx="60" cy="70" r="3"/><circle cx="150" cy="45" r="2"/>
+          <circle cx="260" cy="80" r="3"/><circle cx="350" cy="50" r="2"/>
+          <circle cx="80" cy="180" r="2"/><circle cx="340" cy="200" r="3"/>
+          <circle cx="40" cy="300" r="2"/><circle cx="380" cy="320" r="2"/>
+        </g>
+        <path d="M210 300 L240 350 L210 340 L180 350 Z" fill="#E36414"/>
+        <path d="M210 170 L236 250 L286 272 L238 270 L210 300 L182 270 L134 272 L184 250 Z" fill="#E36414"/>
+        <path d="M210 190 L224 250 L210 262 L196 250 Z" fill="#F6B37A"/>
+        <g fill="#D7E3EA">
+          <rect x="205" y="120" width="10" height="34" rx="5"/>
+          <rect x="120" y="150" width="9" height="26" rx="4"/>
+          <rect x="291" y="150" width="9" height="26" rx="4"/>
+        </g>
+        <g fill="#BFD9DF" opacity=".8">
+          <path d="M120 90 l24 12 -24 12 -6 -12 z"/>
+          <path d="M300 105 l22 11 -22 11 -5 -11 z"/>
+        </g>
+        <path d="M98 95 l10 0 M103 90 l0 10" stroke="#E36414" stroke-width="3"/>
+        <path d="M322 70 l10 0 M327 65 l0 10" stroke="#E36414" stroke-width="3"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">今天</div>
+    <h1>做完你会拥有一个完整射击游戏</h1>
+    <ul>
+      <li>方向键控制飞机，子弹自动往上打</li>
+      <li>三种敌机从上方出现，打中加分，越往后越快</li>
+      <li>被敌机撞到就结束，打中 11 架过关</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">复习 · 打砖块 / 打地鼠</div>
+    <h1>三个老朋友</h1>
+    <div class="q"><span class="n">Q1</span>克隆体是什么？</div>
+    <div class="ans reveal">本体的一份拷贝。本体留在原地，克隆体去飞、去撞，用完要删掉。</div>
+    <div class="q"><span class="n">Q2</span>「在几到几之间随机选数」用在哪？</div>
+    <div class="ans reveal">今天用来决定敌机从哪个 x 坐标出现，每次都不一样。</div>
+    <div class="q"><span class="n">Q3</span>为什么克隆体用完要删除？</div>
+    <div class="ans reveal">不删就一直留在舞台外，越积越多，游戏会越来越卡。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">导入</div>
+    <h1>先看老师玩 30 秒</h1>
+    <ul>
+      <li>子弹从哪来？需要按发射键吗？</li>
+      <li>敌机从哪出现？打中会怎样？</li>
+      <li>什么情况算结束？怎样算过关？</li>
+    </ul>
+    <p class="sub">只看不说，看完带着这三个问题开工。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">程序全景</div>
+    <h1>六类角色，各干一件事</h1>
+    <div class="cols3">
+      <div class="card"><b>主角机</b>方向键移动<small>碰到敌机就结束</small></div>
+      <div class="card"><b>子弹</b>自动发射<small>每 0.5 秒一颗</small></div>
+      <div class="card"><b>三种敌机</b>敌机 / 敌机2 / 堡垒机<small>速度不同、生成间隔不同</small></div>
+    </div>
+    <div class="cols3" style="margin-top:22px">
+      <div class="card"><b>开始</b>一张图，点击开始<small>gamestart</small></div>
+      <div class="card"><b>失败 / 胜利</b>两张图<small>gameover / you-win</small></div>
+      <div class="card"><b>变量</b>只有 1 个<small>分数</small></div>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">变量速查</div>
+    <h1>只有一个变量：分数</h1>
+    <div class="cols">
+      <div class="card"><b>分数</b>打中几架敌机<small>初值 0，打中一架 +1</small></div>
+      <div class="card"><b>过关线</b>分数 &gt; 10<small>也就是打中 11 架</small></div>
+    </div>
+    <p class="hint">本课没有列表；每架敌机、每颗子弹都是克隆体，靠克隆管理数量。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 1 · 主角机</div>
+    <h1>四个方向键，各推一把</h1>
+    <div class="code sm reveal">当绿旗被点击：<br>&nbsp;&nbsp;隐藏；移到 (0, -100)<br><br>当收到「开始」：<br>&nbsp;&nbsp;显示<br>&nbsp;&nbsp;重复执行：<br>&nbsp;&nbsp;&nbsp;&nbsp;按 ← x -10&nbsp;&nbsp;按 → x +10<br>&nbsp;&nbsp;&nbsp;&nbsp;按 ↑ y +10&nbsp;&nbsp;按 ↓ y -10</div>
+    <p class="sub">是「x 增加」，不是「移到 x」——一下移 10，飞机才会平滑地走。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 2 · 子弹自动发射</div>
+    <h1>每 0.5 秒生一颗，自己往上飞</h1>
+    <div class="code sm reveal">当收到「开始」：<br>&nbsp;&nbsp;重复执行：<br>&nbsp;&nbsp;&nbsp;&nbsp;等待 0.5 秒<br>&nbsp;&nbsp;&nbsp;&nbsp;克隆自己<br>&nbsp;&nbsp;&nbsp;&nbsp;播放音效<br><br>当作为克隆体启动时：<br>&nbsp;&nbsp;移到「主角机」<br>&nbsp;&nbsp;显示；重复执行：y 增加 20</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 2 · 两个卡点</div>
+    <h1>子弹从飞机身上出生，飞出去要删</h1>
+    <ul>
+      <li>克隆体先「移到主角机」，再显示——否则子弹从舞台中心冒出来</li>
+      <li>重复执行里判断：碰到敌机 或 敌机2 或 堡垒机 或 舞台边缘</li>
+      <li>成立就「等待 0.05 秒 → 删除此克隆体」</li>
+    </ul>
+    <p class="hint">不删子弹，舞台外会堆几百颗，游戏越来越卡。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 3 · 敌机出现</div>
+    <h1>随机 x，从顶上往下飞</h1>
+    <div class="code sm reveal">当收到「开始」：<br>&nbsp;&nbsp;重复执行：<br>&nbsp;&nbsp;&nbsp;&nbsp;等待 (1 到 3) 秒<br>&nbsp;&nbsp;&nbsp;&nbsp;克隆自己<br><br>当作为克隆体启动时：<br>&nbsp;&nbsp;移到 (在 -220 到 220 间随机选数, 180)<br>&nbsp;&nbsp;显示；重复执行：y 增加 -8</div>
+    <p class="sub">y 小于 -160 就飞出屏幕，删除克隆体；避免在舞台外越积越多。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 4 · 打中加分</div>
+    <h1>子弹碰到敌机：加分、爆炸、消失</h1>
+    <div class="code reveal">敌机克隆体重复执行：<br>&nbsp;&nbsp;如果 碰到「子弹」？：<br>&nbsp;&nbsp;&nbsp;&nbsp;分数 +1<br>&nbsp;&nbsp;&nbsp;&nbsp;换成「爆炸」造型<br>&nbsp;&nbsp;&nbsp;&nbsp;播放音效<br>&nbsp;&nbsp;&nbsp;&nbsp;删除此克隆体</div>
+    <p class="hint">加分写在敌机身上，不写在子弹身上——子弹碰到就删了，来不及加分。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 5 · 被撞就结束</div>
+    <h1>三种敌机，碰哪个都算输</h1>
+    <div class="code sm reveal">主角机重复执行：<br>&nbsp;&nbsp;如果 碰到「敌机」？ 或<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;碰到「敌机2」？ 或<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;碰到「堡垒机」？：<br>&nbsp;&nbsp;&nbsp;&nbsp;换成「爆炸」造型<br>&nbsp;&nbsp;&nbsp;&nbsp;播放音效<br>&nbsp;&nbsp;&nbsp;&nbsp;广播「结束」</div>
+    <p class="sub">「或」多连几次，三个条件填满；少一个，撞那种敌机就穿过去了。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 6 · 开始 / 失败 / 胜利</div>
+    <h1>三张图片，用广播换场</h1>
+    <div class="cols3">
+      <div class="card"><b>开始图</b>绿旗显示；被点击 → 隐藏，广播「开始」</div>
+      <div class="card"><b>失败图</b>绿旗隐藏；收到「结束」→ 显示，停止全部</div>
+      <div class="card"><b>胜利图</b>绿旗分数=0；重复判断 分数 &gt; 10 → 显示，停止全部</div>
+    </div>
+    <p class="hint">「停止全部」放在画面角色里，一显示就把整个游戏停住。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 7 · 三种敌机</div>
+    <h1>只改速度和生成间隔</h1>
+    <table>
+      <tr><th>角色</th><th>每架间隔</th><th>下降速度</th><th>打中得分</th></tr>
+      <tr><td>敌机</td><td>1–3 秒</td><td>8</td><td>+1</td></tr>
+      <tr><td>敌机2</td><td>1–5 秒</td><td>6</td><td>+1</td></tr>
+      <tr><td>堡垒机</td><td>1–7 秒</td><td>4</td><td>+1</td></tr>
+    </table>
+    <p class="sub">复制敌机角色，脚本不用重写，只改等待时间和「y 增加 -几」。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">调试</div>
+    <h1>出问题，先查这三处</h1>
+    <ul class="reveal">
+      <li>子弹不走：克隆体脚本是不是挂在绿旗下，而不是「当作为克隆体启动时」？</li>
+      <li>打中不加分：加分写在敌机身上吗？碰到的对象选的是「子弹」吗？</li>
+      <li>越玩越卡：子弹和敌机飞出屏幕后，删除克隆体了吗？</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">挑战 · 只给提前打完的</div>
+    <h1>还能再进一步</h1>
+    <ul>
+      <li>给主角机加 3 条命，被撞一次掉一条</li>
+      <li>堡垒机改成 Boss：要打 5 下才爆</li>
+      <li>加道具：打中有概率掉加命/加速</li>
+      <li>难度递增：分数越高，敌机生成越快</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">收尾</div>
+    <h1>三个问题带走</h1>
+    <div class="q"><span class="n">Q1</span>子弹为什么先「移到主角机」再显示？</div>
+    <div class="ans reveal">克隆体默认在舞台中心出生；先移过去，子弹才会从飞机身上发射。</div>
+    <div class="q"><span class="n">Q2</span>加分为什么写在敌机身上？</div>
+    <div class="ans reveal">子弹碰到就删了，来不及加分；敌机知道自己被谁打中，加分更稳。</div>
+    <div class="q"><span class="n">Q3</span>为什么飞出屏幕的克隆体一定要删？</div>
+    <div class="ans reveal">不删就一直在后台累积，克隆体越多越卡，最后会卡死。</div>
+  </section>
+
+  <a id="home" href="index.html" title=""><i></i></a>
+      <div id="nav"><button id="prev" aria-label="上一页">‹</button><button id="next" aria-label="下一页">›</button></div>
+  <div id="rotate" onclick="this.dataset.off=1;this.style.display='none'">把手机横过来看，更清楚<br><br><span style="font-size:15px;opacity:.7">点一下继续</span></div>
+  <div id="foot">飞机大战 · TurboWarp 中班（备选） · 2026-11-15</div>
+  <div id="hint">空格 揭晓</div>
+  <div id="pager"></div>
+</div>
+
+<script>
+const stage=document.getElementById('stage');
+const slides=[...document.querySelectorAll('.slide')];
+const pager=document.getElementById('pager');
+const hint=document.getElementById('hint');
+let i=0;
+
+function view(){
+  const v=window.visualViewport;
+  const w=Math.min(innerWidth, v?v.width:innerWidth,
+        screen.width||innerWidth);
+  const h=Math.min(innerHeight, v?v.height:innerHeight,
+        screen.height||innerHeight);
+  return {w,h};
+}
+function fit(){
+  const {w,h}=view();
+  const s=Math.min(w/1600,h/900);
+  stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+  const rot=document.getElementById('rotate');
+  if(rot) rot.style.display=(!rot.dataset.off && h>w && w<=1000)?'flex':'none';
+}
+addEventListener('resize',fit);
+addEventListener('orientationchange',()=>setTimeout(fit,200));
+if(window.visualViewport){
+  visualViewport.addEventListener('resize',fit);
+  visualViewport.addEventListener('scroll',fit);
+}
+fit();
+
+function paint(){
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  slides[i].querySelectorAll('.reveal').forEach(e=>e.classList.remove('show'));
+  pager.textContent=(i+1)+' / '+slides.length;
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+function go(d){ i=Math.max(0,Math.min(slides.length-1,i+d)); paint(); }
+function reveal(){
+  const n=slides[i].querySelector('.reveal:not(.show)');
+  if(n) n.classList.add('show');
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+addEventListener('keydown',e=>{
+  if(['ArrowRight','PageDown'].includes(e.key)){e.preventDefault();go(1)}
+  else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(-1)}
+  else if(e.key===' '||e.key==='Enter'){e.preventDefault();reveal()}
+  else if(e.key==='a'||e.key==='A'){e.preventDefault();slides[i].querySelectorAll('.reveal').forEach(x=>x.classList.add('show'));hint.style.opacity=0}
+  else if(e.key==='Home'){i=0;paint()}
+  else if(e.key==='End'){i=slides.length-1;paint()}
+  else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+});
+let _lastTouch=0;
+stage.addEventListener('click',()=>{ if(Date.now()-_lastTouch<600) return; reveal(); });
+let _sx=0,_sy=0;
+stage.addEventListener('touchstart',e=>{const t=e.touches[0];_sx=t.clientX;_sy=t.clientY;},{passive:true});
+stage.addEventListener('touchend',e=>{
+  _lastTouch=Date.now();
+  const t=e.changedTouches[0], dx=t.clientX-_sx, dy=t.clientY-_sy;
+  if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)){ go(dx<0?1:-1); }
+  else { reveal(); }
+},{passive:true});
+document.getElementById('prev').onclick=()=>go(-1);
+document.getElementById('next').onclick=()=>go(1);
+paint();
+</script>
+</body>
+</html>
