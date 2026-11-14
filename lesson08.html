@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>打地鼠 · TurboWarp 中班</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#1A1A1A;overflow:hidden;
+    font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+  #stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;
+    transform-origin:center center;background:#FFFFFF;
+    box-shadow:0 0 60px rgba(0,0,0,.5);overflow:hidden}
+  .slide{position:absolute;inset:0;padding:74px 150px;display:none;
+    flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .slide.pad{padding-top:60px;padding-bottom:60px}
+
+  .bar{position:absolute;left:0;top:0;width:100%;height:14px;background:#E36414}
+
+  .kicker{font-size:20px;font-weight:700;color:#E36414;letter-spacing:.04em;
+    margin:6px 0 10px}
+  h1{font-size:50px;font-weight:700;color:#0F4C5C;line-height:1.2;margin-bottom:42px}
+
+  ul{list-style:none;margin-top:6px}
+  li{font-size:36px;line-height:1.45;color:#1F2937;margin-bottom:22px;
+    padding-left:44px;position:relative}
+  li:before{content:"▪";position:absolute;left:2px;top:-2px;color:#E36414;
+    font-weight:700}
+
+  .q{font-size:36px;line-height:1.45;color:#1F2937;background:#E6F2F4;
+    border-radius:10px;padding:18px 30px;margin-bottom:14px;font-weight:400}
+  .q .n{color:#E36414;font-weight:700;margin-right:14px}
+
+  .ans{font-size:33px;line-height:1.5;color:#0F4C5C;background:#F2F8F9;
+    border-left:8px solid #E36414;padding:16px 26px;margin:-2px 0 20px 26px;
+    border-radius:0 8px 8px 0}
+  .hint{font-size:33px;line-height:1.5;color:#8A6A16;background:#FBF1D8;
+    border-left:8px solid #D9A21B;padding:18px 26px;margin:14px 0;
+    border-radius:0 8px 8px 0}
+
+  .code{font-family:Consolas,"Courier New",monospace;font-size:32px;line-height:1.65;
+    background:#0B121A;border-radius:12px;padding:30px 40px;color:#D7E3EA}
+  .code.sm{font-size:29px;line-height:1.55;padding:24px 36px}
+
+  .cols{display:flex;gap:34px;margin-top:10px;margin-bottom:10px}
+  .cols3{display:flex;gap:26px;margin-top:6px}
+  .card{flex:1;background:#F2F8F9;border-radius:12px;padding:24px 28px;
+    font-size:31px;line-height:1.5;color:#1F2937}
+  .card b{display:block;color:#0F4C5C;font-size:28px;margin-bottom:8px}
+  .card small{display:block;color:#6B7280;font-size:24px;margin-top:6px}
+
+  .sub{font-size:32px;color:#6B7280;line-height:1.5;margin-top:16px}
+
+  table{width:100%;border-collapse:collapse;margin-top:8px}
+  th,td{font-size:29px;line-height:1.5;padding:12px 18px;text-align:left;
+    border-bottom:1px solid #DCE6E8}
+  th{color:#0F4C5C;background:#F2F8F9}
+
+  /* 遮挡：内容先藏起来，只留一张"盖着"的卡 */
+  .reveal{color:transparent!important;user-select:none;position:relative;
+    transition:color .25s ease}
+  .reveal::after{content:"?";position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    color:#BCC9CD;font-size:30px;font-weight:300;
+    background-color:#F1F6F7;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(15,76,92,.05) 0 12px,transparent 12px 24px);
+    border-radius:8px}
+  .code.reveal::after{color:#46606E;background-color:#0E1822;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(255,255,255,.05) 0 12px,transparent 12px 24px)}
+  ul.reveal::after{color:#C6D1D4;background-color:#FFFFFF;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(15,76,92,.04) 0 12px,transparent 12px 24px)}
+  .reveal.show{color:inherit!important;user-select:auto!important}
+  .ans.reveal.show{color:#0F4C5C!important}
+  .code.reveal.show{color:#D7E3EA!important}
+  .hint.reveal.show{color:#8A6A16!important}
+  ul.reveal.show li{color:#1F2937!important}
+  .reveal.show::after{display:none}
+
+  /* 封面 */
+  .cover{background:#0F4C5C;flex-direction:row;align-items:center;
+    justify-content:space-between;padding:0 120px 0 150px}
+  .cover-left{max-width:760px}
+  .cover-art{width:430px;height:430px;flex:0 0 auto}
+  .cover h1{color:#FFFFFF;font-size:78px;margin-bottom:26px}
+  .cover .kicker{color:#BFD9DF;font-size:22px;margin-bottom:18px;letter-spacing:.1em}
+  .cover .sub{color:#BFD9DF;font-size:30px;margin-top:0}
+  .cover .bar{background:#E36414}
+
+  /* 返回入口：只有知道的人才找得到——右上角一个小点，鼠标放上去才显形 */
+  #home{position:absolute;right:10px;top:8px;width:52px;height:44px;
+    display:flex;align-items:flex-start;justify-content:flex-end;
+    text-decoration:none;font-size:15px;color:#0F4C5C;z-index:5}
+  #home i{width:9px;height:9px;border-radius:50%;background:#E36414;
+    opacity:.18;margin:6px 8px 0 0;font-style:normal}
+  #home:hover i{opacity:.55}
+  #foot{position:absolute;left:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #pager{position:absolute;right:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #hint{position:absolute;right:72px;bottom:52px;font-size:15px;color:#C2C9CB;
+    letter-spacing:.12em;transition:opacity .3s}
+  #nav{position:fixed;right:18px;bottom:18px;display:none;gap:12px;z-index:10}
+  #nav button{width:64px;height:64px;border-radius:50%;border:0;
+    background:rgba(15,76,92,.85);color:#fff;font-size:34px;line-height:1}
+  #rotate{position:fixed;inset:0;background:#0F4C5C;color:#fff;display:none;
+    align-items:center;justify-content:center;font-size:20px;z-index:20}
+  @media (max-width:900px){#nav{display:flex}}
+  @media (max-width:900px) and (orientation:portrait){#rotate{display:flex}}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="slide cover on">
+    <div class="bar"></div>
+    <div class="cover-left">
+      <div class="kicker">TurboWarp 中班</div>
+      <h1>打地鼠</h1>
+      <div class="sub">锤子跟着鼠标，30 秒能敲中几只？<br>2026-11-15 · 周日 · 90 分钟</div>
+    </div>
+    <div class="cover-art">
+      <svg viewBox="0 0 420 420" fill="none">
+        <ellipse cx="210" cy="330" rx="150" ry="34" fill="#E9EFEA"/>
+        <g fill="#0F4C5C" opacity=".16">
+          <ellipse cx="105" cy="230" rx="46" ry="18"/>
+          <ellipse cx="210" cy="230" rx="46" ry="18"/>
+          <ellipse cx="315" cy="230" rx="46" ry="18"/>
+          <ellipse cx="105" cy="330" rx="46" ry="18"/>
+          <ellipse cx="315" cy="330" rx="46" ry="18"/>
+        </g>
+        <ellipse cx="105" cy="230" rx="38" ry="14" fill="#0F4C5C"/>
+        <ellipse cx="210" cy="230" rx="38" ry="14" fill="#0F4C5C"/>
+        <ellipse cx="315" cy="230" rx="38" ry="14" fill="#0F4C5C"/>
+        <ellipse cx="105" cy="330" rx="38" ry="14" fill="#0F4C5C"/>
+        <ellipse cx="315" cy="330" rx="38" ry="14" fill="#0F4C5C"/>
+        <path d="M210 120c-34 0-58 26-58 58v34h116v-34c0-32-24-58-58-58z" fill="#E36414"/>
+        <circle cx="190" cy="164" r="7" fill="#FFFFFF"/>
+        <circle cx="230" cy="164" r="7" fill="#FFFFFF"/>
+        <circle cx="190" cy="166" r="3" fill="#1F2937"/>
+        <circle cx="230" cy="166" r="3" fill="#1F2937"/>
+        <path d="M196 186q14 12 28 0" stroke="#7A3210" stroke-width="4" stroke-linecap="round"/>
+        <rect x="300" y="70" width="26" height="92" rx="8" transform="rotate(24 300 70)" fill="#8A6A16"/>
+        <rect x="286" y="46" width="86" height="34" rx="8" transform="rotate(24 286 46)" fill="#C98A2E"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">今天</div>
+    <h1>做完你会拥有一个完整游戏</h1>
+    <ul>
+      <li>锤子跟着鼠标走，按下鼠标会敲一下</li>
+      <li>地鼠随机冒头，打中就消失、加一分</li>
+      <li>9 个洞铺满画面，30 秒倒计时，时间到结束</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">复习 · 打砖块 / 疫情防卫战</div>
+    <h1>三个老朋友</h1>
+    <div class="q"><span class="n">Q1</span>变量是干什么的？</div>
+    <div class="ans reveal">一块所有角色共用的黑板，用来记数字，比如得分和倒计时。</div>
+    <div class="q"><span class="n">Q2</span>「在几到几之间随机选数」你用过吗？</div>
+    <div class="ans reveal">每次算出来的数不一样。今天用它控制地鼠什么时候冒头。</div>
+    <div class="q"><span class="n">Q3</span>「碰到某某？」是做什么的？</div>
+    <div class="ans reveal">两个角色叠在一起就成立。今天用它判断锤子有没有打到地鼠。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">导入</div>
+    <h1>先看老师玩 30 秒</h1>
+    <ul>
+      <li>锤子怎么动？什么时候变样子？</li>
+      <li>地鼠什么时候出来？被打中会怎样？</li>
+      <li>什么东西在减少？什么时候结束？</li>
+    </ul>
+    <p class="sub">只看不说，看完带着这三个问题开工。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">程序全景</div>
+    <h1>四类角色，各干一件事</h1>
+    <div class="cols3">
+      <div class="card"><b>舞台</b>管倒计时<small>时间到，发「游戏结束」</small></div>
+      <div class="card"><b>锤子</b>跟鼠标、做敲击动作<small>普通 / 攻击 两个造型</small></div>
+      <div class="card"><b>地鼠</b>9 只，冒头、缩回<small>被打中就加分</small></div>
+    </div>
+    <div class="cols3" style="margin-top:22px">
+      <div class="card"><b>开始 / 结束</b>三张图片<small>开始界面、开始按钮、结束画面</small></div>
+      <div class="card"><b>变量</b>2 个<small>得分、剩余时间</small></div>
+      <div class="card"><b>一共</b>13 个角色<small>9 只地鼠脚本完全一样</small></div>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">变量速查</div>
+    <h1>两个变量，各管一摊</h1>
+    <div class="cols">
+      <div class="card"><b>得分</b>敲中几只地鼠<small>初值 0，打中一只 +1</small></div>
+      <div class="card"><b>剩余时间</b>还能玩几秒<small>初值 30，每过 1 秒 -1</small></div>
+    </div>
+    <p class="hint">两个都是全局变量：舞台写、地鼠也写，大家看同一块黑板。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 1 · 锤子跟鼠标</div>
+    <h1>鼠标去哪，锤子去哪</h1>
+    <div class="code reveal">当绿旗被点击：<br>&nbsp;&nbsp;隐藏<br><br>当收到「游戏开始」：<br>&nbsp;&nbsp;显示；移到最前面；换成「普通」造型<br>&nbsp;&nbsp;重复执行：移到 鼠标指针</div>
+    <p class="sub">「移到 鼠标指针」要放在「重复执行」里面，不然只跟一次就不动了。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 2 · 挥锤动作</div>
+    <h1>按下鼠标，敲一下再抬起来</h1>
+    <div class="code reveal">重复执行：<br>&nbsp;&nbsp;移到 鼠标指针<br>&nbsp;&nbsp;如果 按下鼠标？：<br>&nbsp;&nbsp;&nbsp;&nbsp;换成「攻击」造型<br>&nbsp;&nbsp;&nbsp;&nbsp;等待 0.2 秒<br>&nbsp;&nbsp;&nbsp;&nbsp;换成「普通」造型</div>
+    <p class="hint">换造型不是换角色。两个造型都画在同一个「锤子」身上。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 2 · 为什么</div>
+    <h1>地鼠怎么知道锤子正在敲？</h1>
+    <div class="q">锤子有两个造型：普通、攻击。地鼠该看哪个？</div>
+    <div class="ans reveal">看锤子的「造型名称」。名字等于「攻击」，才说明这一下是敲下去的。</div>
+    <p class="hint">造型名要一模一样，大小写、空格都不能差；改名前先问老师。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 3 · 地鼠冒头</div>
+    <h1>等一会儿、冒出来、再缩回去</h1>
+    <div class="code reveal">当绿旗被点击：<br>&nbsp;&nbsp;移到 (-120, 60)；隐藏<br>&nbsp;&nbsp;重复执行：<br>&nbsp;&nbsp;&nbsp;&nbsp;等待 (2 到 4) 秒<br>&nbsp;&nbsp;&nbsp;&nbsp;显示<br>&nbsp;&nbsp;&nbsp;&nbsp;等待 (0.5 到 2) 秒<br>&nbsp;&nbsp;&nbsp;&nbsp;隐藏</div>
+    <p class="sub">两个随机数都不一样，9 只地鼠就不会一起冒头。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 4 · 打中加分</div>
+    <h1>两个条件都成立，才算打中</h1>
+    <div class="code reveal">当绿旗被点击：<br>&nbsp;&nbsp;重复执行：<br>&nbsp;&nbsp;&nbsp;&nbsp;如果 碰到「锤子」？ 并且<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;「锤子」的造型名称 = 「攻击」：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;播放音效<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;隐藏<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;得分 +1</div>
+    <p class="hint">少了「造型名称」这一条，锤子只是扫过也会加分，一按住鼠标就能刷分。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 5 · 复制 9 只</div>
+    <h1>只改每只开头的两个坐标</h1>
+    <div class="cols">
+      <div class="card"><b>怎么复制</b>右键地鼠 → 复制，做 8 次<small>脚本和造型会一起复制</small></div>
+      <div class="card"><b>怎么摆</b>只改「移到 (x, y)」<small>3 行 × 3 列，差不多对齐就行</small></div>
+    </div>
+    <table>
+      <tr><th>第一行</th><td>(-120, 60)</td><td>(0, 60)</td><td>(120, 60)</td></tr>
+      <tr><th>第二行</th><td>(-140, 10)</td><td>(0, 10)</td><td>(110, 10)</td></tr>
+      <tr><th>第三行</th><td>(-140, -60)</td><td>(-10, -60)</td><td>(120, -60)</td></tr>
+    </table>
+    <p class="hint">别复制「锤子」——锤子只有一个；复制完先点数量，确认舞台上是 9 只地鼠。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 6 · 30 秒倒计时</div>
+    <h1>数 30 下，数完就结束</h1>
+    <div class="code reveal">当收到「游戏开始」：<br>&nbsp;&nbsp;得分 = 0；剩余时间 = 30<br>&nbsp;&nbsp;重复 30 次：<br>&nbsp;&nbsp;&nbsp;&nbsp;等待 1 秒<br>&nbsp;&nbsp;&nbsp;&nbsp;剩余时间 -1<br>&nbsp;&nbsp;广播「游戏结束」并等待<br>&nbsp;&nbsp;停止 全部</div>
+    <p class="sub">写在舞台里。用「重复 30 次 + 等待 1 秒」，不要写「等待 30 秒」——那样剩余时间不会一格一格掉。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 6 · 开始和结束画面</div>
+    <h1>用广播，让所有角色一起换场</h1>
+    <div class="cols3">
+      <div class="card"><b>开始按钮</b>绿旗显示；被点击 → 隐藏，广播「游戏开始」</div>
+      <div class="card"><b>开始界面</b>绿旗显示；收到「游戏开始」→ 隐藏</div>
+      <div class="card"><b>结束画面</b>绿旗隐藏；收到「游戏结束」→ 移到最前面，显示</div>
+    </div>
+    <p class="hint">广播就是一个开关：发一次，所有「收到同一消息」的角色一起动。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">调试</div>
+    <h1>出问题，先查这三处</h1>
+    <ul class="reveal">
+      <li>锤子不动：是不是忘了「重复执行」包住「移到鼠标指针」？</li>
+      <li>打中不加分：两个条件都有吗？造型名是不是「攻击」？</li>
+      <li>时间不停：是「重复 30 次 + 等待 1 秒」，还是只写了「等待 30 秒」？</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">挑战 · 只给提前打完的</div>
+    <h1>还能再进一步</h1>
+    <ul>
+      <li>加连击：连续打中，得分翻倍</li>
+      <li>加炸弹地鼠：敲到扣分</li>
+      <li>难度递增：每过 10 秒，地鼠出来得更快</li>
+      <li>把结束画面换成显示最终得分</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">收尾</div>
+    <h1>三个问题带走</h1>
+    <div class="q"><span class="n">Q1</span>为什么要判断锤子的「造型名称」？</div>
+    <div class="ans reveal">只看碰到的话，锤子扫过也算打中；看造型名才知道这一下真敲了。</div>
+    <div class="q"><span class="n">Q2</span>9 只地鼠的脚本要写 9 遍吗？</div>
+    <div class="ans reveal">不用。复制角色会连脚本一起复制，只需要改每只开头的坐标。</div>
+    <div class="q"><span class="n">Q3</span>倒计时为什么用「重复 30 次」？</div>
+    <div class="ans reveal">每重复一次等 1 秒、减 1，剩余时间才会一秒一秒掉；等待 30 秒中间不会变。</div>
+  </section>
+
+  <a id="home" href="index.html" title=""><i></i></a>
+      <div id="nav"><button id="prev" aria-label="上一页">‹</button><button id="next" aria-label="下一页">›</button></div>
+  <div id="rotate" onclick="this.dataset.off=1;this.style.display='none'">把手机横过来看，更清楚<br><br><span style="font-size:15px;opacity:.7">点一下继续</span></div>
+  <div id="foot">打地鼠 · TurboWarp 中班 · 2026-11-15</div>
+  <div id="hint">空格 揭晓</div>
+  <div id="pager"></div>
+</div>
+
+<script>
+const stage=document.getElementById('stage');
+const slides=[...document.querySelectorAll('.slide')];
+const pager=document.getElementById('pager');
+const hint=document.getElementById('hint');
+let i=0;
+
+function view(){
+  const v=window.visualViewport;
+  // min 收口：桌面UA模式 innerWidth 会虚胖(1200+)，screen.width 才是设备真实宽
+  const w=Math.min(innerWidth, v?v.width:innerWidth,
+        screen.width||innerWidth);
+  const h=Math.min(innerHeight, v?v.height:innerHeight,
+        screen.height||innerHeight);
+  return {w,h};
+}
+function fit(){
+  const {w,h}=view();
+  const s=Math.min(w/1600,h/900);
+  stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+  const rot=document.getElementById('rotate');
+  if(rot) rot.style.display=(!rot.dataset.off && h>w && w<=1000)?'flex':'none';
+}
+addEventListener('resize',fit);
+addEventListener('orientationchange',()=>setTimeout(fit,200));
+if(window.visualViewport){
+  visualViewport.addEventListener('resize',fit);
+  visualViewport.addEventListener('scroll',fit);
+}
+fit();
+
+function paint(){
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  slides[i].querySelectorAll('.reveal').forEach(e=>e.classList.remove('show'));
+  pager.textContent=(i+1)+' / '+slides.length;
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+function go(d){ i=Math.max(0,Math.min(slides.length-1,i+d)); paint(); }
+function reveal(){
+  const n=slides[i].querySelector('.reveal:not(.show)');
+  if(n) n.classList.add('show');
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+addEventListener('keydown',e=>{
+  if(['ArrowRight','PageDown'].includes(e.key)){e.preventDefault();go(1)}
+  else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(-1)}
+  else if(e.key===' '||e.key==='Enter'){e.preventDefault();reveal()}
+  else if(e.key==='a'||e.key==='A'){e.preventDefault();slides[i].querySelectorAll('.reveal').forEach(x=>x.classList.add('show'));hint.style.opacity=0}
+  else if(e.key==='Home'){i=0;paint()}
+  else if(e.key==='End'){i=slides.length-1;paint()}
+  else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+});
+let _lastTouch=0;
+stage.addEventListener('click',()=>{ if(Date.now()-_lastTouch<600) return; reveal(); });
+let _sx=0,_sy=0;
+stage.addEventListener('touchstart',e=>{const t=e.touches[0];_sx=t.clientX;_sy=t.clientY;},{passive:true});
+stage.addEventListener('touchend',e=>{
+  _lastTouch=Date.now();
+  const t=e.changedTouches[0], dx=t.clientX-_sx, dy=t.clientY-_sy;
+  if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)){ go(dx<0?1:-1); }
+  else { reveal(); }
+},{passive:true});
+document.getElementById('prev').onclick=()=>go(-1);
+document.getElementById('next').onclick=()=>go(1);
+paint();
+</script>
+</body>
+</html>
