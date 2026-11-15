@@ -57,16 +57,25 @@
   #nav{position:fixed;right:18px;bottom:18px;display:none;gap:12px;z-index:10}
   #nav button{width:64px;height:64px;border-radius:50%;border:0;background:rgba(15,76,92,.85);color:#fff;font-size:34px;line-height:1}
   #rotate{position:fixed;inset:0;background:#0F4C5C;color:#fff;display:none;align-items:center;justify-content:center;text-align:center;font-size:20px;z-index:20}
-  .shot-box{display:flex;align-items:center;justify-content:center;height:600px}
+  .shot-box{position:relative;display:flex;align-items:center;justify-content:center;height:600px}
   .shot-box img{max-height:600px;max-width:1180px;border-radius:12px;cursor:zoom-in;
-    box-shadow:0 6px 24px rgba(15,76,92,.18);background:#fff}
+    box-shadow:0 6px 24px rgba(15,76,92,.18);background:#fff;transition:transform .25s ease}
   .cap{font-size:25px;color:#6B7280;text-align:center;margin-top:20px}
+  .rot-btns{position:absolute;right:12px;bottom:12px;display:flex;gap:8px;z-index:3}
+  .rot-btns button{width:42px;height:42px;border-radius:50%;border:0;background:rgba(15,76,92,.86);
+    color:#fff;font-size:22px;line-height:1;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+  .rot-btns button:active{transform:scale(.94)}
   #zoom{position:fixed;inset:0;background:rgba(10,20,24,.95);display:none;
     align-items:center;justify-content:center;z-index:99;cursor:zoom-out}
   #zoom.on{display:flex}
-  #zoom img{max-width:95vw;max-height:92vh;box-shadow:0 0 60px rgba(0,0,0,.6)}
+  #zoom img{max-width:95vw;max-height:92vh;box-shadow:0 0 60px rgba(0,0,0,.6);
+    transition:transform .25s ease}
   #zoom span{position:absolute;bottom:18px;left:0;right:0;text-align:center;
     color:#8FA3A8;font-size:15px;letter-spacing:.08em}
+  #zoomRot{position:fixed;right:18px;bottom:18px;display:flex;gap:10px;z-index:101}
+  #zoomRot button{width:48px;height:48px;border-radius:50%;border:0;cursor:pointer;
+    background:rgba(255,255,255,.14);color:#fff;font-size:24px;line-height:1}
+  #zoomRot button:active{transform:scale(.94)}
   @media (max-width:900px){#nav{display:flex}}
   @media (max-width:900px) and (orientation:portrait){#rotate{display:flex}}
 </style>
@@ -156,8 +165,12 @@
     <h1>俯视：控制器怎么挂上去</h1>
     <div class="shot-box">
       <img src="images/wedo-gun/02-top.jpg" alt="连发皮筋枪 俯视结构">
+      <div class="rot-btns" aria-label="旋转俯视图">
+        <button type="button" data-rot="-90" title="向左旋转90°">↺</button>
+        <button type="button" data-rot="90" title="向右旋转90°">↻</button>
+      </div>
     </div>
-    <p class="cap">点图片放大 · 黄色件把 WeDo 控制器吊在侧面，线接回电机</p>
+    <p class="cap">点图片放大 · 黄色件把 WeDo 控制器吊在侧面，线接回电机 · 右下角按钮可旋转</p>
   </section>
 
   <section class="slide pad">
@@ -254,7 +267,13 @@
   <div id="pager"></div>
 </div>
 
-<div id="zoom"><img alt="放大查看"><span>点一下关闭</span></div>
+<div id="zoom"><img alt="放大查看">
+  <div id="zoomRot" aria-label="旋转图片">
+    <button type="button" data-rot="-90" title="向左旋转90°">↺</button>
+    <button type="button" data-rot="90" title="向右旋转90°">↻</button>
+  </div>
+  <span>点一下关闭</span>
+</div>
 
 <script>
 const stage=document.getElementById('stage');
@@ -265,8 +284,43 @@ const zoom=document.getElementById('zoom');
 const zoomImg=zoom.querySelector('img');
 function zoomOpen(){return zoom.classList.contains('on')}
 function zoomClose(){zoom.classList.remove('on')}
+function rotFit(img,boxW,boxH){
+  const deg=+(img.dataset.rot||0);
+  img.style.transform='none';
+  const w=img.offsetWidth,h=img.offsetHeight;
+  let scale=1;
+  if((((deg%360)+360)%360)%180!==0) scale=Math.min(boxW/h,boxH/w,1);
+  img.style.transform=`rotate(${deg}deg) scale(${scale.toFixed(3)})`;
+}
+function rotateInline(img,d){
+  img.dataset.rot=(+img.dataset.rot||0)+d;
+  const box=img.closest('.shot-box');
+  rotFit(img,box.clientWidth,box.clientHeight);
+}
+function rotateZoom(d){
+  zoomImg.dataset.rot=(+zoomImg.dataset.rot||0)+d;
+  rotFit(zoomImg,innerWidth*.95,innerHeight*.92);
+}
 document.querySelectorAll('.shot-box img').forEach(im=>{
-  im.addEventListener('click',e=>{e.stopPropagation();zoomImg.src=im.currentSrc||im.src;zoom.classList.add('on')});
+  im.addEventListener('click',e=>{
+    e.stopPropagation();
+    zoomImg.src=im.currentSrc||im.src;
+    zoomImg.dataset.rot=im.dataset.rot||0;
+    zoom.classList.add('on');
+    requestAnimationFrame(()=>rotFit(zoomImg,innerWidth*.95,innerHeight*.92));
+  });
+});
+document.querySelectorAll('.rot-btns button').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    rotateInline(b.closest('.shot-box').querySelector('img'),+b.dataset.rot);
+  });
+});
+document.querySelectorAll('#zoomRot button').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    rotateZoom(+b.dataset.rot);
+  });
 });
 zoom.addEventListener('click',zoomClose);
 let i=0;
