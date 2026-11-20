@@ -180,7 +180,7 @@
     <div class="bar"></div>
     <div class="kicker">单元 2 · 看见</div>
     <h1>把加速度画成一条线</h1>
-    <div class="code reveal">设置 X = 0<br>循环执行：<br>&nbsp;&nbsp;画点 x = X，y = 映射(加速度X, 从 [-1200, 1200] 到 [0, 64])<br>&nbsp;&nbsp;X = X + 0.5<br>&nbsp;&nbsp;如果 X &gt; 128 → 屏幕全黑，X = 0<br>&nbsp;&nbsp;等待 0.01 秒</div>
+    <div class="code reveal">设置 X = 0<br>循环执行：<br>&nbsp;&nbsp;画点 x = X，y = 映射(加速度X, 从 [-1200, 1200] 到 [0, 50])<br>&nbsp;&nbsp;X = X + 0.5<br>&nbsp;&nbsp;如果 X &gt; 128 → 屏幕全黑，X = 0<br>&nbsp;&nbsp;等待 0.01 秒</div>
     <p class="sub">横着走的是时间，竖着跳的是加速度——一个「心电图」。</p>
   </section>
 
@@ -189,7 +189,7 @@
     <div class="kicker">单元 2 · 坑</div>
     <h1>两个地方最容易画不出来</h1>
     <ul class="reveal">
-      <li>映射范围写错：必须 <b>-1200 ~ 1200 → 0 ~ 64</b>，数值会跑到屏幕外</li>
+      <li>映射范围写错：必须 <b>-1200 ~ 1200 → 0 ~ 50</b>，数值会跑到屏幕外</li>
       <li>忘了清零：X 超过 128 要「屏幕全黑 + X 归 0」，不然线冲出屏幕就不见了</li>
     </ul>
     <p class="hint">屏幕没有线，先把这两处对一遍，再怀疑传感器。</p>
