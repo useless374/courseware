@@ -18,6 +18,7 @@
   .map svg{width:100%;height:auto;display:block}
   .side{flex:1;min-width:0}
   h2{font-size:16px;color:#0F4C5C;margin:0 0 8px;letter-spacing:.02em}
+  .p2head{display:none}
   .legend{margin-top:12px;font-size:12.5px;line-height:1.7;color:#4B5563}
   .legend b{color:#E36414}
   .legend .k{display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:-1px;margin-right:3px}
@@ -27,22 +28,27 @@
   .toolbar button{border:0;background:#0F4C5C;color:#fff;font-size:14px;padding:9px 20px;border-radius:6px;cursor:pointer}
   .toolbar button:hover{background:#0B3A47}
   @media print{
+    /* 双面打印：第 1 页 = 场地图，第 2 页 = 文字说明 */
     @page{size:A4 landscape;margin:8mm}
-    body{background:#fff;padding:0}
+    html,body{background:#fff;margin:0;padding:0}
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
     .toolbar{display:none}
-    .sheet{width:281mm;height:194mm;overflow:hidden;box-shadow:none;border-radius:0;padding:0;
-           display:flex;flex-direction:column}
-    .head{padding-bottom:2mm;margin-bottom:3mm}
-    .head h1{font-size:6.5mm}
-    .head .meta{font-size:3.2mm}
-    .body{flex:1 1 auto;gap:5mm}
-    .map{flex:0 0 150mm}
-    h2{font-size:4mm;margin-bottom:2mm}
-    .legend{font-size:3.1mm;line-height:1.55;margin-top:2.5mm}
-    .rule{font-size:3.1mm;line-height:1.55;margin-top:2.5mm;padding:2mm 3mm}
-    .foot{font-size:3mm;margin-top:2mm}
+    .sheet{width:281mm;height:auto;padding:0;box-shadow:none;border-radius:0;overflow:visible;
+           display:block}
+    .p2head{display:block;font-size:4.5mm;color:#6B7280;margin-bottom:3mm}
+    .head{padding-bottom:2mm;margin-bottom:3mm;page-break-after:avoid}
+    .head h1{font-size:7mm}
+    .head .meta{font-size:4mm}
+    .body{display:block}
+    .map{width:230mm;margin:0 auto;page-break-inside:avoid}
+    .map svg{width:230mm;height:172.5mm;display:block}
+    .side{page-break-before:always;break-before:page;width:100%;padding:2mm 0 0}
+    .side h2{font-size:7mm;margin-bottom:4mm;padding-bottom:2mm;border-bottom:2px solid #E36414}
+    .legend{font-size:5mm;line-height:1.75;margin-top:0}
+    .rule{font-size:4.8mm;line-height:1.7;margin-top:6mm;padding:4mm 5mm}
+    .foot{font-size:4mm;margin-top:8mm;padding-top:3mm;border-top:1px solid #D5DEE0}
   }
-  @media (max-width:900px){
+  @media screen and (max-width:900px){
     body{padding:0}
     .sheet,.toolbar{width:100%;border-radius:0}
     .body{flex-direction:column}
@@ -55,7 +61,7 @@
 
 <div class="toolbar">
   <button onclick="window.print()">打印 / 存成 PDF（A4 横向）</button>
-  <span>打印后在图上画每段的线，线上写字母；做了画实线，没做画虚线。</span>
+  <span>双面打印正合适：第 1 页是场地图，第 2 页是说明（选「长边翻转」）。打印后在图上画每段的线，线上写字母。</span>
 </div>
 
 <div class="sheet">
@@ -88,7 +94,6 @@
         <!-- 吴哥窟湖泊（浅蓝/深蓝两区，船屋要停进指定色区） -->
         <ellipse cx="450" cy="345" rx="72" ry="58" fill="#A9DCEA"/>
         <ellipse cx="450" cy="345" rx="38" ry="30" fill="#5FB4D6"/>
-        <text x="450" y="419" text-anchor="middle" font-size="10" fill="#1F6F8B">湖泊（浅蓝 / 深蓝）</text>
 
         <!-- 博物馆区域（中央停靠圈） -->
         <circle cx="300" cy="225" r="74" fill="#FBF7EF" stroke="#0F4C5C" stroke-width="3"/>
@@ -154,7 +159,7 @@
         <line x1="538" y1="148" x2="558" y2="148" stroke="#8D6E63" stroke-width="2"/>
         <line x1="541" y1="141" x2="555" y2="155" stroke="#8D6E63" stroke-width="2"/>
         <line x1="541" y1="155" x2="555" y2="141" stroke="#8D6E63" stroke-width="2"/>
-        <text x="560" y="128" text-anchor="middle" font-size="11" font-weight="700" fill="#8D6E63">车②</text>
+        <text x="548" y="181" text-anchor="middle" font-size="11" font-weight="700" fill="#8D6E63">车②</text>
 
         <g transform="translate(516 186) rotate(28)">
           <rect x="-10" y="-6" width="20" height="12" fill="#C2185B" stroke="#7A0F38" stroke-width="1.5"/>
@@ -166,9 +171,11 @@
 
         <!-- 船屋 + 随机指示器 -->
         <rect x="512" y="350" width="22" height="13" fill="#8D6E63" stroke="#4E342E"/>
-        <text x="506" y="360" text-anchor="end" font-size="10" fill="#4E342E">船屋</text>
+        <text x="523" y="345" text-anchor="middle" font-size="9" fill="#4E342E">船屋</text>
         <rect x="384" y="404" width="14" height="14" fill="#37474F"/>
         <text x="391" y="432" text-anchor="middle" font-size="10" fill="#37474F">指示器</text>
+        <text x="450" y="341" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">湖泊</text>
+        <text x="450" y="357" text-anchor="middle" font-size="8.5" fill="#E8F6FB">浅蓝 / 深蓝</text>
 
         <!-- 边框 -->
         <rect x="0.5" y="0.5" width="599" height="449" fill="none" stroke="#9CA3AF" stroke-width="1"/>
@@ -176,6 +183,7 @@
     </div>
 
     <div class="side">
+      <div class="p2head">古迹文明 · 路线图说明 · WRO 2026 集训</div>
       <h2>图例与用法</h2>
       <div class="legend">
         <b>图例：</b><span class="k" style="background:#C2185B"></span>闸 = 推到水道外（共 2 个）
