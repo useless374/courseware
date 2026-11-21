@@ -18,15 +18,6 @@
   .map svg{width:100%;height:auto;display:block}
   .side{flex:1;min-width:0}
   h2{font-size:16px;color:#0F4C5C;margin:0 0 8px;letter-spacing:.02em}
-  table.seg{width:100%;border-collapse:collapse;font-size:13px}
-  table.seg th{background:#0F4C5C;color:#fff;font-weight:700;padding:6px 4px;font-size:12px}
-  table.seg td{border:1px solid #C9D6D9;padding:7px 4px;height:36px;vertical-align:middle}
-  table.seg td.n{text-align:center;font-weight:700;color:#E36414;width:42px;white-space:nowrap}
-  table.seg td.l{text-align:center;font-weight:700;color:#0F4C5C;width:34px;font-size:15px}
-  table.seg td.from{width:112px;color:#374151;font-size:12px;line-height:1.3}
-  table.seg td.tr{width:50px;text-align:center;white-space:nowrap;color:#6B7280}
-  table.seg td.line{width:38px;text-align:center;color:#9CA3AF;font-size:11px}
-  .box{display:inline-block;width:14px;height:14px;border:1.5px solid #9CA3AF;border-radius:3px;margin:0 1px;vertical-align:-2px}
   .legend{margin-top:12px;font-size:12.5px;line-height:1.7;color:#4B5563}
   .legend b{color:#E36414}
   .legend .k{display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:-1px;margin-right:3px}
@@ -46,12 +37,6 @@
     .head .meta{font-size:3.2mm}
     .body{flex:1 1 auto;gap:5mm}
     .map{flex:0 0 150mm}
-    table.seg{font-size:3.2mm}
-    table.seg th{font-size:3mm;padding:1mm}
-    table.seg td{height:8mm;padding:1mm}
-    table.seg td.from{font-size:3mm}
-    table.seg td.l{font-size:3.6mm}
-    table.seg td.line{font-size:2.8mm}
     h2{font-size:4mm;margin-bottom:2mm}
     .legend{font-size:3.1mm;line-height:1.55;margin-top:2.5mm}
     .rule{font-size:3.1mm;line-height:1.55;margin-top:2.5mm;padding:2mm 3mm}
@@ -191,20 +176,7 @@
     </div>
 
     <div class="side">
-      <h2>每段一条线 · 线上写字母</h2>
-      <table class="seg">
-        <tr>
-          <th>段</th><th>字母</th><th>起点 → 终点</th><th>动作</th><th>跑3次</th><th>线</th>
-        </tr>
-        <tr><td class="n">段0</td><td class="l">A</td><td class="from">安全区 → 对准直线</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="line">实/虚</td></tr>
-        <tr><td class="n">段1</td><td class="l">B</td><td class="from">角落 → 中央博物馆</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="line">实/虚</td></tr>
-        <tr><td class="n">段2</td><td class="l">C</td><td class="from">退回停靠圈</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="line">实/虚</td></tr>
-        <tr><td class="n">段3</td><td class="l">D</td><td class="from">角落 → 中央博物馆</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="line">实/虚</td></tr>
-        <tr><td class="n">段4</td><td class="l">E</td><td class="from">球门（先空）</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="line">实/虚</td></tr>
-        <tr><td class="n">段5</td><td class="l">F</td><td class="from">奖杯（先空）</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="line">实/虚</td></tr>
-        <tr><td class="n">段6</td><td class="l">G</td><td class="from">开进中央圆圈</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="line">实/虚</td></tr>
-      </table>
-
+      <h2>图例与用法</h2>
       <div class="legend">
         <b>图例：</b><span class="k" style="background:#C2185B"></span>闸 = 推到水道外（共 2 个）
         <span class="k" style="background:#8D6E63"></span>车 = 全程不能碰（共 2 架）<br>
@@ -214,7 +186,7 @@
         1. 每段程序 = 一个字母：从安全区出发，到另一个安全区或中央博物馆结束。<br>
         2. 在图上画这条线，线旁写字母：A=段0，B=段1 …… G=段6。<br>
         3. <b>实线 = 做成了</b>；<b>虚线 = 没做 / 放弃</b>。<br>
-        4. 同一段跑 3 次成 2 次，就在「跑3次」勾两格。<br>
+        4. 同一段连跑 3 次成 2 次，再把它改成实线。<br>
         5. 下课把实线段圈一下，拍照，和程序快照一起存档。
       </div>
       <div class="rule">
