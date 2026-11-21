@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>WRO集训 第4课 · 两件珍宝</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#1A1A1A;overflow:hidden;font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+#stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:center center;background:#fff;box-shadow:0 0 60px rgba(0,0,0,.5);overflow:hidden}
+.slide{position:absolute;inset:0;padding:64px 120px;display:none;flex-direction:column;justify-content:center}
+.slide.on{display:flex}
+.bar{position:absolute;left:0;top:0;width:100%;height:14px;background:#E36414}
+.kicker{font-size:20px;font-weight:700;color:#E36414;letter-spacing:.04em;margin:6px 0 10px}
+h1{font-size:48px;font-weight:700;color:#0F4C5C;line-height:1.2;margin-bottom:28px}
+ul{list-style:none;margin-top:6px}
+li{font-size:32px;line-height:1.45;color:#1F2937;margin-bottom:18px;padding-left:40px;position:relative}
+li:before{content:"\25AA";position:absolute;left:2px;top:-2px;color:#E36414;font-weight:700}
+.q{font-size:32px;line-height:1.45;color:#1F2937;background:#E6F2F4;border-radius:10px;padding:14px 26px;margin-bottom:10px}
+.q .n{color:#E36414;font-weight:700;margin-right:12px}
+.ans{font-size:30px;line-height:1.5;color:#0F4C5C;background:#F2F8F9;border-left:8px solid #E36414;padding:12px 22px;margin:-2px 0 18px 24px;border-radius:0 8px 8px 0}
+.hint{font-size:28px;line-height:1.5;color:#8A6A16;background:#FBF1D8;border-left:8px solid #D9A21B;padding:16px 24px;margin:12px 0;border-radius:0 8px 8px 0}
+.code{font-family:Consolas,"Microsoft YaHei","Courier New",monospace;font-size:27px;line-height:1.55;background:#0B121A;border-radius:12px;padding:22px 30px;color:#D7E3EA;white-space:pre-wrap}
+.sub{font-size:30px;color:#6B7280;line-height:1.5;margin-top:14px}
+.sub b{color:#E36414}
+.reveal{color:transparent!important;user-select:none;position:relative;transition:color .25s ease}
+.reveal::after{content:"?";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#BCC9CD;font-size:28px;background-color:#F1F6F7;background-image:repeating-linear-gradient(135deg,rgba(15,76,92,.05) 0 12px,transparent 12px 24px);border-radius:8px}
+.reveal.show{color:inherit!important;user-select:auto!important}
+.reveal.show::after{display:none}
+.cover{background:#0F4C5C;flex-direction:column;align-items:flex-start;justify-content:center;padding:0 150px}
+.cover h1{color:#fff;font-size:84px;margin-bottom:24px}
+.cover .kicker{color:#BFD9DF;font-size:22px;margin-bottom:16px;letter-spacing:.1em}
+.cover .sub{color:#BFD9DF;font-size:32px;margin-top:0}
+#foot{position:absolute;left:60px;bottom:18px;font-size:16px;color:#6B7280}
+#pager{position:absolute;right:60px;bottom:18px;font-size:16px;color:#6B7280}
+#hint{position:absolute;right:60px;bottom:46px;font-size:14px;color:#C2C9CB;letter-spacing:.12em}
+#nav{position:fixed;right:18px;bottom:18px;display:none;gap:12px;z-index:10}
+#nav button{width:64px;height:64px;border-radius:50%;border:0;background:rgba(15,76,92,.85);color:#fff;font-size:34px}
+#rotate{position:fixed;inset:0;background:#0F4C5C;color:#fff;display:none;align-items:center;justify-content:center;text-align:center;font-size:20px;z-index:20}
+table.task{width:100%;border-collapse:collapse;font-size:27px}
+table.task th,table.task td{border-bottom:1px solid #DDE5E7;padding:13px 14px;text-align:left;vertical-align:top;line-height:1.4}
+table.task th{color:#0F4C5C;font-size:24px;background:#F2F8F9}
+table.task td:first-child{font-weight:700;color:#E36414;white-space:nowrap}
+table.score{width:100%;border-collapse:collapse;font-size:25px}
+table.score th,table.score td{border:1px solid #C9D6D9;padding:9px 12px;text-align:left}
+table.score th{background:#0F4C5C;color:#fff;font-size:23px}
+table.score td.p{text-align:center;font-weight:700;color:#E36414;width:110px;white-space:nowrap}
+table.score tr.sum td{background:#FBF1D8;font-weight:700;color:#6B5420}
+@media (max-width:900px){#nav{display:flex}}
+@media (max-width:900px) and (orientation:portrait){#rotate{display:flex}}
+</style></head>
+<body><div id="stage">
+<section class="slide cover on"><div class="bar"></div><div class="kicker">古迹文明 · WRO 集训 · 第 4 课</div><h1>两件珍宝</h1><div class="sub">把第二件也送进博物馆<br>全程连起来跑，90 秒内完成</div></section>
+<section class="slide"><div class="bar"></div><div class="kicker">今天</div><h1>今天三件事</h1><ul><li><b>段2</b>：学会倒着开回停靠区</li><li><b>段3</b>：换一个角落，再推一件珍宝</li><li><b>全程</b>：段0 到段3 串成一条，开始计时</li></ul><p class="hint">球门和奖杯今天不碰。先把自己会的分坐实。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">先算账</div><h1>175 分里，我们先拿多少</h1><table class="score"><tr><th>任务</th><th>分</th></tr><tr><td>珍宝送进博物馆</td><td class="p">40</td></tr><tr><td>四件珍宝全到，追加</td><td class="p">10</td></tr><tr><td>机器人停进中央圆圈</td><td class="p">10</td></tr><tr><td>两架水车全程没被碰</td><td class="p">20</td></tr><tr class="sum"><td>今天要拿稳的</td><td class="p">80</td></tr></table><p class="hint">水车那 20 分是白拿的：全程绕开它，别碰就不丢。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">复习 · 上节课</div><h1>三个问题</h1><div class="q"><span class="n">Q1</span>珍宝进馆以后，为什么必须先回车停靠圈？</div><div class="ans reveal">只有安全区和停靠圈里能碰车；在外面碰一次扣 1 分，也没法摆正。</div><div class="q"><span class="n">Q2</span>同样是 1 秒，倒车和前进走得一样远吗？</div><div class="ans reveal">速度差不多，但车尾看不清，对位更难，所以必须单独量。</div><div class="q"><span class="n">Q3</span>2 分钟的比赛，为什么我们只用 90 秒？</div><div class="ans reveal">留 30 秒缓冲：摆位、扶正、意外，都需要时间。</div></section>
+<section class="slide"><div class="bar"></div><div class="kicker">段2</div><h1>为什么回程最容易翻车</h1><ul><li>珍宝刚放下，车还在博物馆门口</li><li>要<b>倒着</b>开回角落的安全区</li><li>车尾没有参照物，方向容易歪</li><li>停不进安全区 → 后面段3 全卡住</li></ul><p class="hint">回程是整套路线的「换手点」，它不稳，后面全白搭。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">段2 · 做法</div><h1>倒着开回去</h1><div class="code">段2（字母 C）：
+  后退   速度 50
+  等 N 秒
+  停止
+
+车尾进安全区停住 → 用手扶正</div><p class="sub">做完这步：车能在安全区里停住，手够得着</p><p class="hint">N 是量出来的，不是猜出来的。下面一页讲怎么量。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">段2 · 标定</div><h1>倒车距离怎么量</h1><ul><li>跑 1 秒，用尺子量车尾退了几厘米</li><li>连跑 3 次取平均，写进路线图</li><li>换电池、换地面 → 重新量一次</li><li>宁可多退 2 厘米，别少退</li></ul><p class="hint">多退没惩罚；少退进不了安全区，下一段就出不来。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">段3</div><h1>换个角落，再推一件</h1><ul><li>车在安全区里时，用手搬到另一个角落（规则允许）</li><li>从新角落出发，推这个角的珍宝</li><li>动作和段1 一样，路线是<b>镜像</b>的</li><li>时间不能照抄：两段距离不一样</li></ul><p class="hint">搬车只能在安全区或停靠圈做，半路上绝不能挪。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">段3 · 标定</div><h1>程序不能复制粘贴</h1><div class="code">段3（字母 D）：
+  前进   等 M 秒     ← M 重新量
+  推     等 K 秒     ← K 重新量
+  后退   等 P 秒     ← 回停靠</div><p class="sub">做完这步：第二件珍宝也能 3 次成 2 次</p><p class="hint">镜子路线只是方向反了，距离没变不代表时间能照抄——先量再写。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">进阶</div><h1>一趟带两件，不绕路</h1><ul><li>去 B 角的路上，把 A 角的珍宝一起推着</li><li>从 B 去博物馆，两件一起送进去</li><li>速度降到 50–60%，宁可慢</li><li>两件容易互相撞偏，先练单件</li></ul><p class="hint">两件是加分项。今天做不成，就先按单件跑稳。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">第 3 步 · 连起来</div><h1>全程跑一遍</h1><div class="code">A → B → C → D → G
+（段4 球门、段5 奖杯 先跳过）
+
+单段都绿了再合并；合起来失败，退回单段查</div><p class="sub">做完这步：整条路线一次跑完，中间不用碰车</p><p class="hint">合并后某段掉链子，先查它在单段里还绿不绿，别急着改程序。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">第 4 步 · 计时</div><h1>90 秒怎么卡</h1><ul><li>两个时间点：出发 / 回到停靠圈</li><li>手机秒表，一人专门盯</li><li>目标 <b>≤90 秒</b>，2 分钟里留 30 秒</li><li>超时先查慢在哪段，不急着改</li></ul><p class="hint">时间大多耗在摆位和扶正，不在车跑的那几秒。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">第 5 步 · 判定</div><h1>3 次成 2 次，然后存快照</h1><div class="code">全程连跑 3 次：
+  □ 第1次  分 / 秒
+  □ 第2次  分 / 秒
+  □ 第3次  分 / 秒
+
+2 次成 → 打印程序，标 v2，路线图涂绿</div><p class="sub">做完这步：手里有一份能稳定跑 80 分的版本</p><p class="hint">段0–段3、段6 涂绿；段4、段5 继续空着，下节课再填。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">卡住了</div><h1>三个常见故障</h1><ul><li><b>回程撞墙</b> → 后退时间长了 2–3 秒，先减再试</li><li><b>珍宝滑出门口</b> → 推太快，进馆后多推 2 厘米</li><li><b>第二件总偏</b> → 照抄了段1 的时间，重新量</li></ul><p class="hint">同一段两次失败原因一样 → 改程序；每次都不一样 → 查摆位和电池。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">收尾</div><h1>三个问题</h1><div class="q"><span class="n">Q1</span>为什么回程的时间要单独量？</div><div class="ans reveal">倒车对位难，而且到安全区的距离和出发时不一样。</div><div class="q"><span class="n">Q2</span>换角落推第二件，程序能直接复制吗？</div><div class="ans reveal">不能，路线是镜像的，距离和时间都要重新量。</div><div class="q"><span class="n">Q3</span>全程 90 秒没跑完，先改哪里？</div><div class="ans reveal">先查摆位和扶正的时间，再查程序。</div></section>
+<div id="nav"><button id="prev">‹</button><button id="next">›</button></div>
+<div id="rotate" onclick="this.style.display='none'">把手机横过来看，更清楚<br><br><span style="font-size:15px;opacity:.7">点一下继续</span></div>
+<div id="foot">WRO集训 · 第4课 · 两件珍宝 · 2026-11-21</div>
+<div id="hint">空格 揭晓</div><div id="pager"></div>
+</div>
+<script>
+const stage=document.getElementById("stage"),slides=[...document.querySelectorAll(".slide")],pager=document.getElementById("pager");
+let i=0;
+function viewSize(){const v=window.visualViewport;const w=Math.min(innerWidth,v?v.width:innerWidth,screen.width||innerWidth);const h=Math.min(innerHeight,v?v.height:innerHeight,screen.height||innerHeight);return {w,h}}
+function paint(){slides.forEach((s,k)=>s.classList.toggle("on",k===i));slides[i].querySelectorAll(".reveal").forEach(e=>e.classList.remove("show"));pager.textContent=(i+1)+" / "+slides.length}
+function go(n){i=Math.max(0,Math.min(slides.length-1,n));paint()}
+function reveal(){const r=[...slides[i].querySelectorAll(".reveal")].find(x=>!x.classList.contains("show"));if(r)r.classList.add("show");else go(i+1)}
+function fit(){const {w,h}=viewSize();stage.style.transform="translate(-50%,-50%) scale("+Math.min(w/1600,h/900)+")";const rot=document.getElementById("rotate");if(rot)rot.style.display=(h>w&&w<=1000)?"flex":"none"}
+addEventListener("resize",fit);addEventListener("orientationchange",()=>setTimeout(fit,200));
+if(window.visualViewport){visualViewport.addEventListener("resize",fit);visualViewport.addEventListener("scroll",fit)}
+fit();paint();
+addEventListener("keydown",function(e){
+ if(e.key==="ArrowRight"||e.key==="PageDown"){e.preventDefault();go(i+1)}
+ else if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();go(i-1)}
+ else if(e.key===" "||e.key==="Enter"){e.preventDefault();reveal()}
+});
+let _lastTouch=0;
+stage.addEventListener("click",function(e){if(Date.now()-_lastTouch<600)return;if(e.clientX>innerWidth*0.6)go(i+1);else if(e.clientX<innerWidth*0.4)go(i-1);else reveal()});
+let _sx=0,_sy=0;
+stage.addEventListener("touchstart",function(e){const t=e.touches[0];_sx=t.clientX;_sy=t.clientY},{passive:true});
+stage.addEventListener("touchend",function(e){_lastTouch=Date.now();const t=e.changedTouches[0],dx=t.clientX-_sx,dy=t.clientY-_sy;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){go(dx<0?1:-1)}else{reveal()}},{passive:true});
+document.getElementById("prev").onclick=function(){go(i-1)};
+document.getElementById("next").onclick=function(){go(i+1)};
+</script></body></html>

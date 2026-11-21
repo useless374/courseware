@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>WRO集训 第5课 · 难点攻坚</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#1A1A1A;overflow:hidden;font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+#stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:center center;background:#fff;box-shadow:0 0 60px rgba(0,0,0,.5);overflow:hidden}
+.slide{position:absolute;inset:0;padding:64px 120px;display:none;flex-direction:column;justify-content:center}
+.slide.on{display:flex}
+.bar{position:absolute;left:0;top:0;width:100%;height:14px;background:#E36414}
+.kicker{font-size:20px;font-weight:700;color:#E36414;letter-spacing:.04em;margin:6px 0 10px}
+h1{font-size:48px;font-weight:700;color:#0F4C5C;line-height:1.2;margin-bottom:28px}
+ul{list-style:none;margin-top:6px}
+li{font-size:32px;line-height:1.45;color:#1F2937;margin-bottom:18px;padding-left:40px;position:relative}
+li:before{content:"\25AA";position:absolute;left:2px;top:-2px;color:#E36414;font-weight:700}
+.q{font-size:32px;line-height:1.45;color:#1F2937;background:#E6F2F4;border-radius:10px;padding:14px 26px;margin-bottom:10px}
+.q .n{color:#E36414;font-weight:700;margin-right:12px}
+.ans{font-size:30px;line-height:1.5;color:#0F4C5C;background:#F2F8F9;border-left:8px solid #E36414;padding:12px 22px;margin:-2px 0 18px 24px;border-radius:0 8px 8px 0}
+.hint{font-size:28px;line-height:1.5;color:#8A6A16;background:#FBF1D8;border-left:8px solid #D9A21B;padding:16px 24px;margin:12px 0;border-radius:0 8px 8px 0}
+.code{font-family:Consolas,"Microsoft YaHei","Courier New",monospace;font-size:27px;line-height:1.55;background:#0B121A;border-radius:12px;padding:22px 30px;color:#D7E3EA;white-space:pre-wrap}
+.sub{font-size:30px;color:#6B7280;line-height:1.5;margin-top:14px}
+.sub b{color:#E36414}
+.reveal{color:transparent!important;user-select:none;position:relative;transition:color .25s ease}
+.reveal::after{content:"?";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#BCC9CD;font-size:28px;background-color:#F1F6F7;background-image:repeating-linear-gradient(135deg,rgba(15,76,92,.05) 0 12px,transparent 12px 24px);border-radius:8px}
+.reveal.show{color:inherit!important;user-select:auto!important}
+.reveal.show::after{display:none}
+.cover{background:#0F4C5C;flex-direction:column;align-items:flex-start;justify-content:center;padding:0 150px}
+.cover h1{color:#fff;font-size:84px;margin-bottom:24px}
+.cover .kicker{color:#BFD9DF;font-size:22px;margin-bottom:16px;letter-spacing:.1em}
+.cover .sub{color:#BFD9DF;font-size:32px;margin-top:0}
+#foot{position:absolute;left:60px;bottom:18px;font-size:16px;color:#6B7280}
+#pager{position:absolute;right:60px;bottom:18px;font-size:16px;color:#6B7280}
+#hint{position:absolute;right:60px;bottom:46px;font-size:14px;color:#C2C9CB;letter-spacing:.12em}
+#nav{position:fixed;right:18px;bottom:18px;display:none;gap:12px;z-index:10}
+#nav button{width:64px;height:64px;border-radius:50%;border:0;background:rgba(15,76,92,.85);color:#fff;font-size:34px}
+#rotate{position:fixed;inset:0;background:#0F4C5C;color:#fff;display:none;align-items:center;justify-content:center;text-align:center;font-size:20px;z-index:20}
+table.task{width:100%;border-collapse:collapse;font-size:27px}
+table.task th,table.task td{border-bottom:1px solid #DDE5E7;padding:13px 14px;text-align:left;vertical-align:top;line-height:1.4}
+table.task th{color:#0F4C5C;font-size:24px;background:#F2F8F9}
+table.task td:first-child{font-weight:700;color:#E36414;white-space:nowrap}
+table.score{width:100%;border-collapse:collapse;font-size:25px}
+table.score th,table.score td{border:1px solid #C9D6D9;padding:9px 12px;text-align:left}
+table.score th{background:#0F4C5C;color:#fff;font-size:23px}
+table.score td.p{text-align:center;font-weight:700;color:#E36414;width:110px;white-space:nowrap}
+table.score tr.sum td{background:#FBF1D8;font-weight:700;color:#6B5420}
+@media (max-width:900px){#nav{display:flex}}
+@media (max-width:900px) and (orientation:portrait){#rotate{display:flex}}
+</style></head>
+<body><div id="stage">
+<section class="slide cover on"><div class="bar"></div><div class="kicker">古迹文明 · WRO 集训 · 第 5 课</div><h1>啃一个难点</h1><div class="sub">球门 30 分，奖杯 10 分<br>今天只碰一个，稳的分一分不能丢</div></section>
+<section class="slide"><div class="bar"></div><div class="kicker">今天的规矩</div><h1>四个不许</h1><ul><li>只挑<b>一个</b>难点</li><li>已经绿的段全部不动</li><li>难点只加在程序最后，可跳过</li><li>下课前必须留一个能跑的保底版</li></ul><p class="hint">今天的输赢不是多拿几分，是别把 80 分弄丢。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">先算账</div><h1>难点到底值多少</h1><table class="score"><tr><th>任务</th><th>单个</th><th>最高</th></tr><tr><td>两个球推离球门、落地 ×2</td><td class="p">15</td><td class="p">30</td></tr><tr><td>两球落地后，奖杯进安全区直立</td><td class="p">10</td><td class="p">10</td></tr><tr class="sum"><td>已经拿稳的底子</td><td class="p">—</td><td class="p">80</td></tr></table><p class="hint">球门值 30，奖杯才 10，还排在前面的球做完后才能拿。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">复习 · 上节课</div><h1>三个问题</h1><div class="q"><span class="n">Q1</span>上个版本全程要跑多久？</div><div class="ans reveal">90 秒以内，2 分钟里留 30 秒缓冲。</div><div class="q"><span class="n">Q2</span>为什么两轮比赛，第一轮要先跑稳的？</div><div class="ans reveal">两轮分数相加，第一轮先落袋，第二轮才敢冒险。</div><div class="q"><span class="n">Q3</span>难点练失败了会怎样？</div><div class="ans reveal">跳过就行，已经绿的段不受影响，分照拿。</div></section>
+<section class="slide"><div class="bar"></div><div class="kicker">选哪个</div><h1>二选一，今天只练它</h1><table class="task"><tr><th>难点</th><th>难在哪</th><th>值</th></tr><tr><td>球门</td><td>球会滚，方向偏一点就弹回来；要力度也要准心</td><td>30</td></tr><tr><td>奖杯</td><td>上重下轻，一碰就倒；倒了不算</td><td>10</td></tr></table><p class="hint">按性价比先选球门；手感明显不顺就换奖杯，别两个都试。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">球门 · 怎么推</div><h1>球是圆的，推板要低</h1><ul><li>推板要<b>低于球心</b>，从底下兜着推</li><li>一次只推一个球，两个会互相撞</li><li>球门是开口的，推偏一点就弹出来</li><li>先用手推三次，找到「推出去、又不滚远」的力度</li></ul><p class="hint">手推都推不出去，写程序也是白费——先用手找手感。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">奖杯 · 怎么放</div><h1>顺序不能反</h1><ul><li>上重下轻，一碰就倒，倒了不算分</li><li>要贴地慢推，不能从上面压</li><li>必须<b>两个球都落地之后</b>才轮到它</li><li>目标是安全区里「直立」</li></ul><p class="hint">球没落地就去碰奖杯，奖杯拿了也不算——顺序是死的。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">实验法</div><h1>一次只改一个变量</h1><div class="code">第1次：时间 2.0 秒     结果：
+第2次：只改时间 → 2.3 秒   结果：
+第3次：只改力度 → 70 → 60   结果：
+
+其它全部不动，才看得出谁在起作用</div><p class="sub">做完这步：知道哪个参数最影响成败</p><p class="hint">一次改两个，成功了也不知道为什么成功。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">失败预算</div><h1>允许失败，但要封得住</h1><ul><li>难点单独用字母块 E / F 放</li><li>主体程序里<b>不插</b>难点</li><li>比赛时跳过，不用重写程序</li><li>做不成，下课恢复上一份快照</li></ul><p class="hint">难点加在最后：前面照跑，最后愿不愿意试自己决定。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">判定线</div><h1>什么时候收手</h1><div class="code">3 次成 1 次  → 可以带上场，排在第二轮
+3 次全败     → 封存，用保底版
+
+任何时候：前面绿的段开始掉 → 立刻停，回滚</div><p class="sub">做完这步：知道这节课的难点算不算「拿下」</p><p class="hint">难点没多拿分、还把稳的段弄丢，就是亏。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">版本管理</div><h1>手里要有两个版本</h1><table class="task"><tr><th>版本</th><th>内容</th><th>什么时候用</th></tr><tr><td>v3 保底版</td><td>两件珍宝 + 停靠，80 分打法</td><td>第一轮、求稳</td></tr><tr><td>v4 冒险版</td><td>v3 + 球门或奖杯</td><td>第二轮、够上限</td></tr></table><p class="hint">两轮分数相加：先保住下限，再去够上限。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">卡住了</div><h1>三个坑</h1><ul><li><b>球推出去又滚回来</b> → 速度太快，降到 50 试</li><li><b>奖杯倒了</b> → 推的位置太高，改成贴地推底部</li><li><b>加了难点，前面开始偏</b> → 程序里插错了位置，挪到最后</li></ul><p class="hint">改完必须退回单段测，别直接在全程里试。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">收尾</div><h1>三个问题</h1><div class="q"><span class="n">Q1</span>为什么难点只加在程序最后？</div><div class="ans reveal">前面照跑、后面可跳过，失败了也不拖累已经拿到的分。</div><div class="q"><span class="n">Q2</span>为什么第一轮要跑保底版？</div><div class="ans reveal">两轮分数相加，先把稳的分落袋，第二轮才敢冒险。</div><div class="q"><span class="n">Q3</span>练了半小时一次没成，怎么办？</div><div class="ans reveal">封存难点，回保底版；比赛那天至少有 80 分。</div></section>
+<div id="nav"><button id="prev">‹</button><button id="next">›</button></div>
+<div id="rotate" onclick="this.style.display='none'">把手机横过来看，更清楚<br><br><span style="font-size:15px;opacity:.7">点一下继续</span></div>
+<div id="foot">WRO集训 · 第5课 · 难点攻坚 · 2026-11-21</div>
+<div id="hint">空格 揭晓</div><div id="pager"></div>
+</div>
+<script>
+const stage=document.getElementById("stage"),slides=[...document.querySelectorAll(".slide")],pager=document.getElementById("pager");
+let i=0;
+function viewSize(){const v=window.visualViewport;const w=Math.min(innerWidth,v?v.width:innerWidth,screen.width||innerWidth);const h=Math.min(innerHeight,v?v.height:innerHeight,screen.height||innerHeight);return {w,h}}
+function paint(){slides.forEach((s,k)=>s.classList.toggle("on",k===i));slides[i].querySelectorAll(".reveal").forEach(e=>e.classList.remove("show"));pager.textContent=(i+1)+" / "+slides.length}
+function go(n){i=Math.max(0,Math.min(slides.length-1,n));paint()}
+function reveal(){const r=[...slides[i].querySelectorAll(".reveal")].find(x=>!x.classList.contains("show"));if(r)r.classList.add("show");else go(i+1)}
+function fit(){const {w,h}=viewSize();stage.style.transform="translate(-50%,-50%) scale("+Math.min(w/1600,h/900)+")";const rot=document.getElementById("rotate");if(rot)rot.style.display=(h>w&&w<=1000)?"flex":"none"}
+addEventListener("resize",fit);addEventListener("orientationchange",()=>setTimeout(fit,200));
+if(window.visualViewport){visualViewport.addEventListener("resize",fit);visualViewport.addEventListener("scroll",fit)}
+fit();paint();
+addEventListener("keydown",function(e){
+ if(e.key==="ArrowRight"||e.key==="PageDown"){e.preventDefault();go(i+1)}
+ else if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();go(i-1)}
+ else if(e.key===" "||e.key==="Enter"){e.preventDefault();reveal()}
+});
+let _lastTouch=0;
+stage.addEventListener("click",function(e){if(Date.now()-_lastTouch<600)return;if(e.clientX>innerWidth*0.6)go(i+1);else if(e.clientX<innerWidth*0.4)go(i-1);else reveal()});
+let _sx=0,_sy=0;
+stage.addEventListener("touchstart",function(e){const t=e.touches[0];_sx=t.clientX;_sy=t.clientY},{passive:true});
+stage.addEventListener("touchend",function(e){_lastTouch=Date.now();const t=e.changedTouches[0],dx=t.clientX-_sx,dy=t.clientY-_sy;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){go(dx<0?1:-1)}else{reveal()}},{passive:true});
+document.getElementById("prev").onclick=function(){go(i-1)};
+document.getElementById("next").onclick=function(){go(i+1)};
+</script></body></html>

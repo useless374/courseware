@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>WRO集训 第7课 · 固化</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#1A1A1A;overflow:hidden;font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+#stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:center center;background:#fff;box-shadow:0 0 60px rgba(0,0,0,.5);overflow:hidden}
+.slide{position:absolute;inset:0;padding:64px 120px;display:none;flex-direction:column;justify-content:center}
+.slide.on{display:flex}
+.bar{position:absolute;left:0;top:0;width:100%;height:14px;background:#E36414}
+.kicker{font-size:20px;font-weight:700;color:#E36414;letter-spacing:.04em;margin:6px 0 10px}
+h1{font-size:48px;font-weight:700;color:#0F4C5C;line-height:1.2;margin-bottom:28px}
+ul{list-style:none;margin-top:6px}
+li{font-size:32px;line-height:1.45;color:#1F2937;margin-bottom:18px;padding-left:40px;position:relative}
+li:before{content:"\25AA";position:absolute;left:2px;top:-2px;color:#E36414;font-weight:700}
+.q{font-size:32px;line-height:1.45;color:#1F2937;background:#E6F2F4;border-radius:10px;padding:14px 26px;margin-bottom:10px}
+.q .n{color:#E36414;font-weight:700;margin-right:12px}
+.ans{font-size:30px;line-height:1.5;color:#0F4C5C;background:#F2F8F9;border-left:8px solid #E36414;padding:12px 22px;margin:-2px 0 18px 24px;border-radius:0 8px 8px 0}
+.hint{font-size:28px;line-height:1.5;color:#8A6A16;background:#FBF1D8;border-left:8px solid #D9A21B;padding:16px 24px;margin:12px 0;border-radius:0 8px 8px 0}
+.code{font-family:Consolas,"Microsoft YaHei","Courier New",monospace;font-size:27px;line-height:1.55;background:#0B121A;border-radius:12px;padding:22px 30px;color:#D7E3EA;white-space:pre-wrap}
+.sub{font-size:30px;color:#6B7280;line-height:1.5;margin-top:14px}
+.sub b{color:#E36414}
+.reveal{color:transparent!important;user-select:none;position:relative;transition:color .25s ease}
+.reveal::after{content:"?";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#BCC9CD;font-size:28px;background-color:#F1F6F7;background-image:repeating-linear-gradient(135deg,rgba(15,76,92,.05) 0 12px,transparent 12px 24px);border-radius:8px}
+.reveal.show{color:inherit!important;user-select:auto!important}
+.reveal.show::after{display:none}
+.cover{background:#0F4C5C;flex-direction:column;align-items:flex-start;justify-content:center;padding:0 150px}
+.cover h1{color:#fff;font-size:84px;margin-bottom:24px}
+.cover .kicker{color:#BFD9DF;font-size:22px;margin-bottom:16px;letter-spacing:.1em}
+.cover .sub{color:#BFD9DF;font-size:32px;margin-top:0}
+#foot{position:absolute;left:60px;bottom:18px;font-size:16px;color:#6B7280}
+#pager{position:absolute;right:60px;bottom:18px;font-size:16px;color:#6B7280}
+#hint{position:absolute;right:60px;bottom:46px;font-size:14px;color:#C2C9CB;letter-spacing:.12em}
+#nav{position:fixed;right:18px;bottom:18px;display:none;gap:12px;z-index:10}
+#nav button{width:64px;height:64px;border-radius:50%;border:0;background:rgba(15,76,92,.85);color:#fff;font-size:34px}
+#rotate{position:fixed;inset:0;background:#0F4C5C;color:#fff;display:none;align-items:center;justify-content:center;text-align:center;font-size:20px;z-index:20}
+table.task{width:100%;border-collapse:collapse;font-size:27px}
+table.task th,table.task td{border-bottom:1px solid #DDE5E7;padding:13px 14px;text-align:left;vertical-align:top;line-height:1.4}
+table.task th{color:#0F4C5C;font-size:24px;background:#F2F8F9}
+table.task td:first-child{font-weight:700;color:#E36414;white-space:nowrap}
+table.score{width:100%;border-collapse:collapse;font-size:25px}
+table.score th,table.score td{border:1px solid #C9D6D9;padding:9px 12px;text-align:left}
+table.score th{background:#0F4C5C;color:#fff;font-size:23px}
+table.score td.p{text-align:center;font-weight:700;color:#E36414;width:110px;white-space:nowrap}
+table.score tr.sum td{background:#FBF1D8;font-weight:700;color:#6B5420}
+@media (max-width:900px){#nav{display:flex}}
+@media (max-width:900px) and (orientation:portrait){#rotate{display:flex}}
+</style></head>
+<body><div id="stage">
+<section class="slide cover on"><div class="bar"></div><div class="kicker">古迹文明 · WRO 集训 · 第 7 课</div><h1>固化</h1><div class="sub">今天不学新东西<br>换谁上来，都能打出一样的分</div></section>
+<section class="slide"><div class="bar"></div><div class="kicker">今天</div><h1>只做三件事</h1><ul><li>把起跑摆位标准化</li><li>练交接和口令</li><li>写下比赛日清单</li></ul><p class="hint">程序今天不动。要动的是人怎么配合。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">为什么换人会掉分</div><h1>不是新手差，是标准没写下来</h1><ul><li>每个人摆车的角度不一样</li><li>推的力度、扶正的手感不一样</li><li>「好了没有」的判断不一样</li><li>出问题时的处理顺序不一样</li></ul><p class="hint">把「凭手感」变成「照步骤」，换人才不掉分。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">起跑检查</div><h1>每轮开始前，五项必查</h1><div class="code">① 电池：满电，备用一块放在桌上
+② 程序：版本号对（保底版 / 冒险版）
+③ 字母：全部改回绿色三角
+④ 摆位：车贴地面标记，车头对齐边线
+⑤ 场地：珍宝、水车位置和上节课一致</div><p class="sub">做完这步：换谁摆，起跑点都一样</p><p class="hint">五项里最容易忘的是第③项：字母块没改回来，比赛可能被判遥控。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">摆位</div><h1>用标记，不用眼睛</h1><ul><li>场地边上贴胶带做起点标记</li><li>车头对齐边线，不靠目测</li><li>摆好后手完全离开，再按开始</li><li>每轮记一下：摆位是否一致</li></ul><p class="hint">摆位差 1 厘米，跑 1 米后可能差 5 厘米。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">交接</div><h1>三个人，三句口令</h1><ul><li>一人操作、一人计时、一人记分</li><li>换人前：上一个操作手说「停了，可以碰」</li><li>口令固定：开始 / 30 秒 / 10 秒 / 停</li><li>记分员在结束后 30 秒内出分</li></ul><p class="hint">没听到「可以碰」，谁都别伸手——碰一次扣一分。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">比赛日</div><h1>当天怎么走</h1><div class="code">到场 → 器材清点 → 场地确认
+→ 试跑一次（不算分）
+→ 第一轮 → 中间检查 → 第二轮
+→ 记分 → 收器材</div><p class="sub">做完这步：当天不用临时商量，照着走</p><p class="hint">试跑只为了确认车和场地，别在试跑里改程序。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">应急</div><h1>出问题了按顺序处理</h1><table class="task"><tr><th>问题</th><th>怎么办</th></tr><tr><td>程序丢了</td><td>从 U 盘 / 云端恢复保底版，不重写</td></tr><tr><td>电池没电</td><td>两块轮换，赛前都充满</td></tr><tr><td>场地和训练不一样</td><td>现场重新量一段距离，改一个数</td></tr><tr><td>车撞坏</td><td>备件：轮子、轴、电机、推板</td></tr></table><p class="hint">所有应急动作都只做「恢复到保底版」，现场不做新尝试。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">清单</div><h1>比赛包 · 打印带在身上</h1><div class="code">□ 车 + 两块满电电池
+□ 程序备份（U 盘 / 手机云端）
+□ 路线图 + 快照记录
+□ 备用件：轮子、轴、电机、推板
+□ 胶带（贴摆位标记）
+□ 秒表 / 手机计时
+□ 计分表（两轮用）</div><p class="hint">缺一样，当天就会手忙脚乱；出门前照着勾。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">收尾</div><h1>三个问题</h1><div class="q"><span class="n">Q1</span>为什么要贴标记、不看眼睛？</div><div class="ans reveal">目测每次都不一样，标记让每个人摆出同一个起点。</div><div class="q"><span class="n">Q2</span>交接口令为什么重要？</div><div class="ans reveal">车还在动就伸手，一次扣一分；口令让全队知道什么时候能碰。</div><div class="q"><span class="n">Q3</span>比赛当天最可能出问题的是哪一环？</div><div class="ans reveal">器材和场地：电池、程序备份、摆位标记，三样最容易漏。</div></section>
+<div id="nav"><button id="prev">‹</button><button id="next">›</button></div>
+<div id="rotate" onclick="this.style.display='none'">把手机横过来看，更清楚<br><br><span style="font-size:15px;opacity:.7">点一下继续</span></div>
+<div id="foot">WRO集训 · 第7课 · 固化 · 2026-11-21</div>
+<div id="hint">空格 揭晓</div><div id="pager"></div>
+</div>
+<script>
+const stage=document.getElementById("stage"),slides=[...document.querySelectorAll(".slide")],pager=document.getElementById("pager");
+let i=0;
+function viewSize(){const v=window.visualViewport;const w=Math.min(innerWidth,v?v.width:innerWidth,screen.width||innerWidth);const h=Math.min(innerHeight,v?v.height:innerHeight,screen.height||innerHeight);return {w,h}}
+function paint(){slides.forEach((s,k)=>s.classList.toggle("on",k===i));slides[i].querySelectorAll(".reveal").forEach(e=>e.classList.remove("show"));pager.textContent=(i+1)+" / "+slides.length}
+function go(n){i=Math.max(0,Math.min(slides.length-1,n));paint()}
+function reveal(){const r=[...slides[i].querySelectorAll(".reveal")].find(x=>!x.classList.contains("show"));if(r)r.classList.add("show");else go(i+1)}
+function fit(){const {w,h}=viewSize();stage.style.transform="translate(-50%,-50%) scale("+Math.min(w/1600,h/900)+")";const rot=document.getElementById("rotate");if(rot)rot.style.display=(h>w&&w<=1000)?"flex":"none"}
+addEventListener("resize",fit);addEventListener("orientationchange",()=>setTimeout(fit,200));
+if(window.visualViewport){visualViewport.addEventListener("resize",fit);visualViewport.addEventListener("scroll",fit)}
+fit();paint();
+addEventListener("keydown",function(e){
+ if(e.key==="ArrowRight"||e.key==="PageDown"){e.preventDefault();go(i+1)}
+ else if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();go(i-1)}
+ else if(e.key===" "||e.key==="Enter"){e.preventDefault();reveal()}
+});
+let _lastTouch=0;
+stage.addEventListener("click",function(e){if(Date.now()-_lastTouch<600)return;if(e.clientX>innerWidth*0.6)go(i+1);else if(e.clientX<innerWidth*0.4)go(i-1);else reveal()});
+let _sx=0,_sy=0;
+stage.addEventListener("touchstart",function(e){const t=e.touches[0];_sx=t.clientX;_sy=t.clientY},{passive:true});
+stage.addEventListener("touchend",function(e){_lastTouch=Date.now();const t=e.changedTouches[0],dx=t.clientX-_sx,dy=t.clientY-_sy;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){go(dx<0?1:-1)}else{reveal()}},{passive:true});
+document.getElementById("prev").onclick=function(){go(i-1)};
+document.getElementById("next").onclick=function(){go(i+1)};
+</script></body></html>
