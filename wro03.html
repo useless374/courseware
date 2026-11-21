@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>WRO集训 第3课 · 串路线</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#1A1A1A;overflow:hidden;font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+#stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:center center;background:#fff;box-shadow:0 0 60px rgba(0,0,0,.5);overflow:hidden}
+.slide{position:absolute;inset:0;padding:64px 120px;display:none;flex-direction:column;justify-content:center}
+.slide.on{display:flex}
+.bar{position:absolute;left:0;top:0;width:100%;height:14px;background:#E36414}
+.kicker{font-size:20px;font-weight:700;color:#E36414;letter-spacing:.04em;margin:6px 0 10px}
+h1{font-size:48px;font-weight:700;color:#0F4C5C;line-height:1.2;margin-bottom:28px}
+ul{list-style:none;margin-top:6px}
+li{font-size:34px;line-height:1.45;color:#1F2937;margin-bottom:20px;padding-left:40px;position:relative}
+li:before{content:"\25AA";position:absolute;left:2px;top:-2px;color:#E36414;font-weight:700}
+.q{font-size:34px;line-height:1.45;color:#1F2937;background:#E6F2F4;border-radius:10px;padding:14px 26px;margin-bottom:10px}
+.q .n{color:#E36414;font-weight:700;margin-right:12px}
+.ans{font-size:31px;line-height:1.5;color:#0F4C5C;background:#F2F8F9;border-left:8px solid #E36414;padding:12px 22px;margin:-2px 0 18px 24px;border-radius:0 8px 8px 0}
+.hint{font-size:30px;line-height:1.5;color:#8A6A16;background:#FBF1D8;border-left:8px solid #D9A21B;padding:16px 24px;margin:12px 0;border-radius:0 8px 8px 0}
+.code{font-family:Consolas,"Courier New",monospace;font-size:28px;line-height:1.55;background:#0B121A;border-radius:12px;padding:22px 30px;color:#D7E3EA;white-space:pre-wrap}
+.sub{font-size:30px;color:#6B7280;line-height:1.5;margin-top:14px}
+.sub b{color:#E36414}
+.reveal{color:transparent!important;user-select:none;position:relative;transition:color .25s ease}
+.reveal::after{content:"?";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#BCC9CD;font-size:28px;background-color:#F1F6F7;background-image:repeating-linear-gradient(135deg,rgba(15,76,92,.05) 0 12px,transparent 12px 24px);border-radius:8px}
+.reveal.show{color:inherit!important}
+.reveal.show::after{display:none}
+.cover{background:#0F4C5C;flex-direction:column;align-items:flex-start;justify-content:center;padding:0 150px}
+.cover h1{color:#fff;font-size:84px;margin-bottom:24px}
+.cover .kicker{color:#BFD9DF;font-size:22px;margin-bottom:16px;letter-spacing:.1em}
+.cover .sub{color:#BFD9DF;font-size:32px;margin-top:0}
+#foot{position:absolute;left:60px;bottom:18px;font-size:16px;color:#6B7280}
+#pager{position:absolute;right:60px;bottom:18px;font-size:16px;color:#6B7280}
+#hint{position:absolute;right:60px;bottom:46px;font-size:14px;color:#C2C9CB;letter-spacing:.12em}
+#nav{position:fixed;right:18px;bottom:18px;display:none;gap:12px;z-index:10}
+#nav button{width:64px;height:64px;border-radius:50%;border:0;background:rgba(15,76,92,.85);color:#fff;font-size:34px}
+#rotate{position:fixed;inset:0;background:#0F4C5C;color:#fff;display:none;align-items:center;justify-content:center;text-align:center;font-size:20px;z-index:20}
+.two{display:flex;gap:46px;align-items:flex-start}
+@media (max-width:900px){#nav{display:flex}}
+@media (max-width:900px) and (orientation:portrait){#rotate{display:flex}}
+</style></head>
+<body><div id="stage">
+<section class="slide cover on"><div class="bar"></div><div class="kicker">古迹文明 · WRO 集训 · 第 3 课</div><h1>串路线</h1><div class="sub">一个任务稳稳拿到，再去拿第二个<br>今天目标：90 秒内跑完 3 个得分点</div></section>
+<section class="slide"><div class="bar"></div><div class="kicker">今天</div><h1>只干两件事</h1><ul><li><b>串起来</b>：把上节课单独跑通的动作，接成一条完整路线</li><li><b>跑得稳</b>：连跑 3 次，成 2 次才算真的会</li><li>不追求高难度：先把最容易的 3 个分拿死</li></ul><p class="hint">175 分是给高手准备的。集训先保 40-60 分，比赛不丢分比多得分重要。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">复习 · 上节课</div><h1>三个问题</h1><div class="q"><span class="n">Q1</span>推进珍宝，推板要碰哪里？</div><div class="ans reveal">碰它的下半部分，贴着地面推，别怼上半截。</div><div class="q"><span class="n">Q2</span>怎么知道车走了多远？</div><div class="ans reveal">用秒表标定：跑 1 秒走多远，再折算成时间。</div><div class="q"><span class="n">Q3</span>停靠分能用手把车放进去吗？</div><div class="ans reveal">不行。必须自己开进去，手放进去不算分。</div></section>
+<section class="slide"><div class="bar"></div><div class="kicker">先定路线</div><h1>在纸上画一条，再上车写程序</h1><div class="two"><ul style="flex:1"><li>起点：安全角</li><li>① 推一件珍宝进博物馆</li><li>② 回停靠区（顺手，不绕路）</li><li>③ 第二个得分点：水槽 ← 今天新加</li><li>④ 开进中央圆圈停好拿停靠分</li></ul><div style="flex:1"><div class="hint" style="margin-top:0">画的时候标三样：<br>从哪出发 · 先后顺序 · 最后停哪</div><div class="hint">宁走三趟稳的，不走一趟险的。撞到场地扣分比少拿分更亏。</div></div></div></section>
+<section class="slide"><div class="bar"></div><div class="kicker">第 1 步 · 拆成小段</div><h1>一段程序只干一件事</h1><div class="code">任务A（单独一个程序）:
+  出发 → 推珍宝 → 停住
+
+先不管后面的任务，这一段跑稳再说</div><p class="sub">做完这步：同一个程序跑 3 次，珍宝每次都在博物馆里</p><p class="hint">不稳定的段，直接删掉重写，别在错的程序上打补丁。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">第 2 步 · 加机械臂</div><h1>到点了，抬臂→前推→放臂</h1><div class="code">任务A:
+  出发 → 走到珍宝前 → 抬臂
+  前进 0.5 秒（推） → 放臂 → 后退 0.3 秒</div><p class="sub">做完这步：推的过程手臂不刮场地，放臂后车能退出来</p><p class="hint">放臂要在车里之前，退的时候才不会被珍宝卡住。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">第 3 步 · 接上第二段</div><h1>一个程序里跑完两个任务</h1><div class="code">任务A（推珍宝）
+  ↓ 停 1 秒
+任务B（去水槽）
+  ↓ 停 1 秒
+回中央圆圈停靠
+
+每段之间都从同一个「已知位置」开始算</div><p class="sub">做完这步：程序一次跑完，中间不用碰车</p><p class="hint">第二段的距离，是「从停靠区出发」量的，不是从起点量的。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">第 4 步 · 掐表</div><h1>找出最慢的一段</h1><div class="code">总时间 = 各段秒表相加
+记录：任务A __ 秒 / 回停靠 __ 秒 / 任务B __ 秒
+把最慢那段单独拉出来练</div><p class="sub">做完这步：知道时间花在哪，才知道改哪里</p><p class="hint">总时长要留 10 秒余量，比赛现场光线、电量都可能让它变慢。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">第 5 步 · 练稳定</div><h1>连跑 3 次，成 2 次</h1><div class="code">同一套程序，不改一个参数，连跑 3 次
+  □ 第1次 成功 / 失败 —— 失败原因：
+  □ 第2次 成功 / 失败 —— 失败原因：
+  □ 第3次 成功 / 失败 —— 失败原因：</div><p class="sub">做完这步：3 次里有 2 次成功，这一段才算练熟</p><p class="hint">两次失败原因一样 → 是程序问题；每次原因都不一样 → 是摆位/场地问题。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">第 6 步 · 拿白送的分</div><h1>不碰水车 + 最后开回中央</h1><div class="code">全程口诀：
+  走外侧 → 不碰水车（白拿 20 分）
+  四件珍宝全进馆 → 再多 10 分
+  最后开进中央圆圈 → 再 10 分</div><p class="sub">做完这步：跑完一圈，场上该有的分都拿到了</p><p class="hint">白送的分最不值得丢：宁可绕远，也不从水车旁边挤过去。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">卡住了看这里</div><h1>四个常见的坑</h1><ul class="reveal"><li>第一段成功、第二段偏 → 中停位置每次不一样，加「撞墙对齐」再出发</li><li>珍宝推进去了又被带出来 → 后退太快，减速或放臂后再退</li><li>三次差别很大 → 电池没电了，换满电电池再测</li><li>时间够但分数没拿到 → 顺序错了，先做近的、再做远的</li></ul></section>
+<section class="slide"><div class="bar"></div><div class="kicker">收尾</div><h1>三个问题</h1><div class="q"><span class="n">Q1</span>为什么每段都要回到同一个已知位置？</div><div class="ans reveal">位置一致，下一段的距离才准，不然越跑越偏。</div><div class="q"><span class="n">Q2</span>连跑 3 次成 2 次，说明了什么？</div><div class="ans reveal">这一段基本可靠了，可以去串下一段。</div><div class="q"><span class="n">Q3</span>比赛里，为什么不追求把所有分都拿完？</div><div class="ans reveal">分越高越容易失误，稳拿的分才是真的分。</div></section>
+<div id="nav"><button id="prev">‹</button><button id="next">›</button></div>
+<div id="rotate" onclick="this.style.display='none'">把手机横过来看，更清楚<br><br><span style="font-size:15px;opacity:.7">点一下继续</span></div>
+<div id="foot">WRO集训 · 第3课 · 串路线 · 2026-11-21</div>
+<div id="hint">空格 揭晓</div><div id="pager"></div>
+</div>
+<script>
+const stage=document.getElementById('stage'),slides=[...document.querySelectorAll('.slide')],pager=document.getElementById('pager');
+let i=0;
+function view(){slides.forEach((s,k)=>s.classList.toggle('on',k===i));pager.textContent=(i+1)+' / '+slides.length}
+function go(n){i=Math.max(0,Math.min(slides.length-1,n));view()}
+function resize(){const s=Math.min(innerWidth/1600,innerHeight/900);stage.style.transform='translate(-50%,-50%) scale('+s+')'}
+addEventListener('resize',resize);resize();view();
+addEventListener('keydown',function(e){
+ if(e.key==='ArrowRight'||e.key==='PageDown'){e.preventDefault();go(i+1)}
+ if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(i-1)}
+ if(e.key===' '){e.preventDefault();var r=[...slides[i].querySelectorAll('.reveal')].find(function(x){return !x.classList.contains('show')});if(r){r.classList.add('show')}else{go(i+1)}}
+});
+document.getElementById('prev').onclick=function(){go(i-1)};
+document.getElementById('next').onclick=function(){go(i+1)};
+stage.addEventListener('click',function(e){if(e.clientX>innerWidth*0.6)go(i+1);else if(e.clientX<innerWidth*0.4)go(i-1)});
+</script></body></html>
