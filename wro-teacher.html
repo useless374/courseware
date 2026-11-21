@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>WRO 集训课怎么上 · 教师培训</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#1A1A1A;overflow:hidden;font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+#stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:center center;background:#fff;box-shadow:0 0 60px rgba(0,0,0,.5);overflow:hidden}
+.slide{position:absolute;inset:0;padding:64px 120px;display:none;flex-direction:column;justify-content:center}
+.slide.on{display:flex}
+.bar{position:absolute;left:0;top:0;width:100%;height:14px;background:#E36414}
+.kicker{font-size:20px;font-weight:700;color:#E36414;letter-spacing:.04em;margin:6px 0 10px}
+h1{font-size:48px;font-weight:700;color:#0F4C5C;line-height:1.2;margin-bottom:28px}
+ul{list-style:none;margin-top:6px}
+li{font-size:32px;line-height:1.45;color:#1F2937;margin-bottom:18px;padding-left:40px;position:relative}
+li:before{content:"\25AA";position:absolute;left:2px;top:-2px;color:#E36414;font-weight:700}
+.q{font-size:32px;line-height:1.45;color:#1F2937;background:#E6F2F4;border-radius:10px;padding:14px 26px;margin-bottom:10px}
+.q .n{color:#E36414;font-weight:700;margin-right:12px}
+.ans{font-size:30px;line-height:1.5;color:#0F4C5C;background:#F2F8F9;border-left:8px solid #E36414;padding:12px 22px;margin:-2px 0 18px 24px;border-radius:0 8px 8px 0}
+.hint{font-size:28px;line-height:1.5;color:#8A6A16;background:#FBF1D8;border-left:8px solid #D9A21B;padding:16px 24px;margin:12px 0;border-radius:0 8px 8px 0}
+.code{font-family:Consolas,"Microsoft YaHei","Courier New",monospace;font-size:27px;line-height:1.55;background:#0B121A;border-radius:12px;padding:22px 30px;color:#D7E3EA;white-space:pre-wrap}
+.sub{font-size:30px;color:#6B7280;line-height:1.5;margin-top:14px}
+.sub b{color:#E36414}
+.reveal{color:transparent!important;user-select:none;position:relative;transition:color .25s ease}
+.reveal::after{content:"?";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#BCC9CD;font-size:28px;background-color:#F1F6F7;background-image:repeating-linear-gradient(135deg,rgba(15,76,92,.05) 0 12px,transparent 12px 24px);border-radius:8px}
+.reveal.show{color:inherit!important;user-select:auto!important}
+.reveal.show::after{display:none}
+.cover{background:#0F4C5C;flex-direction:column;align-items:flex-start;justify-content:center;padding:0 150px}
+.cover h1{color:#fff;font-size:84px;margin-bottom:24px}
+.cover .kicker{color:#BFD9DF;font-size:22px;margin-bottom:16px;letter-spacing:.1em}
+.cover .sub{color:#BFD9DF;font-size:32px;margin-top:0}
+#foot{position:absolute;left:60px;bottom:18px;font-size:16px;color:#6B7280}
+#pager{position:absolute;right:60px;bottom:18px;font-size:16px;color:#6B7280}
+#hint{position:absolute;right:60px;bottom:46px;font-size:14px;color:#C2C9CB;letter-spacing:.12em}
+#nav{position:fixed;right:18px;bottom:18px;display:none;gap:12px;z-index:10}
+#nav button{width:64px;height:64px;border-radius:50%;border:0;background:rgba(15,76,92,.85);color:#fff;font-size:34px}
+#rotate{position:fixed;inset:0;background:#0F4C5C;color:#fff;display:none;align-items:center;justify-content:center;text-align:center;font-size:20px;z-index:20}
+@media (max-width:900px){#nav{display:flex}}
+table.task{width:100%;border-collapse:collapse;font-size:27px}
+table.task th,table.task td{border-bottom:1px solid #DDE5E7;padding:13px 14px;text-align:left;vertical-align:top;line-height:1.4}
+table.task th{color:#0F4C5C;font-size:24px;background:#F2F8F9}
+table.task td:first-child{font-weight:700;color:#E36414;white-space:nowrap}
+table.letters{width:100%;border-collapse:collapse;font-size:28px}
+table.letters th,table.letters td{border:1px solid #C9D6D9;padding:10px 18px;text-align:left}
+table.letters th{background:#0F4C5C;color:#fff;font-size:24px}
+table.letters td:first-child{font-weight:700;color:#E36414;font-size:32px;width:90px;text-align:center}
+</style></head>
+<body><div id="stage">
+<section class="slide cover"><div class="bar"></div><div class="kicker">教师培训 · 2026-11-22</div><h1>WRO 集训课<br>怎么上</h1><div class="sub">90 分钟讲透一件事：<br>把「学生自己想办法」变成「学生会照着规划」</div></section>
+<section class="slide "><div class="bar"></div><div class="kicker">今天讲什么</div><h1>三件事，讲完就能上手</h1><ul><li><b>先讲规则</b>：规则不讲清，学生画出来的路线全是违规的</li><li><b>再放手</b>：先让学生自己画，老师不抢笔</li><li><b>后收口</b>：慢慢把学生引到已经总结好的路线上来</li></ul><p class="hint">顺序不能反。先给答案，学生就只会抄；先讲规则，学生画错了也是自己想过的。</p></section>
+<section class="slide "><div class="bar"></div><div class="kicker">第 0 步 · 规则</div><h1>这四条，第一节课就要钉死</h1><ul><li><b>一轮 2 分钟，打两轮</b>，两轮分数加起来算总分</li><li><b>只认结束那一刻</b>：推进去又滑出来，不算分</li><li><b>车能搬</b>：但只能在安全区或停靠圈里搬</li><li><b>别的地方碰车扣分</b>：安全区外碰一次扣 1 分，撞飞奇琴伊察的环一个扣 15 分</li></ul><p class="hint">讲规则的检验办法：让学生用自己的话说一遍「什么情况下可以动手搬车」。</p></section>
+<section class="slide "><div class="bar"></div><div class="kicker">第 1 步 · 放手</div><h1>发空白图 + 铅笔，15 分钟自己画</h1><ul><li>发<b>空白路线图</b>，别的什么都不给</li><li>老师只做三件事：<b>不纠正</b>、只问「这一段开到哪停」、记下学生卡在哪</li><li>画成什么样都收着，这是下一节课的底稿</li></ul><p class="hint">学生问「这样对吗」，回一句「你先画完，我们一会儿对着规则看」。</p></section>
+<section class="slide "><div class="bar"></div><div class="kicker">四问 ① ②</div><h1>用什么笔？怎么标记？</h1><div class="q"><span class="n">Q1</span>用什么笔？</div><div class="ans reveal">铅笔打底，<b>定稿再用红笔</b>。铅笔好改，红笔只标定下来的段。</div><div class="q"><span class="n">Q2</span>怎么标记？</div><div class="ans reveal">每段一条线 + 一个字母：<b>实线＝已经做出来了，虚线＝还没做</b>。难点的段用红色。</div><p class="sub">学生第一版可以全是虚线，那说明他知道自己走到哪了。</p></section>
+<section class="slide "><div class="bar"></div><div class="kicker">四问 ③</div><h1>程序太多，看不清楚怎么办？</h1><div class="q" style="font-size:30px">六七个程序挤在一起，学生自己都找不到上次那个</div><p class="ans reveal">一段程序 = 一个独立程序块，<b>名字就用图上的字母</b>（A、B、C）。<br>只留当前在练的那一段，其余先不用管。</p><p class="hint">名字起对了，找程序就变成「找字母」，不用一个个点开看积木。</p></section>
+<section class="slide "><div class="bar"></div><div class="kicker">四问 ④</div><h1>程序怎么和地图上的线对上？</h1><div class="q" style="font-size:30px">图上有三条线，程序里有七八块，怎么知道谁对谁？</div><p class="ans reveal">图上写字母 → 程序用同一个字母命名 → 顺序也按字母排。<br>跑通一段，就把图上的虚线改成实线。</p><p class="sub">学生看自己的图，就能答出「哪一段还没做」。</p></section>
+<section class="slide "><div class="bar"></div><div class="kicker">现场示例</div><h1>已经总结好的三条路线</h1><table class="letters"><tr><th>路线</th><th>怎么走</th></tr><tr><td style="color:#D93025">① 红</td><td><b>难点</b>：奇琴伊察 → 两个球门中间 → 击落两球 → 回安全区</td></tr><tr><td style="color:#2E7D32">② 绿</td><td>奇琴伊察 → 顺带四方珍宝 → 万神殿</td></tr><tr><td style="color:#6A1B9A">③ 紫</td><td>万神殿 → 石柱放下手臂 → 回万神殿</td></tr></table><p class="hint">这三条是参考答案，不是第一节课就发的东西。</p></section>
+<section class="slide "><div class="bar"></div><div class="kicker">先搭框架</div><h1>现在不计较的三种毛病</h1><ul><li>车开出界了</li><li>距离不够，没推到位置</li><li>方向差一点，角度歪</li></ul><p class="ans reveal">这三样全部先不管。<b>框架对了，再调数值。</b><br>框架 = 从哪出发、到哪停、这一段做什么任务。</p><p class="hint">反过来做（先抠距离和角度）最费时间：一改方向，前面调的距离全废。</p></section>
+<section class="slide "><div class="bar"></div><div class="kicker">人多的班</div><h1>只做半场，不排队</h1><ul><li>场地按中线分两半：<b>万神殿 + 奇琴伊察</b> 一半，<b>舒什塔尔 + 吴哥窟</b> 一半</li><li>一轮只打一半，学生练到手不闲</li><li>摆位统一：安全区角上贴 <b>L 形胶带框</b>，车交给学生自己摆，不用老师每次摆</li></ul><p class="hint">摆位不准多半不是学生手笨，是没给固定的参照物。</p></section>
+<section class="slide "><div class="bar"></div><div class="kicker">流程单</div><h1>90 分钟怎么分</h1><table class="task"><tr><th>时间</th><th>干什么</th><th>老师做什么</th></tr><tr><td>0–10</td><td>讲规则</td><td>四条钉死，抽人复述</td></tr><tr><td>10–25</td><td>自己画路线</td><td>不纠正，只问「到哪停」</td></tr><tr><td>25–45</td><td>拆成一段段程序</td><td>逼学生给程序起字母名</td></tr><tr><td>45–75</td><td>练难点那一段</td><td>只练红色那段，不跑全程</td></tr><tr><td>75–90</td><td>把虚线改实线</td><td>跑通一段改一段</td></tr></table></section>
+<section class="slide "><div class="bar"></div><div class="kicker">别做歪</div><h1>老师最容易犯的三个错</h1><ul><li><b>替他画</b>：拿过笔帮他排路线——他一节课下来什么都没学到</li><li><b>一上来就调距离</b>：框架还没定就抠毫米，白调</li><li><b>全班跑全程</b>：两分钟一轮，一节课只能跑几趟，谁都没练到</li></ul><p class="hint">记住一句：难点单独练，全程留到最后一节课。</p></section>
+<section class="slide "><div class="bar"></div><div class="kicker">带走</div><h1>三个问题</h1><div class="q"><span class="n">Q1</span>规则讲清了吗？（学生能说出什么时候能搬车）</div><div class="q"><span class="n">Q2</span>路线是谁画的？（学生画的最靠谱）</div><div class="q"><span class="n">Q3</span>今天练的是哪一段？（只能是一段，最好是红色那段）</div><p class="sub">三个都能答上来，这节课就算成了。</p></section>
+<div id="nav"><button id="prev">‹</button><button id="next">›</button></div>
+<div id="rotate" onclick="this.style.display='none'">把手机横过来看，更清楚<br><br><span style="font-size:15px;opacity:.7">点一下继续</span></div>
+<div id="foot">WRO 集训 · 教师培训 · 2026-11-22</div>
+<div id="hint">空格 揭晓</div><div id="pager"></div>
+</div>
+<script>
+const stage=document.getElementById("stage"),slides=[...document.querySelectorAll(".slide")],pager=document.getElementById("pager");
+let i=0;
+function viewSize(){const v=window.visualViewport;const w=Math.min(innerWidth,v?v.width:innerWidth,screen.width||innerWidth);const h=Math.min(innerHeight,v?v.height:innerHeight,screen.height||innerHeight);return {w,h}}
+function paint(){slides.forEach((s,k)=>s.classList.toggle("on",k===i));slides[i].querySelectorAll(".reveal").forEach(e=>e.classList.remove("show"));pager.textContent=(i+1)+" / "+slides.length}
+function go(n){i=Math.max(0,Math.min(slides.length-1,n));paint()}
+function reveal(){const r=[...slides[i].querySelectorAll(".reveal")].find(x=>!x.classList.contains("show"));if(r)r.classList.add("show");else go(i+1)}
+function fit(){const {w,h}=viewSize();stage.style.transform="translate(-50%,-50%) scale("+Math.min(w/1600,h/900)+")";const rot=document.getElementById("rotate");if(rot)rot.style.display=(h>w&&w<=1000)?"flex":"none"}
+addEventListener("resize",fit);addEventListener("orientationchange",()=>setTimeout(fit,200));
+if(window.visualViewport){visualViewport.addEventListener("resize",fit);visualViewport.addEventListener("scroll",fit)}
+fit();paint();
+addEventListener("keydown",function(e){
+ if(e.key==="ArrowRight"||e.key==="PageDown"){e.preventDefault();go(i+1)}
+ else if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();go(i-1)}
+ else if(e.key===" "||e.key==="Enter"){e.preventDefault();reveal()}
+});
+let _lastTouch=0;
+stage.addEventListener("click",function(e){if(Date.now()-_lastTouch<600)return;if(e.clientX>innerWidth*0.6)go(i+1);else if(e.clientX<innerWidth*0.4)go(i-1);else reveal()});
+let _sx=0,_sy=0;
+stage.addEventListener("touchstart",function(e){const t=e.touches[0];_sx=t.clientX;_sy=t.clientY},{passive:true});
+stage.addEventListener("touchend",function(e){_lastTouch=Date.now();const t=e.changedTouches[0],dx=t.clientX-_sx,dy=t.clientY-_sy;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){go(dx<0?1:-1)}else{reveal()}},{passive:true});
+document.getElementById("prev").onclick=function(){go(i-1)};
+document.getElementById("next").onclick=function(){go(i+1)};
+</script></body></html>
