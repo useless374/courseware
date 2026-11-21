@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>古迹文明 · 路线图空白模板</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#EEF2F3;font-family:"Microsoft YaHei","PingFang SC",sans-serif;color:#1F2937;padding:18px}
+  .sheet{width:1120px;margin:0 auto;background:#fff;padding:26px 30px 22px;box-shadow:0 4px 24px rgba(0,0,0,.12);border-radius:6px}
+  .head{display:flex;align-items:flex-end;justify-content:space-between;border-bottom:3px solid #E36414;padding-bottom:10px;margin-bottom:16px}
+  .head h1{font-size:26px;color:#0F4C5C}
+  .head .meta{font-size:14px;color:#4B5563;white-space:nowrap}
+  .head .meta b{color:#E36414}
+  .blank{display:inline-block;min-width:64px;border-bottom:1px solid #9CA3AF;margin:0 4px}
+  .body{display:flex;gap:22px;align-items:flex-start}
+  .map{flex:0 0 606px}
+  .map svg{width:100%;height:auto;display:block}
+  .side{flex:1;min-width:0}
+  h2{font-size:16px;color:#0F4C5C;margin:0 0 8px;letter-spacing:.02em}
+  table.seg{width:100%;border-collapse:collapse;font-size:13px}
+  table.seg th{background:#0F4C5C;color:#fff;font-weight:700;padding:6px 5px;font-size:12px}
+  table.seg td{border:1px solid #C9D6D9;padding:7px 5px;height:36px;vertical-align:middle}
+  table.seg td.n{text-align:center;font-weight:700;color:#E36414;width:46px;white-space:nowrap}
+  table.seg td.from{width:118px;color:#374151;font-size:12px;line-height:1.3}
+  table.seg td.tr{width:54px;text-align:center;white-space:nowrap;color:#6B7280}
+  table.seg td.res{width:46px;text-align:center}
+  .box{display:inline-block;width:15px;height:15px;border:1.5px solid #9CA3AF;border-radius:3px;margin:0 2px;vertical-align:-2px}
+  .legend{margin-top:12px;font-size:12.5px;line-height:1.7;color:#4B5563}
+  .legend b{color:#E36414}
+  .rule{margin-top:12px;background:#FBF1D8;border-left:5px solid #D9A21B;padding:9px 12px;font-size:12.5px;line-height:1.65;color:#6B5420;border-radius:0 6px 6px 0}
+  .foot{display:flex;justify-content:space-between;margin-top:14px;font-size:12.5px;color:#6B7280}
+  .toolbar{width:1120px;margin:0 auto 12px;display:flex;gap:10px;align-items:center;font-size:13px;color:#4B5563}
+  .toolbar button{border:0;background:#0F4C5C;color:#fff;font-size:14px;padding:9px 20px;border-radius:6px;cursor:pointer}
+  .toolbar button:hover{background:#0B3A47}
+  @media print{
+    @page{size:A4 landscape;margin:8mm}
+    body{background:#fff;padding:0}
+    .toolbar{display:none}
+    .sheet{width:281mm;height:194mm;overflow:hidden;box-shadow:none;border-radius:0;padding:0;
+           display:flex;flex-direction:column}
+    .head{padding-bottom:2mm;margin-bottom:3mm}
+    .head h1{font-size:6.5mm}
+    .head .meta{font-size:3.2mm}
+    .body{flex:1 1 auto;gap:5mm}
+    .map{flex:0 0 150mm}
+    table.seg{font-size:3.2mm}
+    table.seg th{font-size:3mm;padding:1mm}
+    table.seg td{height:8mm;padding:1mm}
+    table.seg td.from{font-size:3mm}
+    h2{font-size:4mm;margin-bottom:2mm}
+    .legend{font-size:3.1mm;line-height:1.55;margin-top:2.5mm}
+    .rule{font-size:3.1mm;line-height:1.55;margin-top:2.5mm;padding:2mm 3mm}
+    .foot{font-size:3mm;margin-top:2mm}
+  }
+  @media (max-width:900px){
+    body{padding:0}
+    .sheet,.toolbar{width:100%;border-radius:0}
+    .body{flex-direction:column}
+    .map{flex:1 1 auto;width:100%}
+    .toolbar{padding:10px 14px}
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="window.print()">打印 / 存成 PDF（A4 横向）</button>
+  <span>打印后在图上用笔画每段的直线，跑了就勾格子。</span>
+</div>
+
+<div class="sheet">
+  <div class="head">
+    <h1>古迹文明 · 路线图（空白模板）</h1>
+    <div class="meta">
+      版本 <span class="blank"></span>　日期 <span class="blank"></span>　队员 <span class="blank"></span>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="map">
+      <svg viewBox="0 0 600 450" xmlns="http://www.w3.org/2000/svg" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+        <!-- 场地底色：四个区域 -->
+        <rect x="0" y="0" width="300" height="225" fill="#EFE6D8"/>
+        <rect x="300" y="0" width="300" height="225" fill="#E7EACB"/>
+        <rect x="0" y="225" width="300" height="225" fill="#E2EBCF"/>
+        <rect x="300" y="225" width="300" height="225" fill="#E4EFD6"/>
+
+        <!-- 舒什塔尔水道 -->
+        <path d="M300 0 L360 60 L340 130 L410 160 L470 120 L520 160 L520 0 Z" fill="#BEE3EE"/>
+        <path d="M300 225 C340 240 350 290 390 300 L520 300 L520 225 Z" fill="#BFE6EF" opacity=".55"/>
+        <!-- 吴哥窟湖泊 -->
+        <ellipse cx="450" cy="345" rx="72" ry="58" fill="#A9DCEA"/>
+
+        <!-- 博物院区域 -->
+        <circle cx="300" cy="225" r="74" fill="#FBF7EF" stroke="#0F4C5C" stroke-width="3"/>
+        <text x="300" y="214" text-anchor="middle" font-size="15" font-weight="700" fill="#0F4C5C">博物馆</text>
+        <text x="300" y="235" text-anchor="middle" font-size="13" fill="#0F4C5C">停靠圈</text>
+
+        <!-- 四个安全区 -->
+        <circle cx="58" cy="58" r="62" fill="#FFFFFF" fill-opacity=".82" stroke="#E36414" stroke-width="3"/>
+        <text x="58" y="52" text-anchor="middle" font-size="14" font-weight="700" fill="#0F4C5C">万神殿</text>
+        <text x="58" y="70" text-anchor="middle" font-size="11" fill="#6B7280">安全区</text>
+
+        <circle cx="542" cy="58" r="62" fill="#FFFFFF" fill-opacity=".82" stroke="#E36414" stroke-width="3"/>
+        <text x="542" y="52" text-anchor="middle" font-size="14" font-weight="700" fill="#0F4C5C">舒什塔尔</text>
+        <text x="542" y="70" text-anchor="middle" font-size="11" fill="#6B7280">安全区</text>
+
+        <circle cx="58" cy="392" r="62" fill="#FFFFFF" fill-opacity=".82" stroke="#E36414" stroke-width="3"/>
+        <text x="58" y="386" text-anchor="middle" font-size="14" font-weight="700" fill="#0F4C5C">奇琴伊察</text>
+        <text x="58" y="404" text-anchor="middle" font-size="11" fill="#6B7280">安全区</text>
+
+        <circle cx="542" cy="392" r="62" fill="#FFFFFF" fill-opacity=".82" stroke="#E36414" stroke-width="3"/>
+        <text x="542" y="386" text-anchor="middle" font-size="14" font-weight="700" fill="#0F4C5C">吴哥窟</text>
+        <text x="542" y="404" text-anchor="middle" font-size="11" fill="#6B7280">安全区</text>
+
+        <!-- 四件珍宝（每个安全区各 1 件） -->
+        <rect x="96" y="34" width="18" height="18" fill="#D64545" stroke="#7A2020" stroke-width="1.5"/>
+        <rect x="486" y="34" width="18" height="18" fill="#3B6FB6" stroke="#1E3F6E" stroke-width="1.5"/>
+        <rect x="96" y="368" width="18" height="18" fill="#D9A21B" stroke="#7C5A08" stroke-width="1.5"/>
+        <rect x="486" y="368" width="18" height="18" fill="#3E8E55" stroke="#1E4A2B" stroke-width="1.5"/>
+
+        <!-- 奇琴伊察：球门 + 奖杯 -->
+        <circle cx="168" cy="288" r="9" fill="none" stroke="#B45309" stroke-width="3"/>
+        <circle cx="208" cy="312" r="9" fill="none" stroke="#B45309" stroke-width="3"/>
+        <text x="150" y="333" text-anchor="middle" font-size="10" fill="#7C4A08">球门×2</text>
+        <path d="M238 268 h14 v10 h-14 z" fill="#C9971B" stroke="#7C5A08"/>
+        <text x="262" y="278" font-size="10" fill="#7C5A08">奖杯</text>
+
+        <!-- 万神殿石柱 -->
+        <rect x="214" y="122" width="12" height="12" fill="#B8A98F" stroke="#6E6250"/>
+        <text x="236" y="132" font-size="10" fill="#6E6250">石柱</text>
+
+        <!-- 水闸 -->
+        <rect x="352" y="150" width="16" height="10" fill="#C2185B"/>
+        <rect x="452" y="170" width="16" height="10" fill="#C2185B"/>
+        <text x="392" y="196" font-size="10" fill="#9C1448">水闸×2 · 水车×2</text>
+
+        <!-- 船屋 + 指示器 -->
+        <rect x="516" y="340" width="22" height="13" fill="#8D6E63" stroke="#4E342E"/>
+        <text x="510" y="350" text-anchor="end" font-size="10" fill="#4E342E">船屋</text>
+        <rect x="404" y="404" width="14" height="14" fill="#37474F"/>
+        <text x="411" y="432" text-anchor="middle" font-size="10" fill="#37474F">指示器</text>
+
+        <!-- 边框 + 网格提示 -->
+        <rect x="0.5" y="0.5" width="599" height="449" fill="none" stroke="#9CA3AF" stroke-width="1"/>
+      </svg>
+    </div>
+
+    <div class="side">
+      <h2>每段怎么走 · 勾记录</h2>
+      <table class="seg">
+        <tr>
+          <th>段</th><th>起点 → 终点</th><th>动作</th><th>跑 3 次</th><th>绿</th>
+        </tr>
+        <tr><td class="n">段0</td><td class="from">安全区 → 对准直线</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="res"></td></tr>
+        <tr><td class="n">段1</td><td class="from">角落 → 中央博物馆</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="res"></td></tr>
+        <tr><td class="n">段2</td><td class="from">退回停靠区</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="res"></td></tr>
+        <tr><td class="n">段3</td><td class="from">角落 → 中央博物馆</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="res"></td></tr>
+        <tr><td class="n">段4</td><td class="from">球门（先空）</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="res"></td></tr>
+        <tr><td class="n">段5</td><td class="from">奖杯（先空）</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="res"></td></tr>
+        <tr><td class="n">段6</td><td class="from">开进中央圆圈</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="res"></td></tr>
+      </table>
+
+      <div class="legend">
+        <b>图例：</b>■ 珍宝（每个角各 1 件）　○ 球门　▬ 水闸<br><br>
+        <b>怎么用：</b><br>
+        1. 在左边图上，用不同颜色画每段的直线（起点 → 终点）。<br>
+        2. 每跑一次勾一格；同一段 <b>3 次成 2 次</b> → 「绿」里打勾。<br>
+        3. 全部会的段画实线，暂时放弃的段画虚线并写「弃」。<br>
+        4. 下课把做成的段涂绿，连同程序快照一起存档。
+      </div>
+      <div class="rule">
+        <b>比赛</b>：一轮 2 分钟，打两轮，两轮相加。<br>
+        只认结束时的场地状态；在安全区以外碰车或任务品，每次 −1；撞飞奇琴伊察的环，每个 −15。
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>本节快照版本：v<span class="blank"></span>　程序备份已存：□ 是</span>
+    <span>WRO 集训 · 第 3 课 · 串路线</span>
+  </div>
+</div>
+
+</body>
+</html>

@@ -11,18 +11,18 @@ html,body{height:100%;background:#1A1A1A;overflow:hidden;font-family:"Microsoft 
 .kicker{font-size:20px;font-weight:700;color:#E36414;letter-spacing:.04em;margin:6px 0 10px}
 h1{font-size:48px;font-weight:700;color:#0F4C5C;line-height:1.2;margin-bottom:28px}
 ul{list-style:none;margin-top:6px}
-li{font-size:34px;line-height:1.45;color:#1F2937;margin-bottom:20px;padding-left:40px;position:relative}
+li{font-size:32px;line-height:1.45;color:#1F2937;margin-bottom:18px;padding-left:40px;position:relative}
 li:before{content:"\25AA";position:absolute;left:2px;top:-2px;color:#E36414;font-weight:700}
-.q{font-size:34px;line-height:1.45;color:#1F2937;background:#E6F2F4;border-radius:10px;padding:14px 26px;margin-bottom:10px}
+.q{font-size:32px;line-height:1.45;color:#1F2937;background:#E6F2F4;border-radius:10px;padding:14px 26px;margin-bottom:10px}
 .q .n{color:#E36414;font-weight:700;margin-right:12px}
-.ans{font-size:31px;line-height:1.5;color:#0F4C5C;background:#F2F8F9;border-left:8px solid #E36414;padding:12px 22px;margin:-2px 0 18px 24px;border-radius:0 8px 8px 0}
-.hint{font-size:30px;line-height:1.5;color:#8A6A16;background:#FBF1D8;border-left:8px solid #D9A21B;padding:16px 24px;margin:12px 0;border-radius:0 8px 8px 0}
-.code{font-family:Consolas,"Courier New",monospace;font-size:28px;line-height:1.55;background:#0B121A;border-radius:12px;padding:22px 30px;color:#D7E3EA;white-space:pre-wrap}
+.ans{font-size:30px;line-height:1.5;color:#0F4C5C;background:#F2F8F9;border-left:8px solid #E36414;padding:12px 22px;margin:-2px 0 18px 24px;border-radius:0 8px 8px 0}
+.hint{font-size:28px;line-height:1.5;color:#8A6A16;background:#FBF1D8;border-left:8px solid #D9A21B;padding:16px 24px;margin:12px 0;border-radius:0 8px 8px 0}
+.code{font-family:Consolas,"Microsoft YaHei","Courier New",monospace;font-size:27px;line-height:1.55;background:#0B121A;border-radius:12px;padding:22px 30px;color:#D7E3EA;white-space:pre-wrap}
 .sub{font-size:30px;color:#6B7280;line-height:1.5;margin-top:14px}
 .sub b{color:#E36414}
 .reveal{color:transparent!important;user-select:none;position:relative;transition:color .25s ease}
 .reveal::after{content:"?";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#BCC9CD;font-size:28px;background-color:#F1F6F7;background-image:repeating-linear-gradient(135deg,rgba(15,76,92,.05) 0 12px,transparent 12px 24px);border-radius:8px}
-.reveal.show{color:inherit!important}
+.reveal.show{color:inherit!important;user-select:auto!important}
 .reveal.show::after{display:none}
 .cover{background:#0F4C5C;flex-direction:column;align-items:flex-start;justify-content:center;padding:0 150px}
 .cover h1{color:#fff;font-size:84px;margin-bottom:24px}
@@ -34,71 +34,90 @@ li:before{content:"\25AA";position:absolute;left:2px;top:-2px;color:#E36414;font
 #nav{position:fixed;right:18px;bottom:18px;display:none;gap:12px;z-index:10}
 #nav button{width:64px;height:64px;border-radius:50%;border:0;background:rgba(15,76,92,.85);color:#fff;font-size:34px}
 #rotate{position:fixed;inset:0;background:#0F4C5C;color:#fff;display:none;align-items:center;justify-content:center;text-align:center;font-size:20px;z-index:20}
-.two{display:flex;gap:46px;align-items:flex-start}
 @media (max-width:900px){#nav{display:flex}}
-@media (max-width:900px) and (orientation:portrait){#rotate{display:flex}}
+table.task{width:100%;border-collapse:collapse;font-size:27px}
+table.task th,table.task td{border-bottom:1px solid #DDE5E7;padding:13px 14px;text-align:left;vertical-align:top;line-height:1.4}
+table.task th{color:#0F4C5C;font-size:24px;background:#F2F8F9}
+table.task td:first-child{font-weight:700;color:#E36414;white-space:nowrap}
+table.letters{width:100%;border-collapse:collapse;font-size:28px}
+table.letters th,table.letters td{border:1px solid #C9D6D9;padding:10px 18px;text-align:left}
+table.letters th{background:#0F4C5C;color:#fff;font-size:24px}
+table.letters td:first-child{font-weight:700;color:#E36414;font-size:32px;width:90px;text-align:center}
 </style></head>
 <body><div id="stage">
-<section class="slide cover on"><div class="bar"></div><div class="kicker">古迹文明 · WRO 集训 · 第 3 课</div><h1>串路线</h1><div class="sub">一个任务稳稳拿到，再去拿第二个<br>今天目标：90 秒内跑完 3 个得分点</div></section>
-<section class="slide"><div class="bar"></div><div class="kicker">今天</div><h1>今天只干三件事</h1><ul><li><b>搭框架</b>：整条路线先排好，难的任务留空位</li><li><b>拆难度</b>：会的先做，练练能做的今天试，难的先放着</li><li><b>单段练</b>：只练那一段，不从起点跑全程</li></ul><p class="hint">175 分是给高手准备的。集训先保 40-60 分，比赛不丢分比多得分重要。</p></section>
-<section class="slide"><div class="bar"></div><div class="kicker">复习 · 上节课</div><h1>三个问题</h1><div class="q"><span class="n">Q1</span>推进珍宝，推板要碰哪里？</div><div class="ans reveal">碰它的下半部分，贴着地面推，别怼上半截。</div><div class="q"><span class="n">Q2</span>怎么知道车走了多远？</div><div class="ans reveal">用秒表标定：跑 1 秒走多远，再折算成时间。</div><div class="q"><span class="n">Q3</span>停靠分能用手把车放进去吗？</div><div class="ans reveal">不行。必须自己开进去，手放进去不算分。</div></section>
-<section class="slide"><div class="bar"></div><div class="kicker">先定路线</div><h1>在纸上画一条，再上车写程序</h1><div class="two"><ul style="flex:1"><li>起点：安全角</li><li>① 推一件珍宝进博物馆</li><li>② 回停靠区（顺手，不绕路）</li><li>③ 第二个得分点：水槽 ← 今天新加</li><li>④ 开进中央圆圈停好拿停靠分</li></ul><div style="flex:1"><div class="hint" style="margin-top:0">画的时候标三样：<br>从哪出发 · 先后顺序 · 最后停哪</div><div class="hint">宁走三趟稳的，不走一趟险的。撞到场地扣分比少拿分更亏。</div></div></div></section>
-<section class="slide"><div class="bar"></div><div class="kicker">第 1 步 · 搭框架</div><h1>先把整条路线写成空格子</h1><div class="code">段0 出发对齐        —— 会做
-段1 第一件珍宝      —— 会做
-段2 回停靠区        —— 会做
-段3 第二件珍宝      —— 练练能做
-段4 球门             —— 暂时空着
-段5 奖杯（要两球）   —— 暂时空着
-段6 中央圆圈停靠    —— 会做
+<section class="slide cover on"><div class="bar"></div><div class="kicker">古迹文明 · WRO 集训 · 第 3 课</div><h1>串路线</h1><div class="sub">车不会转弯，就把路拆成一段段直线<br>今天：路线排好 + 第一件珍宝稳下来</div></section>
+<section class="slide"><div class="bar"></div><div class="kicker">今天</div><h1>今天只干三件事</h1><ul><li><b>搭框架</b>：整条路线排成 7 段，不会的段先留空位</li><li><b>拆难度</b>：会的先跑，练练能做的今天试，难的先放着</li><li><b>单段练</b>：只练那一段，不从起点跑全程</li></ul><p class="hint">175 分是满分。我们先保 40–60 分：4 件珍宝 40 分 + 停好车 10 分，够稳。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">复习 · 上节课</div><h1>三个问题</h1><div class="q"><span class="n">Q1</span>推进珍宝，推板要碰哪里？</div><div class="ans reveal">碰它的下半部分，贴着地面推，别怼上半截。</div><div class="q"><span class="n">Q2</span>怎么知道车走了多远？</div><div class="ans reveal">用秒表标定：跑 1 秒走多远，再折算成时间。</div><div class="q"><span class="n">Q3</span>什么时候能用手碰车？</div><div class="ans reveal">只有车碰到安全区或中间停靠圈的时候；在别处碰一次扣 1 分。</div></section>
+<section class="slide"><div class="bar"></div><div class="kicker">先把规则钉死</div><h1>这四条，比赛前必须记住</h1><ul><li><b>一轮 2 分钟，打两轮</b>，两轮分数加起来算总分</li><li><b>只认结束那一刻</b>：推进去又滑出来，不算分</li><li><b>能搬车</b>：车在安全区/停靠圈时，可以从这个区搬到那个区</li><li><b>停靠分不能作弊</b>：必须自己开进中间圆圈，手放进去不算</li></ul><p class="hint">在安全区以外碰到车或任务品，每次扣 1 分；撞飞奇琴伊察的环，一个扣 15 分。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">路线怎么定</div><h1>车不会转弯，就走「直线段接力」</h1><ul><li>从一个<b>安全区</b>，直直开到下一个安全区或中间博物馆</li><li>到站停住 → 用手把车摆正 → 下一段再出发</li><li>每一段只做一件事：开多久 + 推一次 / 戳一次</li></ul><p class="hint">每一段都要停在能用手的地方（安全区或停靠圈），不然摆不正，后面全歪。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">第 1 步 · 搭框架</div><h1>先把整条路线排成 7 段</h1><div class="code">段0  出发对齐        安全区 → 对准直线
+段1  第一件珍宝      角落 → 中央博物馆
+段2  回停靠区        退回能用手的地方
+段3  第二件珍宝      角落 → 中央博物馆
+段4  球门            （先空着）
+段5  奖杯            （先空着）
+段6  中央圆圈停靠    自己开进圆圈
 
-每段先只写「走多久、转多少」，里面细节以后补</div><p class="sub">做完这步：整条路线在屏幕上排好队，空着的段先留白</p><p class="hint">空着的段不是忘了，是故意留位置——以后往里填，不用重排路线。</p></section>
-<section class="slide"><div class="bar"></div><div class="kicker">第 2 步 · 按难度拆</div><h1>会的 / 练练能会 / 先放弃</h1><div class="code">拿一张纸把任务分成三堆：
-  ✅ 现在就会 —— 先跑通
-  🟡 练练能做 —— 今天试
-  ⛔ 暂时放弃 —— 留空位
+每段先只写「开多久、推一次」，细节以后补</div><p class="sub">做完这步：整条路线在纸上排好队，画成箭头</p><p class="hint">空着的段不是忘了，是故意留位置——以后往里填，不用重排路线。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">顺带策略</div><h1>一趟带两件，不绕路</h1><ul><li>从 A 角到 B 角的路上，把 A 的珍宝一起带着走</li><li>从 B 角去中央博物馆时，两件一起推过去</li><li>车和推板最多放 2 件（实数用实车再确认）</li><li>只走本来就要走的直线，不为顺带拐弯</li><li>带宝的段宁可慢：比赛只看结束时珍宝在不在里面</li></ul><p class="hint">先练一件。两件一起推是加分项，不是今天的必须。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">手上的三种动作</div><h1>推、戳、拉，分工要清楚</h1><table class="task"><tr><th>方式</th><th>什么时候用</th><th>代价</th></tr><tr><td>推</td><td>主力运输；顺带两件只能靠推</td><td>拐弯掉头使不上劲，珍宝容易滑</td></tr><tr><td>戳</td><td>死角顶出来、扶正方向</td><td>力度难控，容易一下顶过头</td></tr><tr><td>拉</td><td>把珍宝从难处带回来</td><td>要加爪子，结构复杂容易散架</td></tr></table><p class="hint">现在定：推为主，戳做补救，拉先不加——结构没加固前别加爪子。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">第 2 步 · 按难度拆</div><h1>会的 / 练练能会 / 先放弃</h1><div class="code">拿一张纸把 7 段分成三堆：
+  ✅ 现在就会   —— 段0、段6
+  🟡 练练能做   —— 段1、段2、段3
+  ⛔ 暂时放弃   —— 段4、段5
 
 先只动 ✅ 那一堆</div><p class="sub">做完这步：纸上三堆分清楚，每堆知道自己先做哪一段</p><p class="hint">分堆按「今天能不能稳」，不按「重不重要」；难的不代表该先做。</p></section>
 <section class="slide"><div class="bar"></div><div class="kicker">第 3 步 · 只练那一段</div><h1>不从起点跑全程</h1><div class="code">练段1 时：
-  把段0、段2 先注释掉
-  车直接摆在段1 起点
+  其它段先不放进程序（练习用字母块）
+  车直接摆在段1 起点，手扶正
   只跑：前进 → 推 → 退
 
-这一段练到稳，再接回去</div><p class="sub">做完这步：单段程序能独立跑，3 次里成 2 次</p><p class="hint">从头跑一遍 90 秒，只练一段 15 秒——省下来的时间都用来改这一段。</p></section>
+这一段练到稳，再接回去</div><p class="sub">做完这步：单段程序能独立跑，3 次里成 2 次</p><p class="hint">从头跑一遍 2 分钟，只练一段 15 秒——省下来的时间都用来改这一段。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">字母表 · 练习用</div><h1>A 到 G，一个字母一段</h1><table class="letters"><tr><th>字母</th><th>段</th></tr><tr><td>A</td><td>段0 出发对齐</td></tr><tr><td>B</td><td>段1 第一件珍宝</td></tr><tr><td>C</td><td>段2 回停靠区</td></tr><tr><td>D</td><td>段3 第二件珍宝</td></tr><tr><td>E</td><td>段4 球门（先空）</td></tr><tr><td>F</td><td>段5 奖杯（先空）</td></tr><tr><td>G</td><td>段6 中央圆圈停靠</td></tr></table><p class="hint">绿色三角 = 从头到尾一条链；灰色字母块 = 按键启动。字母顺序和路线段号一致。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">字母块 · 操作</div><h1>怎么设，怎么换回比赛模式</h1><ul><li>灰色字母块 = 按键启动，<b>长按可以改字母</b></li><li>一个字母只放一段；同一个字母的多条链会一起启动</li><li>打印一张字母表贴桌边，别记混</li><li><b>比赛前全部改回绿色三角</b>，一条链从头跑到尾</li></ul><p class="hint">用字母块是为了方便单段练；比赛用绿色三角，避免被判成遥控。</p></section>
 <section class="slide"><div class="bar"></div><div class="kicker">第 4 步 · 判定标准</div><h1>3 次成 2 次才算绿</h1><div class="code">同一段，不改参数，连跑 3 次
   □ 第1次 成 / 败 —— 原因：
   □ 第2次 成 / 败 —— 原因：
   □ 第3次 成 / 败 —— 原因：
 
-2 次成 → 这段标绿，换下一段</div><p class="sub">做完这步：每一段都有绿/红标记，绿了才往下走</p><p class="hint">两次失败原因一样 → 改程序；每次都不一样 → 先查摆位和电池。</p></section>
-<section class="slide"><div class="bar"></div><div class="kicker">第 5 步 · 最后才连</div><h1>绿的串起来，红的留空跳过</h1><div class="code">段0（绿）→ 段1（绿）→ 段2（绿）→ 段3（绿）
-  → 跳过段4、段5
-  → 段6 停靠（绿）
+2 次成 → 这段标绿，换下一段</div><p class="sub">做完这步：每一段都有绿 / 红标记，绿了才往下走</p><p class="hint">两次失败原因一样 → 改程序；每次都不一样 → 先查摆位和电池。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">第 5 步 · 最后才连</div><h1>绿的串起来，红的跳过</h1><div class="code">A（绿）→ B（绿）→ C（绿）→ D（绿）
+  → 跳过 E、F
+  → G 停靠（绿）
 
 先跑通这条「残缺但完整」的路线</div><p class="sub">做完这步：整条路线能一次跑完，中间不用碰车</p><p class="hint">跳过不是出错：比赛也允许只做一部分任务，停好车照样拿分。</p></section>
 <section class="slide"><div class="bar"></div><div class="kicker">第 6 步 · 存快照</div><h1>每次课结束打印一份程序</h1><div class="code">跑通后立刻：
-  ① 程序截图/打印，标版本 v1
-  ② 路线图上把这次做成的段涂绿
-  ③ 下节课从这个版本继续，不从头写</div><p class="sub">做完这步：手里有一份能跑的程序和一张涂了绿的路线图</p><p class="hint">难段做失败了，退回上一份快照，稳的分一分都不会丢。</p></section>
-<section class="slide"><div class="bar"></div><div class="kicker">卡住了看这里</div><h1>四个常见的坑</h1><ul class="reveal"><li>第一段成功、第二段偏 → 中停位置每次不一样，加「撞墙对齐」再出发</li><li>珍宝推进去了又被带出来 → 后退太快，减速或放臂后再退</li><li>三次差别很大 → 电池没电了，换满电电池再测</li><li>时间够但分数没拿到 → 顺序错了，先做近的、再做远的</li></ul></section>
-<section class="slide"><div class="bar"></div><div class="kicker">收尾</div><h1>三个问题</h1><div class="q"><span class="n">Q1</span>为什么每段都要回到同一个已知位置？</div><div class="ans reveal">位置一致，下一段的距离才准，不然越跑越偏。</div><div class="q"><span class="n">Q2</span>连跑 3 次成 2 次，说明了什么？</div><div class="ans reveal">这一段基本可靠了，可以去串下一段。</div><div class="q"><span class="n">Q3</span>比赛里，为什么不追求把所有分都拿完？</div><div class="ans reveal">分越高越容易失误，稳拿的分才是真的分。</div></section>
+  ① 程序截图 / 打印，标版本 v1
+  ② 路线图上把做成的段涂绿
+  ③ 下节课从这个版本继续，不从头写</div><p class="sub">做完这步：手里有一份能跑的程序和一张涂了绿的路线图　<a href="wro-route-blank.html" target="_blank" style="color:#E36414;font-weight:700">→ 打开路线图空白模板</a></p><p class="hint">难段做失败了，退回上一份快照，稳的分一分都不会丢。</p></section>
+<section class="slide"><div class="bar"></div><div class="kicker">卡住了看这里</div><h1>四个常见的坑</h1><ul class="reveal"><li>珍宝推到门口又滑出来 → 推板太短或推太快，慢一点，多推 2 厘米</li><li>车越跑越歪 → 上一段没停正在安全区，先扶正再走</li><li>撞到奇琴伊察的环 → 一个环扣 15 分，绕开或降速</li><li>三次差别很大 → 电池没电了，换满电电池再测</li></ul></section>
+<section class="slide"><div class="bar"></div><div class="kicker">收尾</div><h1>三个问题</h1><div class="q"><span class="n">Q1</span>为什么每段都要停在安全区或停靠圈？</div><div class="ans reveal">只有那里能用手扶正，下一段才准；在别处碰车要扣分。</div><div class="q"><span class="n">Q2</span>连跑 3 次成 2 次，说明了什么？</div><div class="ans reveal">这一段基本可靠了，可以去串下一段。</div><div class="q"><span class="n">Q3</span>为什么带宝的段宁可慢？</div><div class="ans reveal">比赛只认结束时的位置，推进去又滑出来等于白干。</div></section>
 <div id="nav"><button id="prev">‹</button><button id="next">›</button></div>
 <div id="rotate" onclick="this.style.display='none'">把手机横过来看，更清楚<br><br><span style="font-size:15px;opacity:.7">点一下继续</span></div>
 <div id="foot">WRO集训 · 第3课 · 串路线 · 2026-11-21</div>
 <div id="hint">空格 揭晓</div><div id="pager"></div>
 </div>
 <script>
-const stage=document.getElementById('stage'),slides=[...document.querySelectorAll('.slide')],pager=document.getElementById('pager');
+const stage=document.getElementById("stage"),slides=[...document.querySelectorAll(".slide")],pager=document.getElementById("pager");
 let i=0;
-function view(){slides.forEach((s,k)=>s.classList.toggle('on',k===i));pager.textContent=(i+1)+' / '+slides.length}
-function go(n){i=Math.max(0,Math.min(slides.length-1,n));view()}
-function resize(){const s=Math.min(innerWidth/1600,innerHeight/900);stage.style.transform='translate(-50%,-50%) scale('+s+')'}
-addEventListener('resize',resize);resize();view();
-addEventListener('keydown',function(e){
- if(e.key==='ArrowRight'||e.key==='PageDown'){e.preventDefault();go(i+1)}
- if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(i-1)}
- if(e.key===' '){e.preventDefault();var r=[...slides[i].querySelectorAll('.reveal')].find(function(x){return !x.classList.contains('show')});if(r){r.classList.add('show')}else{go(i+1)}}
+function viewSize(){const v=window.visualViewport;const w=Math.min(innerWidth,v?v.width:innerWidth,screen.width||innerWidth);const h=Math.min(innerHeight,v?v.height:innerHeight,screen.height||innerHeight);return {w,h}}
+function paint(){slides.forEach((s,k)=>s.classList.toggle("on",k===i));slides[i].querySelectorAll(".reveal").forEach(e=>e.classList.remove("show"));pager.textContent=(i+1)+" / "+slides.length}
+function go(n){i=Math.max(0,Math.min(slides.length-1,n));paint()}
+function reveal(){const r=[...slides[i].querySelectorAll(".reveal")].find(x=>!x.classList.contains("show"));if(r)r.classList.add("show");else go(i+1)}
+function fit(){const {w,h}=viewSize();stage.style.transform="translate(-50%,-50%) scale("+Math.min(w/1600,h/900)+")";const rot=document.getElementById("rotate");if(rot)rot.style.display=(h>w&&w<=1000)?"flex":"none"}
+addEventListener("resize",fit);addEventListener("orientationchange",()=>setTimeout(fit,200));
+if(window.visualViewport){visualViewport.addEventListener("resize",fit);visualViewport.addEventListener("scroll",fit)}
+fit();paint();
+addEventListener("keydown",function(e){
+ if(e.key==="ArrowRight"||e.key==="PageDown"){e.preventDefault();go(i+1)}
+ else if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();go(i-1)}
+ else if(e.key===" "||e.key==="Enter"){e.preventDefault();reveal()}
 });
-document.getElementById('prev').onclick=function(){go(i-1)};
-document.getElementById('next').onclick=function(){go(i+1)};
-stage.addEventListener('click',function(e){if(e.clientX>innerWidth*0.6)go(i+1);else if(e.clientX<innerWidth*0.4)go(i-1)});
+let _lastTouch=0;
+stage.addEventListener("click",function(e){if(Date.now()-_lastTouch<600)return;if(e.clientX>innerWidth*0.6)go(i+1);else if(e.clientX<innerWidth*0.4)go(i-1);else reveal()});
+let _sx=0,_sy=0;
+stage.addEventListener("touchstart",function(e){const t=e.touches[0];_sx=t.clientX;_sy=t.clientY},{passive:true});
+stage.addEventListener("touchend",function(e){_lastTouch=Date.now();const t=e.changedTouches[0],dx=t.clientX-_sx,dy=t.clientY-_sy;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){go(dx<0?1:-1)}else{reveal()}},{passive:true});
+document.getElementById("prev").onclick=function(){go(i-1)};
+document.getElementById("next").onclick=function(){go(i+1)};
 </script></body></html>
