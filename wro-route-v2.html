@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>古迹文明 · 完整路线规划 v2</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#1A1A1A;overflow:hidden;
+    font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+  #stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;
+    transform-origin:center center;background:#FFFFFF;
+    box-shadow:0 0 60px rgba(0,0,0,.5);overflow:hidden}
+  .slide{position:absolute;inset:0;padding:64px 100px;display:none;
+    flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .slide.pad{padding-top:52px;padding-bottom:52px}
+  .bar{position:absolute;left:0;top:0;width:100%;height:14px;background:#E36414}
+
+  .kicker{font-size:20px;font-weight:700;color:#E36414;letter-spacing:.04em;margin:6px 0 10px}
+  h1{font-size:46px;font-weight:700;color:#0F4C5C;line-height:1.2;margin-bottom:30px}
+
+  ul{list-style:none;margin-top:6px}
+  li{font-size:30px;line-height:1.4;color:#1F2937;margin-bottom:18px;
+    padding-left:38px;position:relative}
+  li:before{content:"▪";position:absolute;left:2px;top:-2px;color:#E36414;font-weight:700}
+
+  .hint{font-size:23px;line-height:1.5;color:#8A6A16;background:#FBF1D8;
+    border-left:8px solid #D9A21B;padding:14px 22px;margin:12px 0;
+    border-radius:0 8px 8px 0}
+  .sub{font-size:24px;color:#6B7280;line-height:1.5;margin-top:12px}
+
+  table{width:100%;border-collapse:collapse;font-size:20px;color:#1F2937}
+  th{background:#0F4C5C;color:#fff;font-weight:700;padding:10px 12px;text-align:left}
+  td{padding:8px 12px;border-bottom:1px solid #E3ECEE;vertical-align:top;line-height:1.4}
+  tr:nth-child(even) td{background:#F7FAFA}
+  td.c{text-align:center;color:#E36414;font-weight:700;white-space:nowrap}
+  td.b{font-weight:700;color:#0F4C5C}
+  .steps col.c2{width:150px}.steps col.c4{width:232px}
+
+  .reveal{color:transparent!important;user-select:none;position:relative;border-radius:8px}
+  .reveal::after{content:"?";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    color:#BCC9CD;font-size:26px;font-weight:300;background-color:#F1F6F7;
+    background-image:repeating-linear-gradient(135deg,rgba(15,76,92,.05) 0 12px,transparent 12px 24px)}
+  .reveal.show{color:inherit!important;user-select:auto!important}
+  .reveal.show::after{display:none}
+
+  .cover{background:#0F4C5C;flex-direction:row;align-items:center;justify-content:space-between;padding:0 110px 0 140px}
+  .cover-left{max-width:880px}
+  .cover-art{width:360px;height:360px;flex:0 0 auto}
+  .cover h1{color:#FFFFFF;font-size:64px;margin-bottom:22px}
+  .cover .kicker{color:#BFD9DF;font-size:22px;margin-bottom:18px;letter-spacing:.1em}
+  .cover .sub{color:#BFD9DF;font-size:26px;margin-top:0}
+
+  .two{display:flex;gap:24px;align-items:flex-start;flex:1;min-height:0}
+  .mapbox{flex:0 0 680px}
+  .steps{flex:1;min-width:0;display:flex;flex-direction:column}
+  .svgmap{width:680px;height:510px;display:block;background:#fff;border:1px solid #E3ECEE;border-radius:6px}
+  .steps table{font-size:18px;table-layout:fixed;width:100%}
+  .steps th,.steps td{padding:7px 9px;line-height:1.35;overflow-wrap:break-word}
+  .steps col.c1{width:44px}.steps col.c2{width:118px}.steps col.c4{width:250px}
+  .badge{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;
+    border-radius:9px;color:#fff;font-weight:700;font-size:22px;margin-right:10px;vertical-align:-4px}
+  .bA{background:#D64545}.bB{background:#3B6FB6}.bC{background:#3E8E55}
+  .legendline{display:flex;gap:22px;margin:8px 0 14px;font-size:19px;color:#4B5563}
+  .legendline i{display:inline-block;width:30px;height:6px;border-radius:3px;vertical-align:2px;margin-right:6px}
+
+  #foot{position:absolute;left:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #pager{position:absolute;right:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #hint{position:absolute;right:72px;bottom:52px;font-size:15px;color:#C2C9CB;letter-spacing:.12em;transition:opacity .3s}
+  #nav{position:fixed;right:18px;bottom:18px;display:none;gap:12px;z-index:10}
+  #nav button{width:64px;height:64px;border-radius:50%;border:0;background:rgba(15,76,92,.85);color:#fff;font-size:34px;line-height:1}
+  #rotate{position:fixed;inset:0;background:#0F4C5C;color:#fff;display:none;
+    align-items:center;justify-content:center;font-size:20px;z-index:20;text-align:center}
+  @media (max-width:900px){#nav{display:flex}}
+  @media (max-width:900px) and (orientation:portrait){#rotate{display:flex}}
+
+  @media print{
+    @page{size:423.3mm 238.1mm;margin:0}
+    html,body{background:#fff;overflow:visible;height:auto}
+    #stage{position:static;transform:none!important;box-shadow:none;width:1600px;height:auto;background:#fff}
+    .slide{position:relative;inset:auto;display:flex!important;width:1600px;height:900px;
+      padding:64px 100px;page-break-after:always;break-after:page;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .slide:last-child{page-break-after:auto;break-after:auto}
+    #foot,#pager,#hint,#nav,#rotate{display:none!important}
+    .reveal{color:inherit!important}
+    .reveal::after{display:none!important}
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+
+<!-- ===== 共用 SVG 定义：场地底图 + 箭头 ===== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="arA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#D64545"/></marker>
+    <marker id="arB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#3B6FB6"/></marker>
+    <marker id="arC" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#3E8E55"/></marker>
+
+    <g id="venue" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+      <rect x="0" y="0" width="300" height="225" fill="#EFE6D8"/>
+      <rect x="300" y="0" width="300" height="225" fill="#E7EACB"/>
+      <rect x="0" y="225" width="300" height="225" fill="#E2EBCF"/>
+      <rect x="300" y="225" width="300" height="225" fill="#E4EFD6"/>
+      <path d="M318 0 C338 40 352 68 368 96 C382 122 380 150 398 176 C412 196 420 220 420 250 C420 288 410 320 404 342"
+            fill="none" stroke="#8FCFE0" stroke-width="24" stroke-linecap="round"/>
+      <path d="M318 0 C338 40 352 68 368 96 C382 122 380 150 398 176 C412 196 420 220 420 250 C420 288 410 320 404 342"
+            fill="none" stroke="#C6E9F2" stroke-width="14" stroke-linecap="round"/>
+      <path d="M600 122 C562 126 536 150 520 182 C506 206 470 216 440 228 C432 231 426 240 420 250"
+            fill="none" stroke="#8FCFE0" stroke-width="24" stroke-linecap="round"/>
+      <path d="M600 122 C562 126 536 150 520 182 C506 206 470 216 440 228 C432 231 426 240 420 250"
+            fill="none" stroke="#C6E9F2" stroke-width="14" stroke-linecap="round"/>
+      <ellipse cx="450" cy="345" rx="72" ry="58" fill="#A9DCEA"/>
+      <ellipse cx="450" cy="345" rx="38" ry="30" fill="#5FB4D6"/>
+      <circle cx="300" cy="225" r="74" fill="#FBF7EF" stroke="#0F4C5C" stroke-width="3"/>
+      <text x="300" y="210" text-anchor="middle" font-size="15" font-weight="700" fill="#0F4C5C">博物馆</text>
+      <text x="300" y="231" text-anchor="middle" font-size="13" fill="#0F4C5C">停靠圈</text>
+
+      <circle cx="58" cy="58" r="62" fill="#FFFFFF" fill-opacity=".82" stroke="#E36414" stroke-width="3"/>
+      <text x="58" y="52" text-anchor="middle" font-size="14" font-weight="700" fill="#0F4C5C">万神殿</text>
+      <text x="58" y="70" text-anchor="middle" font-size="11" fill="#6B7280">安全区</text>
+
+      <circle cx="542" cy="58" r="62" fill="#FFFFFF" fill-opacity=".82" stroke="#E36414" stroke-width="3"/>
+      <text x="542" y="52" text-anchor="middle" font-size="14" font-weight="700" fill="#0F4C5C">舒什塔尔</text>
+      <text x="542" y="70" text-anchor="middle" font-size="11" fill="#6B7280">安全区</text>
+
+      <circle cx="58" cy="392" r="62" fill="#FFFFFF" fill-opacity=".82" stroke="#E36414" stroke-width="3"/>
+      <text x="58" y="386" text-anchor="middle" font-size="14" font-weight="700" fill="#0F4C5C">奇琴伊察</text>
+      <text x="58" y="404" text-anchor="middle" font-size="11" fill="#6B7280">安全区</text>
+
+      <circle cx="542" cy="392" r="62" fill="#FFFFFF" fill-opacity=".82" stroke="#E36414" stroke-width="3"/>
+      <text x="542" y="386" text-anchor="middle" font-size="14" font-weight="700" fill="#0F4C5C">吴哥窟</text>
+      <text x="542" y="404" text-anchor="middle" font-size="11" fill="#6B7280">安全区</text>
+
+      <rect x="96" y="34" width="18" height="18" fill="#D64545" stroke="#7A2020" stroke-width="1.5"/>
+      <rect x="486" y="34" width="18" height="18" fill="#3B6FB6" stroke="#1E3F6E" stroke-width="1.5"/>
+      <rect x="96" y="368" width="18" height="18" fill="#D9A21B" stroke="#7C5A08" stroke-width="1.5"/>
+      <rect x="486" y="368" width="18" height="18" fill="#3E8E55" stroke="#1E4A2B" stroke-width="1.5"/>
+
+      <circle cx="146" cy="288" r="9" fill="none" stroke="#B45309" stroke-width="3"/>
+      <circle cx="223" cy="296" r="9" fill="none" stroke="#B45309" stroke-width="3"/>
+      <text x="146" y="313" text-anchor="middle" font-size="9" fill="#7C4A08">球门①</text>
+      <text x="223" y="321" text-anchor="middle" font-size="9" fill="#7C4A08">球门②</text>
+      <path d="M168 395 h14 v11 h-14 z" fill="#C9971B" stroke="#7C5A08"/>
+      <text x="190" y="405" font-size="10" fill="#7C5A08">奖杯</text>
+
+      <rect x="168" y="121" width="12" height="12" fill="#B8A98F" stroke="#6E6250"/>
+      <text x="188" y="131" font-size="10" fill="#6E6250">石柱</text>
+
+      <circle cx="352" cy="62" r="20" fill="none" stroke="#C2185B" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <circle cx="352" cy="62" r="10" fill="#FFFFFF" stroke="#8D6E63" stroke-width="3"/>
+      <line x1="352" y1="52" x2="352" y2="72" stroke="#8D6E63" stroke-width="2"/>
+      <line x1="342" y1="62" x2="362" y2="62" stroke="#8D6E63" stroke-width="2"/>
+      <line x1="345" y1="55" x2="359" y2="69" stroke="#8D6E63" stroke-width="2"/>
+      <line x1="345" y1="69" x2="359" y2="55" stroke="#8D6E63" stroke-width="2"/>
+      <text x="352" y="33" text-anchor="middle" font-size="11" font-weight="700" fill="#8D6E63">车①</text>
+
+      <g transform="translate(372 98) rotate(-24)">
+        <rect x="-10" y="-6" width="20" height="12" fill="#C2185B" stroke="#7A0F38" stroke-width="1.5"/>
+        <line x1="-5" y1="-6" x2="-5" y2="6" stroke="#fff" stroke-width="1.5"/>
+        <line x1="0" y1="-6" x2="0" y2="6" stroke="#fff" stroke-width="1.5"/>
+        <line x1="5" y1="-6" x2="5" y2="6" stroke="#fff" stroke-width="1.5"/>
+      </g>
+      <text x="392" y="106" font-size="11" font-weight="700" fill="#C2185B">闸①</text>
+
+      <circle cx="548" cy="148" r="20" fill="none" stroke="#C2185B" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <circle cx="548" cy="148" r="10" fill="#FFFFFF" stroke="#8D6E63" stroke-width="3"/>
+      <line x1="548" y1="138" x2="548" y2="158" stroke="#8D6E63" stroke-width="2"/>
+      <line x1="538" y1="148" x2="558" y2="148" stroke="#8D6E63" stroke-width="2"/>
+      <line x1="541" y1="141" x2="555" y2="155" stroke="#8D6E63" stroke-width="2"/>
+      <line x1="541" y1="155" x2="555" y2="141" stroke="#8D6E63" stroke-width="2"/>
+      <text x="548" y="181" text-anchor="middle" font-size="11" font-weight="700" fill="#8D6E63">车②</text>
+
+      <g transform="translate(516 186) rotate(28)">
+        <rect x="-10" y="-6" width="20" height="12" fill="#C2185B" stroke="#7A0F38" stroke-width="1.5"/>
+        <line x1="-5" y1="-6" x2="-5" y2="6" stroke="#fff" stroke-width="1.5"/>
+        <line x1="0" y1="-6" x2="0" y2="6" stroke="#fff" stroke-width="1.5"/>
+        <line x1="5" y1="-6" x2="5" y2="6" stroke="#fff" stroke-width="1.5"/>
+      </g>
+      <text x="492" y="198" text-anchor="end" font-size="11" font-weight="700" fill="#C2185B">闸②</text>
+
+      <rect x="512" y="350" width="22" height="13" fill="#8D6E63" stroke="#4E342E"/>
+      <text x="523" y="345" text-anchor="middle" font-size="9" fill="#4E342E">船屋</text>
+      <rect x="384" y="404" width="14" height="14" fill="#37474F"/>
+      <text x="391" y="432" text-anchor="middle" font-size="10" fill="#37474F">指示器</text>
+      <text x="450" y="341" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">湖泊</text>
+      <text x="450" y="357" text-anchor="middle" font-size="8.5" fill="#E8F6FB">浅蓝 / 深蓝</text>
+
+      <rect x="0.5" y="0.5" width="599" height="449" fill="none" stroke="#9CA3AF" stroke-width="1"/>
+    </g>
+  </defs>
+</svg>
+
+<!-- ========== P1 封面 ========== -->
+<section class="slide cover on">
+  <div class="bar"></div>
+  <div class="cover-left">
+    <div class="kicker">WRO 2026 · 初小组 · 集训第 3 课</div>
+    <h1>古迹文明 · 完整路线规划</h1>
+    <div class="sub">三条路线 → 每段一个字母 → 一张图配一张程序表<br>2026-11-21 · 第 3 课串路线</div>
+  </div>
+  <div class="cover-art">
+    <svg viewBox="0 0 360 360" fill="none" font-family="Microsoft YaHei,sans-serif">
+      <rect x="40" y="40" width="280" height="280" rx="10" stroke="#BFD9DF" stroke-width="3" stroke-dasharray="8 6"/>
+      <circle cx="90" cy="90" r="34" stroke="#E36414" stroke-width="4"/>
+      <circle cx="270" cy="90" r="34" stroke="#E36414" stroke-width="4"/>
+      <circle cx="90" cy="270" r="34" stroke="#E36414" stroke-width="4"/>
+      <circle cx="270" cy="270" r="34" stroke="#E36414" stroke-width="4"/>
+      <circle cx="180" cy="180" r="40" stroke="#E36414" stroke-width="4"/>
+      <path d="M90 270 L150 215" stroke="#D64545" stroke-width="5" stroke-linecap="round"/>
+      <path d="M90 90 L150 150" stroke="#3B6FB6" stroke-width="5" stroke-linecap="round"/>
+      <path d="M90 90 L135 110" stroke="#3E8E55" stroke-width="5" stroke-linecap="round"/>
+      <text x="160" y="240" font-size="18" fill="#D64545" font-weight="700">A</text>
+      <text x="158" y="140" font-size="18" fill="#3B6FB6" font-weight="700">B</text>
+      <text x="118" y="98" font-size="18" fill="#3E8E55" font-weight="700">C</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ========== P2 三条路线总表 ========== -->
+<section class="slide pad">
+  <div class="bar"></div>
+  <div class="kicker">先看全局</div>
+  <h1>一共三条路线，每条给一个字母</h1>
+  <table>
+    <tr><th style="width:110px">路线</th><th style="width:90px">字母</th><th>用大白话说：干什么</th><th style="width:150px">分值</th><th style="width:110px">难度</th><th style="width:140px">练的顺序</th></tr>
+    <tr><td class="b">② 送珍宝</td><td class="c"><span class="badge bB">B</span></td><td>四个角各拿一件珍宝，开进中间博物馆，四个人一共 40 分</td><td>40＋10（全到）</td><td>容易</td><td>第 1 个练</td></tr>
+    <tr><td class="b">③ 放石柱</td><td class="c"><span class="badge bC">C</span></td><td>从万神殿出发，把旁边的石柱勾回来、立直</td><td>10</td><td>中等</td><td>第 2 个练</td></tr>
+    <tr><td class="b">① 打两球</td><td class="c"><span class="badge bA">A</span></td><td>从奇琴伊察开进球门中间，把两个球打出去；球落地后把奖杯推进安全区</td><td>30（两球）＋10（奖杯）</td><td>最难</td><td>最后练</td></tr>
+  </table>
+  <div class="hint"><b>字母怎么念：</b>字母＝第几条路线，后面的数字＝第几步。A1 念「A-1」，就是路线 A 的第 1 步；B3 就是路线 B 的第 3 步。图上写什么字母，程序就叫什么名字，找起来不费劲。</div>
+  <div class="sub">顺序不是随便定的：先拿不用机械臂、路线最稳的分，再练手臂，最后攻最难的两球。同一节课只跑一条线，别三条一起上。</div>
+</section>
+
+<!-- ========== P3 地图总览 ========== -->
+<section class="slide pad">
+  <div class="bar"></div>
+  <div class="kicker">完整地图</div>
+  <h1>三条线画在一张图上</h1>
+  <div class="two">
+    <div class="mapbox">
+      <svg class="svgmap" viewBox="0 0 600 450" font-family="Microsoft YaHei,PingFang SC,sans-serif">
+        <use href="#venue"/>
+        <!-- A 打两球（红） -->
+        <path d="M86 377 L181 296" fill="none" stroke="#D64545" stroke-width="5" marker-end="url(#arA)" stroke-linecap="round"/>
+        <path d="M181 296 L86 377" fill="none" stroke="#D64545" stroke-width="3" stroke-dasharray="9 7" marker-end="url(#arA)" opacity=".75"/>
+        <text x="172" y="340" font-size="17" font-weight="700" fill="#D64545">A</text>
+        <!-- B 送珍宝（蓝） -->
+        <path d="M86 78 L238 184" fill="none" stroke="#3B6FB6" stroke-width="5" marker-end="url(#arB)" stroke-linecap="round"/>
+        <path d="M514 78 L362 184" fill="none" stroke="#3B6FB6" stroke-width="5" marker-end="url(#arB)" stroke-linecap="round"/>
+        <path d="M86 372 L238 267" fill="none" stroke="#3B6FB6" stroke-width="5" marker-end="url(#arB)" stroke-linecap="round"/>
+        <path d="M514 372 L362 267" fill="none" stroke="#3B6FB6" stroke-width="5" marker-end="url(#arB)" stroke-linecap="round"/>
+        <text x="150" y="112" font-size="17" font-weight="700" fill="#3B6FB6">B</text>
+        <text x="448" y="112" font-size="17" font-weight="700" fill="#3B6FB6">B</text>
+        <text x="150" y="334" font-size="17" font-weight="700" fill="#3B6FB6">B</text>
+        <text x="448" y="334" font-size="17" font-weight="700" fill="#3B6FB6">B</text>
+        <!-- C 放石柱（绿） -->
+        <path d="M90 82 L158 116" fill="none" stroke="#3E8E55" stroke-width="5" marker-end="url(#arC)" stroke-linecap="round"/>
+        <path d="M158 116 L90 82" fill="none" stroke="#3E8E55" stroke-width="3" stroke-dasharray="9 7" marker-end="url(#arC)" opacity=".75"/>
+        <text x="108" y="126" font-size="17" font-weight="700" fill="#3E8E55">C</text>
+      </svg>
+      <div class="legendline">
+        <span><i style="background:#D64545"></i>A 打两球</span>
+        <span><i style="background:#3B6FB6"></i>B 送珍宝</span>
+        <span><i style="background:#3E8E55"></i>C 放石柱</span>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="hint" style="margin-top:0"><b>三种颜色 = 三条不同的活，不是一辆车同时跑。</b><br>一轮 2 分钟只能选一条线跑。换线之前，先把车摆回安全区、对准方向，再跑。</div>
+      <ul style="margin-top:18px">
+        <li>实线 = 开过去的路线；虚线 = 倒回来</li>
+        <li>一条线 = 一段程序，从安全区出发，到另一个安全区或博物馆停下</li>
+        <li>每条线旁边的字母，就是这段程序的文件名</li>
+        <li>线画在图上，程序照线上写，跑通就把线描成实线</li>
+      </ul>
+      <div class="sub">后三页每条线单独放大：左边是图，右边是「第几步干什么」和「程序怎么写」。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== P4 路线 A ========== -->
+<section class="slide pad">
+  <div class="bar"></div>
+  <div class="kicker"><span class="badge bA">A</span>路线 ①·打两球 · 最难</div>
+  <h1>奇琴伊察 → 两球门中间 → 回安全区</h1>
+  <div class="two">
+    <div class="mapbox">
+      <svg class="svgmap" viewBox="0 0 600 450" font-family="Microsoft YaHei,PingFang SC,sans-serif">
+        <use href="#venue"/>
+        <path d="M86 377 L181 296" fill="none" stroke="#D64545" stroke-width="6" marker-end="url(#arA)" stroke-linecap="round"/>
+        <path d="M181 296 L86 377" fill="none" stroke="#D64545" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#arA)" opacity=".8"/>
+        <circle cx="181" cy="296" r="22" fill="none" stroke="#D64545" stroke-width="2.5" stroke-dasharray="5 4"/>
+        <text x="176" y="252" font-size="18" font-weight="700" fill="#D64545">A1 去</text>
+        <text x="176" y="368" font-size="18" font-weight="700" fill="#D64545">A3 回</text>
+        <text x="196" y="303" font-size="16" font-weight="700" fill="#D64545">A2 打</text>
+      </svg>
+    </div>
+    <div class="steps">
+      <table>
+        <colgroup><col class="c1"><col class="c2"><col><col class="c4"></colgroup>
+        <tr><th>步</th><th>从 → 到</th><th>做什么</th><th>程序块</th></tr>
+        <tr><td class="c">A1</td><td class="b">奇琴伊察 →两球门中间</td><td>车头对准两个球门的中间，直直开过去</td><td>马达A 顺时针 功率8 → 等 2.4 秒 → 停</td></tr>
+        <tr><td class="c">A2</td><td class="b">站在中间</td><td>推板伸出去，把两个球一起扫出球门、落地</td><td>马达B 顺时针 功率7 → 等 1.2 秒 → 反转 0.8 秒收回</td></tr>
+        <tr><td class="c">A3</td><td class="b">球门 → 奇琴伊察</td><td>原路倒车回安全区停住</td><td>马达A 逆时针 功率8 → 等 2.4 秒 → 停</td></tr>
+        <tr><td class="c">A4</td><td class="b">奇琴伊察 → 奖杯</td><td>两球都落地后，把奖杯推进安全区（可选，+10）</td><td>马达A 正转 0.8 秒 → 推板推一下</td></tr>
+      </table>
+      <div class="hint reveal">坑：球门是两个小洞，球要「推离球门、掉到地上」才算；车别压到球门圈，压了也算碰任务品。A4 一定要等两个球都落地再做，否则奖杯不算分。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== P5 路线 B ========== -->
+<section class="slide pad">
+  <div class="bar"></div>
+  <div class="kicker"><span class="badge bB">B</span>路线 ②·送珍宝 · 最容易</div>
+  <h1>四个角各拿一件，开进博物馆</h1>
+  <div class="two">
+    <div class="mapbox">
+      <svg class="svgmap" viewBox="0 0 600 450" font-family="Microsoft YaHei,PingFang SC,sans-serif">
+        <use href="#venue"/>
+        <path d="M86 78 L238 184" fill="none" stroke="#3B6FB6" stroke-width="6" marker-end="url(#arB)" stroke-linecap="round"/>
+        <path d="M514 78 L362 184" fill="none" stroke="#3B6FB6" stroke-width="6" marker-end="url(#arB)" stroke-linecap="round"/>
+        <path d="M86 372 L238 267" fill="none" stroke="#3B6FB6" stroke-width="6" marker-end="url(#arB)" stroke-linecap="round"/>
+        <path d="M514 372 L362 267" fill="none" stroke="#3B6FB6" stroke-width="6" marker-end="url(#arB)" stroke-linecap="round"/>
+        <text x="160" y="122" font-size="18" font-weight="700" fill="#3B6FB6">B1</text>
+        <text x="400" y="122" font-size="18" font-weight="700" fill="#3B6FB6">B2</text>
+        <text x="160" y="336" font-size="18" font-weight="700" fill="#3B6FB6">B3</text>
+        <text x="400" y="336" font-size="18" font-weight="700" fill="#3B6FB6">B4</text>
+      </svg>
+    </div>
+    <div class="steps">
+      <table>
+        <colgroup><col class="c1"><col class="c2"><col><col class="c4"></colgroup>
+        <tr><th>步</th><th>从 → 到</th><th>做什么</th><th>程序块</th></tr>
+        <tr><td class="c">B1</td><td class="b">万神殿 → 博物馆</td><td>带上红色珍宝，直行进中央圈停住</td><td>马达A 顺时针 功率6 → 等 3.4 秒 → 停</td></tr>
+        <tr><td class="c">B2</td><td class="b">舒什塔尔 → 博物馆</td><td>带上蓝色珍宝，直行进中央圈停住</td><td>同上，等 4.1 秒</td></tr>
+        <tr><td class="c">B3</td><td class="b">奇琴伊察 → 博物馆</td><td>带上黄色珍宝，直行进中央圈停住</td><td>同上，等 3.6 秒</td></tr>
+        <tr><td class="c">B4</td><td class="b">吴哥窟 → 博物馆</td><td>带上绿色珍宝，直行进中央圈停住</td><td>同上，等 4.4 秒</td></tr>
+      </table>
+      <div class="hint reveal">四条线其实是同一套程序，只是起点不同、秒数不同。2 分钟一般只跑 2 趟：先跑最近、最直的那一趟，别贪四趟全跑，跑不完还压线。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== P6 路线 C ========== -->
+<section class="slide pad">
+  <div class="bar"></div>
+  <div class="kicker"><span class="badge bC">C</span>路线 ③·放石柱 · 中等</div>
+  <h1>万神殿 → 石柱 → 带回来立直</h1>
+  <div class="two">
+    <div class="mapbox">
+      <svg class="svgmap" viewBox="0 0 600 450" font-family="Microsoft YaHei,PingFang SC,sans-serif">
+        <use href="#venue"/>
+        <path d="M90 82 L158 116" fill="none" stroke="#3E8E55" stroke-width="6" marker-end="url(#arC)" stroke-linecap="round"/>
+        <path d="M158 116 L90 82" fill="none" stroke="#3E8E55" stroke-width="3.5" stroke-dasharray="9 7" marker-end="url(#arC)" opacity=".8"/>
+        <circle cx="158" cy="116" r="20" fill="none" stroke="#3E8E55" stroke-width="2.5" stroke-dasharray="5 4"/>
+        <text x="104" y="72" font-size="18" font-weight="700" fill="#3E8E55">C1</text>
+        <text x="168" y="150" font-size="18" font-weight="700" fill="#3E8E55">C2 勾</text>
+        <text x="118" y="140" font-size="18" font-weight="700" fill="#3E8E55">C3</text>
+      </svg>
+    </div>
+    <div class="steps">
+      <table>
+        <colgroup><col class="c1"><col class="c2"><col><col class="c4"></colgroup>
+        <tr><th>步</th><th>从 → 到</th><th>做什么</th><th>程序块</th></tr>
+        <tr><td class="c">C1</td><td class="b">万神殿 → 石柱旁</td><td>车头对准石柱，开过去停在它前面</td><td>马达A 顺时针 功率6 → 等 1.8 秒 → 停</td></tr>
+        <tr><td class="c">C2</td><td class="b">石柱旁</td><td>手臂放下去，勾住石柱</td><td>马达B 顺时针 功率5 → 等 1.5 秒 → 反转 0.6 秒夹紧</td></tr>
+        <tr><td class="c">C3</td><td class="b">石柱 → 万神殿</td><td>倒车把柱带回安全区，到位置把手臂抬起，让柱立直</td><td>马达A 逆时针 功率6 → 等 1.8 秒 → 停；马达B 抬起</td></tr>
+      </table>
+      <div class="hint reveal">坑：石柱分三步拿：勾住、带走、立直。少了「立直」这一步，柱子躺在地上不算分；进安全区以后手臂要松开、抬起来，别一直夹着。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== P7 程序清单 ========== -->
+<section class="slide pad">
+  <div class="bar"></div>
+  <div class="kicker">程序清单</div>
+  <h1>按步骤号排，一个程序干一件事</h1>
+  <table>
+    <tr><th style="width:120px">程序名</th><th>积木怎么排</th><th style="width:170px">参考秒数</th></tr>
+    <tr><td class="b">A1</td><td>马达A 顺时针 功率8 → 等待 2.4 秒 → 马达A 停止</td><td>2.4</td></tr>
+    <tr><td class="b">A2</td><td>马达B 顺时针 功率7 → 等待 1.2 秒 → 马达B 逆时针 功率7 → 等待 0.8 秒 → 停止</td><td>2.0</td></tr>
+    <tr><td class="b">A3</td><td>马达A 逆时针 功率8 → 等待 2.4 秒 → 马达A 停止</td><td>2.4</td></tr>
+    <tr><td class="b">A4</td><td>马达A 顺时针 功率5 → 等待 0.8 秒 → 停止 → 马达B 推 0.6 秒</td><td>约 1.4</td></tr>
+    <tr><td class="b">B1～B4</td><td>马达A 顺时针 功率6 → 等待（各自秒数，见下）→ 马达A 停止</td><td>3.4 / 4.1 / 3.6 / 4.4</td></tr>
+    <tr><td class="b">C1</td><td>马达A 顺时针 功率6 → 等待 1.8 秒 → 马达A 停止</td><td>1.8</td></tr>
+    <tr><td class="b">C2</td><td>马达B 顺时针 功率5 → 等待 1.5 秒 → 马达B 逆时针 功率5 → 等待 0.6 秒 → 停止</td><td>2.1</td></tr>
+    <tr><td class="b">C3</td><td>马达B 抬起 0.5 秒 → 马达A 逆时针 功率6 → 等待 1.8 秒 → 停止</td><td>2.3</td></tr>
+  </table>
+  <div class="hint"><b>表里的秒数只是起点，不是标准答案。</b>每台车、每块电池都不一样，一定要从同一个起点量出你自己的秒数，写在你自己的路线卡上。改的时候一次只改一个数。</div>
+</section>
+
+<!-- ========== P8 怎么用 ========== -->
+<section class="slide pad">
+  <div class="bar"></div>
+  <div class="kicker">课堂怎么用</div>
+  <h1>一节课只跑一条线</h1>
+  <ul>
+    <li><b>先发空白地图</b>：让学生自己用铅笔画，你在旁边只问一句「开到哪停」</li>
+    <li><b>画完对照这三条线</b>：差在哪补哪，不推翻重画</li>
+    <li><b>这节课只挑一条跑</b>：按 B → C → A 的顺序，先拿稳分</li>
+    <li><b>一段一段验证</b>：同一段连跑 3 次、成 2 次，才画实线、往下接</li>
+    <li><b>下课拍照</b>：拍画好的地图 + 程序快照，存档，下次接着跑</li>
+  </ul>
+  <div class="hint">打印：按 Ctrl+P 选「A4 横向」，或者直接用 PDF 那份。图上空着的地方，让学生自己补画自己的线。</div>
+</section>
+
+  <div id="nav"><button id="prev" aria-label="上一页">‹</button><button id="next" aria-label="下一页">›</button></div>
+  <div id="rotate" onclick="this.dataset.off=1;this.style.display='none'">把手机横过来看，更清楚<br><br><span style="font-size:15px;opacity:.7">点一下继续</span></div>
+  <div id="foot">古迹文明 · 集训第3课 · 完整路线规划 v2 · 2026-11-21</div>
+  <div id="hint">空格 揭晓</div>
+  <div id="pager"></div>
+</div>
+
+<script>
+const stage=document.getElementById('stage');
+const slides=[...document.querySelectorAll('.slide')];
+const pager=document.getElementById('pager');
+const hint=document.getElementById('hint');
+let i=0;
+
+function view(){
+  const v=window.visualViewport;
+  const w=Math.min(innerWidth, v?v.width:innerWidth, screen.width||innerWidth);
+  const h=Math.min(innerHeight, v?v.height:innerHeight, screen.height||innerHeight);
+  return {w,h};
+}
+function fit(){
+  const {w,h}=view();
+  const s=Math.min(w/1600,h/900);
+  stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+  const rot=document.getElementById('rotate');
+  if(rot) rot.style.display=(!rot.dataset.off && h>w && w<=1000)?'flex':'none';
+}
+addEventListener('resize',fit);
+addEventListener('orientationchange',()=>setTimeout(fit,200));
+if(window.visualViewport){
+  visualViewport.addEventListener('resize',fit);
+  visualViewport.addEventListener('scroll',fit);
+}
+fit();
+
+function paint(){
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  slides[i].querySelectorAll('.reveal').forEach(e=>e.classList.remove('show'));
+  pager.textContent=(i+1)+' / '+slides.length;
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+function go(d){ i=Math.max(0,Math.min(slides.length-1,i+d)); paint(); }
+function reveal(){
+  const n=slides[i].querySelector('.reveal:not(.show)');
+  if(n) n.classList.add('show');
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+addEventListener('keydown',e=>{
+  if(['ArrowRight','PageDown'].includes(e.key)){e.preventDefault();go(1)}
+  else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(-1)}
+  else if(e.key===' '||e.key==='Enter'){e.preventDefault();reveal()}
+  else if(e.key==='a'||e.key==='A'){e.preventDefault();slides[i].querySelectorAll('.reveal').forEach(x=>x.classList.add('show'));hint.style.opacity=0}
+  else if(e.key==='Home'){i=0;paint()}
+  else if(e.key==='End'){i=slides.length-1;paint()}
+  else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+});
+let _lastTouch=0;
+stage.addEventListener('click',()=>{ if(Date.now()-_lastTouch<600) return; reveal(); });
+let _sx=0,_sy=0;
+stage.addEventListener('touchstart',e=>{const t=e.touches[0];_sx=t.clientX;_sy=t.clientY;},{passive:true});
+stage.addEventListener('touchend',e=>{
+  _lastTouch=Date.now();
+  const t=e.changedTouches[0], dx=t.clientX-_sx, dy=t.clientY-_sy;
+  if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)){ go(dx<0?1:-1); }
+  else { reveal(); }
+},{passive:true});
+document.getElementById('prev').onclick=()=>go(-1);
+document.getElementById('next').onclick=()=>go(1);
+(function(){ const m=parseInt((location.hash||'').replace('#',''),10); if(m>=1&&m<=slides.length) i=m-1; })();
+paint();
+</script>
+</body>
+</html>
