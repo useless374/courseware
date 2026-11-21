@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>古迹文明 · 路线图空白模板</title>
+<title>古迹文明 · 路线图 v1（含三条参考路线）</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:#EEF2F3;font-family:"Microsoft YaHei","PingFang SC",sans-serif;color:#1F2937;padding:18px}
@@ -44,8 +44,8 @@
     .map svg{width:230mm;height:172.5mm;display:block}
     .side{page-break-before:always;break-before:page;width:100%;padding:2mm 0 0}
     .side h2{font-size:7mm;margin-bottom:4mm;padding-bottom:2mm;border-bottom:2px solid #E36414}
-    .legend{font-size:5mm;line-height:1.75;margin-top:0}
-    .rule{font-size:4.8mm;line-height:1.7;margin-top:6mm;padding:4mm 5mm}
+    .legend{font-size:4.3mm;line-height:1.55;margin-top:0}
+    .rule{font-size:4.2mm;line-height:1.55;margin-top:5mm;padding:3.5mm 5mm}
     .foot{font-size:4mm;margin-top:8mm;padding-top:3mm;border-top:1px solid #D5DEE0}
   }
   @media screen and (max-width:900px){
@@ -61,12 +61,12 @@
 
 <div class="toolbar">
   <button onclick="window.print()">打印 / 存成 PDF（A4 横向）</button>
-  <span>双面打印正合适：第 1 页是场地图，第 2 页是说明（选「长边翻转」）。打印后在图上画每段的线，线上写字母。</span>
+  <span>双面打印正合适：第 1 页是场地图，第 2 页是说明（选「长边翻转」）。图上已标三条参考路线（红=难点），其余段落自己画，线上写字母。</span>
 </div>
 
 <div class="sheet">
   <div class="head">
-    <h1>古迹文明 · 路线图（空白模板）</h1>
+    <h1>古迹文明 · 路线图 v1</h1>
     <div class="meta">
       版本 <span class="blank"></span>　日期 <span class="blank"></span>　队员 <span class="blank"></span>
     </div>
@@ -177,6 +177,34 @@
         <text x="450" y="341" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">湖泊</text>
         <text x="450" y="357" text-anchor="middle" font-size="8.5" fill="#E8F6FB">浅蓝 / 深蓝</text>
 
+        <!-- ===== 三条参考路线（2026-11-21 集训3 课堂定） ===== -->
+        <defs>
+          <marker id="aR" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#D93025"/></marker>
+          <marker id="aG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2E7D32"/></marker>
+          <marker id="aP" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6A1B9A"/></marker>
+        </defs>
+
+        <!-- 半场分界 -->
+        <line x1="300" y1="0" x2="300" y2="147" stroke="#9CA3AF" stroke-width="2" stroke-dasharray="7 5" opacity=".9"/>
+        <line x1="300" y1="303" x2="300" y2="450" stroke="#9CA3AF" stroke-width="2" stroke-dasharray="7 5" opacity=".9"/>
+        <text x="306" y="446" font-size="9" fill="#6B7280">半场分界 · 一轮只打一半</text>
+
+        <!-- ① 难点（红）：奇琴伊察 → 两球门中间 → 击落两球 → 回安全区 -->
+        <line x1="107" y1="353" x2="184" y2="292" stroke="#D93025" stroke-width="4" marker-end="url(#aR)"/>
+        <line x1="184" y1="292" x2="151" y2="288" stroke="#D93025" stroke-width="3" marker-end="url(#aR)"/>
+        <line x1="184" y1="292" x2="220" y2="295" stroke="#D93025" stroke-width="3" marker-end="url(#aR)"/>
+        <line x1="189" y1="298" x2="112" y2="358" stroke="#D93025" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#aR)" opacity=".9"/>
+        <text x="130" y="370" font-size="11" font-weight="700" fill="#D93025" stroke="#fff" stroke-width="3" paint-order="stroke">① 击落两球（难点）</text>
+
+        <!-- ② 奇琴伊察 → 顺带四方珍宝 → 万神殿 -->
+        <line x1="100" y1="352" x2="100" y2="100" stroke="#2E7D32" stroke-width="4" marker-end="url(#aG)"/>
+        <text x="108" y="238" font-size="11" font-weight="700" fill="#2E7D32" stroke="#fff" stroke-width="3" paint-order="stroke">② 带四方珍宝 → 万神殿</text>
+
+        <!-- ③ 万神殿 → 石柱放下手臂 → 回万神殿 -->
+        <line x1="112" y1="89" x2="162" y2="118" stroke="#6A1B9A" stroke-width="4" marker-end="url(#aP)"/>
+        <line x1="165" y1="123" x2="108" y2="95" stroke="#6A1B9A" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#aP)" opacity=".9"/>
+        <text x="186" y="96" font-size="11" font-weight="700" fill="#6A1B9A" stroke="#fff" stroke-width="3" paint-order="stroke">③ 到石柱放下手臂</text>
+
         <!-- 边框 -->
         <rect x="0.5" y="0.5" width="599" height="449" fill="none" stroke="#9CA3AF" stroke-width="1"/>
       </svg>
@@ -189,7 +217,11 @@
         <b>图例：</b><span class="k" style="background:#C2185B"></span>闸 = 推到水道外（共 2 个）
         <span class="k" style="background:#8D6E63"></span>车 = 全程不能碰（共 2 架）<br>
         红色虚线圈 = 水车禁碰区，碰到就丢 20 分。<br>
-        <span class="k" style="background:#D64545"></span>珍宝（每角 1 件）　○ 球门　▬ 石柱　▬ 船屋<br><br>
+        <span class="k" style="background:#D64545"></span>珍宝（每角 1 件）　○ 球门　▬ 石柱　▬ 船屋<br>
+        <span style="display:inline-block;width:20px;height:3px;background:#D93025;vertical-align:3px"></span> <b style="color:#D93025">①难点</b>：奇琴伊察 → 两球门中间 → 击落两球 → 回安全区<br>
+        <span style="display:inline-block;width:20px;height:3px;background:#2E7D32;vertical-align:3px"></span> <b style="color:#2E7D32">②</b>：奇琴伊察 →（顺带四方珍宝）→ 万神殿<br>
+        <span style="display:inline-block;width:20px;height:3px;background:#6A1B9A;vertical-align:3px"></span> <b style="color:#6A1B9A">③</b>：万神殿 → 石柱放下手臂 → 回万神殿<br>
+        灰色虚线 = 半场分界：<b>一轮只打一半</b>，先打左半场（万神殿＋奇琴伊察）。<br><br>
         <b>怎么用：</b><br>
         1. 每段程序 = 一个字母：从安全区出发，到另一个安全区或中央博物馆结束。<br>
         2. 在图上画这条线，线旁写字母：A=段0，B=段1 …… G=段6。<br>
@@ -200,7 +232,9 @@
       <div class="rule">
         <b>比赛</b>：一轮 2 分钟，打两轮，两轮相加。<br>
         只认结束时的场地状态；在安全区以外碰车或任务品，每次 −1；撞飞奇琴伊察的环，每个 −15。<br>
-        <b>水车</b>：两架都没被碰 → 白拿 20 分；<b>水闸</b>：推到完全不碰蓝色水道才算分。
+        <b>水车</b>：两架都没被碰 → 白拿 20 分；<b>水闸</b>：推到完全不碰蓝色水道才算分。<br>
+        <b>摆位（11-21 反馈）</b>：安全区贴 L 形胶带框，车尾两轮顶住，朝向固定；每次放同一位置，手机拍一张标准照对照。<br>
+        <b>推准</b>：点走（走一段停一下）比一口气走准；速度降一半，推板碰到目标再停；每次只改一个数。
       </div>
     </div>
   </div>

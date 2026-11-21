@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>科创探究 · 3D打印第5课 雪人存钱罐</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#1A1A1A;overflow:hidden;font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+  #stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:center center;background:#FFFFFF;box-shadow:0 0 60px rgba(0,0,0,.5);overflow:hidden}
+  .slide{position:absolute;inset:0;padding:70px 150px;display:none;flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .slide.pad{padding-top:58px;padding-bottom:58px}
+  .bar{position:absolute;left:0;top:0;width:100%;height:14px;background:#E36414}
+  .kicker{font-size:20px;font-weight:700;color:#E36414;letter-spacing:.04em;margin:6px 0 10px}
+  h1{font-size:48px;font-weight:700;color:#0F4C5C;line-height:1.2;margin-bottom:36px}
+  ul{list-style:none;margin-top:6px}
+  li{font-size:35px;line-height:1.45;color:#1F2937;margin-bottom:22px;padding-left:44px;position:relative}
+  li:before{content:"▪";position:absolute;left:2px;top:-2px;color:#E36414;font-weight:700}
+  .q{font-size:35px;line-height:1.4;color:#1F2937;background:#E6F2F4;border-radius:10px;padding:16px 28px;margin-bottom:12px}
+  .q .n{color:#E36414;font-weight:700;margin-right:14px}
+  .ans{font-size:32px;line-height:1.45;color:#0F4C5C;background:#F2F8F9;border-left:8px solid #E36414;padding:14px 26px;margin:-2px 0 18px 26px;border-radius:0 8px 8px 0}
+  .hint{font-size:32px;line-height:1.45;color:#8A6A16;background:#FBF1D8;border-left:8px solid #D9A21B;padding:16px 26px;margin:12px 0;border-radius:0 8px 8px 0}
+  .code{font-family:Consolas,"Courier New",monospace;font-size:31px;line-height:1.7;background:#0B121A;border-radius:12px;padding:28px 38px;color:#D7E3EA}
+  .cols{display:flex;gap:34px;margin-top:8px;margin-bottom:8px}
+  .card{flex:1;background:#F2F8F9;border-radius:12px;padding:24px 28px;font-size:30px;line-height:1.45;color:#1F2937}
+  .card b{display:block;color:#0F4C5C;font-size:27px;margin-bottom:8px}
+  .sub{font-size:32px;color:#6B7280;line-height:1.5;margin-top:14px}
+  .num{color:#E36414;font-weight:700}
+  table{width:100%;border-collapse:collapse;font-size:28px;color:#1F2937;margin-top:8px}
+  th{background:#0F4C5C;color:#fff;font-weight:700;padding:12px 16px;text-align:left}
+  td{padding:10px 16px;border-bottom:1px solid #E3ECEE}
+  tr:nth-child(even) td{background:#F5FAFB}
+  td.c{text-align:center;color:#E36414;font-weight:700;white-space:nowrap}
+  .reveal{color:transparent!important;user-select:none;position:relative;transition:color .25s ease}
+  .reveal::after{content:"?";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#BCC9CD;font-size:30px;font-weight:300;background-color:#F1F6F7;background-image:repeating-linear-gradient(135deg,rgba(15,76,92,.05) 0 12px,transparent 12px 24px);border-radius:8px}
+  .code.reveal::after{color:#46606E;background-color:#0E1822;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 12px,transparent 12px 24px)}
+  ul.reveal::after{color:#C6D1D4;background-color:#FFFFFF;background-image:repeating-linear-gradient(135deg,rgba(15,76,92,.04) 0 12px,transparent 12px 24px)}
+  .reveal.show{color:inherit!important}
+  .ans.reveal.show{color:#0F4C5C!important}
+  .code.reveal.show{color:#D7E3EA!important}
+  .hint.reveal.show{color:#8A6A16!important}
+  ul.reveal.show li{color:#1F2937!important}
+  .reveal.show{user-select:auto!important}
+  .reveal.show::after{display:none}
+  .cover{background:#0F4C5C;flex-direction:row;align-items:center;justify-content:space-between;padding:0 110px 0 150px}
+  .cover-left{max-width:800px}
+  .cover-art{width:440px;height:440px;flex:0 0 auto}
+  .cover h1{color:#FFFFFF;font-size:72px;margin-bottom:24px}
+  .cover .kicker{color:#BFD9DF;font-size:22px;margin-bottom:18px;letter-spacing:.1em}
+  .cover .sub{color:#BFD9DF;font-size:29px;margin-top:0}
+  .cover .bar{background:#E36414}
+  #home{position:absolute;right:10px;top:8px;width:52px;height:44px;z-index:5;display:flex;align-items:flex-start;justify-content:flex-end;text-decoration:none}
+  #home i{width:9px;height:9px;border-radius:50%;background:#E36414;display:block;margin:10px 14px 0 0}
+  #foot{position:absolute;left:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #pager{position:absolute;right:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #hint{position:absolute;right:72px;bottom:52px;font-size:15px;color:#C2C9CB;letter-spacing:.12em;transition:opacity .3s}
+  #nav{position:fixed;right:18px;bottom:18px;display:none;gap:12px;z-index:10}
+  #nav button{width:64px;height:64px;border-radius:50%;border:0;background:rgba(15,76,92,.85);color:#fff;font-size:34px;line-height:1}
+  #rotate{position:fixed;inset:0;background:#0F4C5C;color:#fff;display:none;align-items:center;justify-content:center;text-align:center;font-size:20px;z-index:20}
+  @media (max-width:900px){#nav{display:flex}}
+  @media (max-width:900px) and (orientation:portrait){#rotate{display:flex}}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="slide cover on">
+    <div class="bar"></div>
+    <div class="cover-left">
+      <div class="kicker">科创探究 · 3D 打印 第 5 课</div>
+      <h1>雪人存钱罐</h1>
+      <div class="sub">开个口子、掏空肚子、装一个抽屉</div>
+    </div>
+    <div class="cover-art">
+      <svg viewBox="0 0 420 420" fill="none">
+        <circle cx="210" cy="320" r="76" stroke="#BFD9DF" stroke-width="8"/>
+        <circle cx="210" cy="196" r="54" stroke="#BFD9DF" stroke-width="8"/>
+        <circle cx="210" cy="112" r="40" stroke="#BFD9DF" stroke-width="8"/>
+        <path d="M214 112 L258 104" stroke="#E36414" stroke-width="9" stroke-linecap="round"/>
+        <rect x="188" y="86" width="44" height="7" rx="3" fill="#E36414"/>
+        <rect x="176" y="288" width="68" height="8" rx="4" fill="#E36414"/>
+        <rect x="176" y="288" width="6" height="56" fill="#E36414"/>
+        <rect x="238" y="288" width="6" height="56" fill="#E36414"/>
+        <rect x="176" y="340" width="68" height="6" rx="3" fill="#E36414"/>
+        <circle cx="210" cy="318" r="7" fill="#E36414"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">今天</div>
+    <h1>把上周的雪人，改成真的能用的存钱罐</h1>
+    <ul>
+      <li>头顶开一个投币口，硬币塞得进去</li>
+      <li>把身体掏空，硬币才掉得下来</li>
+      <li>前面做一个抽屉，钱存满了能拉出来</li>
+    </ul>
+    <p class="sub">做完的标准：拿一枚真硬币试，能塞进去、能滚到抽屉里、能拉出来。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">复习 · 上节课</div>
+    <h1>三个问题</h1>
+    <div class="q"><span class="n">Q1</span>想把一块形状挖掉，要把它设成什么？</div>
+    <div class="ans reveal">设成「孔」，再和主体组合。</div>
+    <div class="q"><span class="n">Q2</span>三个球怎么才能竖着串成一条线？</div>
+    <div class="ans reveal">用「对齐」功能，把中心对齐。</div>
+    <div class="q"><span class="n">Q3</span>雪人为什么能站住？</div>
+    <div class="ans reveal">下面最大最重，重心落在底面里面。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">导入</div>
+    <h1>雪人现在是实心的，硬币掉不进去</h1>
+    <p class="sub">要变存钱罐，得先解决三个问题：</p>
+    <div class="cols">
+      <div class="card"><b>① 钱从哪进</b>头顶开一条缝</div>
+      <div class="card"><b>② 掉到哪</b>肚子里面得有空间</div>
+      <div class="card"><b>③ 怎么拿出来</b>前面装一个抽屉</div>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">概念 · 掏空</div>
+    <h1>怎么把实心变空心？</h1>
+    <div class="q"><span class="n">Q</span>一颗实心的球，怎么在里面留出一个空腔？</div>
+    <div class="ans reveal">复制一个更小一号的球，设成「孔」，从里面挖掉。剩下的壳就是空的。</div>
+    <div class="hint reveal">就像拿勺子把西瓜瓤挖走，皮留下。壳留 2mm 厚就够。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">第一步 · 投币口</div>
+    <h1>头顶开一条缝</h1>
+    <ul>
+      <li>帽子先挪开，斜挂在后脑勺上</li>
+      <li>拖一个方块当孔：长 30 × 宽 3 × 高 10</li>
+      <li>放在头顶正中，压下去，穿过头顶那层壳</li>
+      <li>全选 → 组合</li>
+    </ul>
+    <p class="sub">缝别太宽：1 元硬币厚 1.85mm，留 3mm 刚好。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">第二步 · 掏空</div>
+    <h1>把身体里面挖掉</h1>
+    <ul>
+      <li>雪人先解组，只留三个球叠成的身体</li>
+      <li>三个球各复制一个，每个直径缩 4mm，圆心别动</li>
+      <li>中间加一根竖着的圆柱，把三个空腔连起来</li>
+      <li>内胆先组合 → 设成孔 → 和外壳全选组合</li>
+    </ul>
+    <div class="hint">这一步最容易出错：内胆没有先组合成一块，挖出来是破的。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">第三步 · 抽屉洞</div>
+    <h1>前面挖一个方洞</h1>
+    <ul>
+      <li>方块当孔：宽 35 × 高 14 × 深 30</li>
+      <li>放在正前方，底面离地 13mm，往里推 30mm</li>
+      <li>别挖穿到后面，挖到肚子中间就停</li>
+      <li>全选 → 组合，洞里要能看到刚刚掏出来的空腔</li>
+    </ul>
+    <p class="sub">检查：从抽屉洞往里看，能一直通到头顶的投币口。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">概念 · 间隙</div>
+    <h1>抽屉做多大才塞得进去？</h1>
+    <div class="q"><span class="n">Q</span>抽屉照洞口 1:1 做，能推进去吗？</div>
+    <div class="ans reveal">推不进去。打印机会把东西打胖一点点，两边会顶死。</div>
+    <div class="hint reveal">所以要留「间隙」：抽屉每一面都比洞口小 0.4mm，总共小 0.8mm。<br>就像门和门框之间要留缝，不然关不上。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">第四步 · 做抽屉</div>
+    <h1>一个没有盖的小盒子</h1>
+    <div class="cols">
+      <div class="card"><b>外壳</b>34.2 × 13.2 × 29.5<br>比洞口每边小 0.4mm</div>
+      <div class="card"><b>掏内腔</b>再挖一个方块，宽高各小 3.2mm<br>壁厚 1.6mm</div>
+    </div>
+    <p class="sub">单独在空白的地方做，先别塞进雪人里。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">第四步 · 挡板</div>
+    <h1>给抽屉加一个「肩膀」</h1>
+    <ul>
+      <li>挡板：43 × 22 × 2，贴在抽屉开口那一面</li>
+      <li>比洞大一圈，推到头会卡住，不会掉进肚子里</li>
+      <li>拉手：小圆柱 半径 3 × 高 4，贴在挡板外面</li>
+      <li>三块一起组合</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">尺寸表</div>
+    <h1>记住这几个数（底球直径 60mm）</h1>
+    <table>
+      <tr><th>部位</th><th>尺寸</th><th>说明</th></tr>
+      <tr><td>投币口</td><td class="c">30 × 3 × 10</td><td>宽 3mm，硬币好进不好出</td></tr>
+      <tr><td>内胆</td><td class="c">每个球 −4mm</td><td>壳厚 2mm</td></tr>
+      <tr><td>抽屉洞</td><td class="c">35 × 14 × 30</td><td>洞底离地 13mm</td></tr>
+      <tr><td>抽屉外壳</td><td class="c">34.2 × 13.2 × 29.5</td><td>每边留 0.4mm 缝</td></tr>
+      <tr><td>挡板</td><td class="c">43 × 22 × 2</td><td>比洞口每边大 4mm</td></tr>
+    </table>
+    <p class="sub">你的底球不是 60mm？按比例改，拿不准就问老师。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">测试</div>
+    <h1>推出前先过四关</h1>
+    <ul>
+      <li>投币口：拿真硬币试，塞得进去</li>
+      <li>空腔：从抽屉洞往里看，能看到头顶</li>
+      <li>抽屉：能推进去、能拉出来，不卡死也不晃</li>
+      <li>外观：帽子和围巾装回去了，没有零件打架</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">导出</div>
+    <h1>导出两个文件</h1>
+    <div class="code reveal">身体 → 导出 STL → 存钱罐-身体-你的名字.stl<br>抽屉 → 导出 STL → 存钱罐-抽屉-你的名字.stl</div>
+    <p class="sub">两个分开打：抽屉平躺着打，身体竖着打。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">调试</div>
+    <h1>抽屉推不进去，或者掉不出来。</h1>
+    <p class="sub" style="font-size:35px;color:#1F2937">先自己找两分钟。</p>
+    <ul class="reveal" style="margin-top:22px">
+      <li>量一下洞口和抽屉的实际尺寸，差不到 0.8mm 就再缩小抽屉 0.2mm</li>
+      <li>抽屉内腔是不是挖穿了，变成个空框</li>
+      <li>挡板是不是和雪人粘在一起了（必须分开，不能组合到一起）</li>
+      <li>空腔没连通：硬币卡在上面下不来，把抽屉洞往里加深 5mm</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">收尾</div>
+    <h1>三个问题</h1>
+    <div class="q"><span class="n">Q1</span>为什么要掏空？</div>
+    <div class="ans reveal">实心的硬币进不去；掏空才有地方装钱，还省材料。</div>
+    <div class="q"><span class="n">Q2</span>抽屉为什么要比洞口小一圈？</div>
+    <div class="ans reveal">打印会胀一点点，留 0.4mm 间隙才推得动，不留就卡死。</div>
+    <div class="q"><span class="n">Q3</span>挡板有什么用？</div>
+    <div class="ans reveal">比洞大，卡在洞口，抽屉不会整个人掉进去。</div>
+  </section>
+
+  <div id="nav"><button id="prev" aria-label="上一页">‹</button><button id="next" aria-label="下一页">›</button></div>
+  <div id="rotate" onclick="this.dataset.off=1;this.style.display='none'">把手机横过来看，更清楚<br><br><span style="font-size:15px;opacity:.7">点一下继续</span></div>
+  <div id="foot">科创探究 · 3D打印第5课 · 雪人存钱罐 · 2026-11-21</div>
+  <a id="home" href="index.html"><i></i></a>
+  <div id="hint">空格 揭晓</div>
+  <div id="pager"></div>
+</div>
+
+<script>
+const stage=document.getElementById('stage');
+const slides=[...document.querySelectorAll('.slide')];
+const pager=document.getElementById('pager');
+const hint=document.getElementById('hint');
+let i=0;
+function view(){
+  const v=window.visualViewport;
+  const w=Math.min(innerWidth, v?v.width:innerWidth, screen.width||innerWidth);
+  const h=Math.min(innerHeight, v?v.height:innerHeight, screen.height||innerHeight);
+  return {w,h};
+}
+function fit(){
+  const {w,h}=view();
+  const s=Math.min(w/1600,h/900);
+  stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+  const rot=document.getElementById('rotate');
+  if(rot) rot.style.display=(!rot.dataset.off && h>w && w<=1000)?'flex':'none';
+}
+addEventListener('resize',fit);
+addEventListener('orientationchange',()=>setTimeout(fit,200));
+if(window.visualViewport){
+  visualViewport.addEventListener('resize',fit);
+  visualViewport.addEventListener('scroll',fit);
+}
+fit();
+function paint(){
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  slides[i].querySelectorAll('.reveal').forEach(e=>e.classList.remove('show'));
+  pager.textContent=(i+1)+' / '+slides.length;
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+function go(d){ i=Math.max(0,Math.min(slides.length-1,i+d)); paint(); }
+function reveal(){
+  const n=slides[i].querySelector('.reveal:not(.show)');
+  if(n) n.classList.add('show');
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+addEventListener('keydown',e=>{
+  if(['ArrowRight','PageDown'].includes(e.key)){e.preventDefault();go(1)}
+  else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(-1)}
+  else if(e.key===' '||e.key==='Enter'){e.preventDefault();reveal()}
+  else if(e.key==='a'||e.key==='A'){e.preventDefault();slides[i].querySelectorAll('.reveal').forEach(x=>x.classList.add('show'));hint.style.opacity=0}
+  else if(e.key==='Home'){i=0;paint()}
+  else if(e.key==='End'){i=slides.length-1;paint()}
+  else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+});
+let _lastTouch=0;
+stage.addEventListener('click',()=>{ if(Date.now()-_lastTouch<600) return; reveal(); });
+let _sx=0,_sy=0;
+stage.addEventListener('touchstart',e=>{const t=e.touches[0];_sx=t.clientX;_sy=t.clientY;},{passive:true});
+stage.addEventListener('touchend',e=>{
+  _lastTouch=Date.now();
+  const t=e.changedTouches[0], dx=t.clientX-_sx, dy=t.clientY-_sy;
+  if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)){ go(dx<0?1:-1); }
+  else { reveal(); }
+},{passive:true});
+document.getElementById('prev').onclick=()=>go(-1);
+document.getElementById('next').onclick=()=>go(1);
+paint();
+</script>
+</body>
+</html>
