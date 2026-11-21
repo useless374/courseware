@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>拼图 · 海洋 — TurboWarp 项目课</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#1A1A1A;overflow:hidden;
+    font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+  #stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;
+    transform-origin:center center;background:#FFFFFF;
+    box-shadow:0 0 60px rgba(0,0,0,.5);overflow:hidden}
+  .slide{position:absolute;inset:0;padding:74px 150px;display:none;
+    flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .slide.pad{padding-top:60px;padding-bottom:60px}
+
+  .bar{position:absolute;left:0;top:0;width:100%;height:14px;background:#E36414}
+
+  .kicker{font-size:20px;font-weight:700;color:#E36414;letter-spacing:.04em;
+    margin:6px 0 10px}
+  h1{font-size:50px;font-weight:700;color:#0F4C5C;line-height:1.2;margin-bottom:42px}
+
+  ul{list-style:none;margin-top:6px}
+  li{font-size:36px;line-height:1.45;color:#1F2937;margin-bottom:22px;
+    padding-left:44px;position:relative}
+  li:before{content:"▪";position:absolute;left:2px;top:-2px;color:#E36414;
+    font-weight:700}
+
+  .q{font-size:36px;line-height:1.45;color:#1F2937;background:#E6F2F4;
+    border-radius:10px;padding:18px 30px;margin-bottom:14px;font-weight:400}
+  .q .n{color:#E36414;font-weight:700;margin-right:14px}
+
+  .ans{font-size:33px;line-height:1.5;color:#0F4C5C;background:#F2F8F9;
+    border-left:8px solid #E36414;padding:16px 26px;margin:-2px 0 20px 26px;
+    border-radius:0 8px 8px 0}
+  .hint{font-size:33px;line-height:1.5;color:#8A6A16;background:#FBF1D8;
+    border-left:8px solid #D9A21B;padding:18px 26px;margin:14px 0;
+    border-radius:0 8px 8px 0}
+
+  .code{font-family:Consolas,"Courier New",monospace;font-size:32px;line-height:1.65;
+    background:#0B121A;border-radius:12px;padding:30px 40px;color:#D7E3EA;
+    white-space:pre-wrap}
+  .code.sm{font-size:29px;line-height:1.55;padding:24px 36px}
+  .code em{font-style:normal;color:#7FB9C9}
+  .code b{color:#F2B479;font-weight:700}
+
+  .cols{display:flex;gap:34px;margin-top:10px;margin-bottom:10px}
+  .cols3{display:flex;gap:26px;margin-top:6px}
+  .card{flex:1;background:#F2F8F9;border-radius:12px;padding:24px 28px;
+    font-size:31px;line-height:1.5;color:#1F2937}
+  .card b{display:block;color:#0F4C5C;font-size:28px;margin-bottom:8px}
+  .card small{display:block;color:#6B7280;font-size:24px;margin-top:6px}
+
+  .sub{font-size:32px;color:#6B7280;line-height:1.5;margin-top:16px}
+
+  table{width:100%;border-collapse:collapse;margin-top:8px}
+  th,td{font-size:29px;line-height:1.5;padding:12px 18px;text-align:left;
+    border-bottom:1px solid #DCE6E8}
+  th{color:#0F4C5C;background:#F2F8F9}
+
+  /* 遮挡：内容先藏起来，只留一张"盖着"的卡 */
+  .reveal{color:transparent!important;user-select:none;position:relative;
+    transition:color .25s ease}
+  .reveal::after{content:"?";position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    color:#BCC9CD;font-size:30px;font-weight:300;
+    background-color:#F1F6F7;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(15,76,92,.05) 0 12px,transparent 12px 24px);
+    border-radius:8px}
+  .code.reveal::after{color:#46606E;background-color:#0E1822;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(255,255,255,.05) 0 12px,transparent 12px 24px)}
+  ul.reveal::after{color:#C6D1D4;background-color:#FFFFFF;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(15,76,92,.04) 0 12px,transparent 12px 24px)}
+  .reveal.show{color:inherit!important;user-select:auto!important}
+  .ans.reveal.show{color:#0F4C5C!important}
+  .code.reveal.show{color:#D7E3EA!important}
+  .hint.reveal.show{color:#8A6A16!important}
+  ul.reveal.show li{color:#1F2937!important}
+  .reveal.show::after{display:none}
+
+  /* 封面 */
+  .cover{background:#0F4C5C;flex-direction:row;align-items:center;
+    justify-content:space-between;padding:0 120px 0 150px}
+  .cover-left{max-width:820px}
+  .cover-art{width:430px;height:430px;flex:0 0 auto;display:grid;
+    grid-template-columns:repeat(3,1fr);gap:10px}
+  .cover-art i{border-radius:8px;background:rgba(255,255,255,.13);display:block}
+  .cover-art i.hot{background:#E36414;border-radius:8px 8px 30px 8px}
+  .cover-art i.hot2{background:#F2B479}
+  .cover h1{color:#FFFFFF;font-size:78px;margin-bottom:26px}
+  .cover .kicker{color:#BFD9DF;font-size:22px;margin-bottom:18px;letter-spacing:.1em}
+  .cover .sub{color:#BFD9DF;font-size:30px;margin-top:0}
+  .cover .bar{background:#E36414}
+
+  /* 返回入口：只有知道的人才找得到——右上角一个小点，鼠标放上去才显形 */
+  #home{position:absolute;right:10px;top:8px;width:52px;height:44px;
+    display:flex;align-items:flex-start;justify-content:flex-end;
+    text-decoration:none;font-size:15px;color:#0F4C5C;z-index:5}
+  #home i{width:9px;height:9px;border-radius:50%;background:#E36414;
+    opacity:.18;margin:6px 8px 0 0;font-style:normal}
+  #home:hover i{opacity:.55}
+  #foot{position:absolute;left:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #pager{position:absolute;right:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #hint{position:absolute;right:72px;bottom:52px;font-size:15px;color:#C2C9CB;
+    letter-spacing:.12em;transition:opacity .3s}
+  #nav{position:fixed;right:18px;bottom:18px;display:none;gap:12px;z-index:10}
+  #nav button{width:64px;height:64px;border-radius:50%;border:0;
+    background:rgba(15,76,92,.85);color:#fff;font-size:34px;line-height:1}
+  #rotate{position:fixed;inset:0;background:#0F4C5C;color:#fff;display:none;
+    align-items:center;justify-content:center;font-size:20px;z-index:20}
+  @media (max-width:900px){#nav{display:flex}}
+  @media (max-width:900px) and (orientation:portrait){#rotate{display:flex}}
+</style>
+</head>
+<body>
+<div id="stage">
+  <a id="home" href="index.html" title="回首页"><i></i></a>
+
+  <section class="slide cover on">
+    <div class="bar"></div>
+    <div class="cover-left">
+      <div class="kicker">TURBOWARP · 项目课</div>
+      <h1>拼图 · 海洋</h1>
+      <div class="sub">12 块拼图，拖一拖、吸一吸<br>2026-11-22 · 周日 中班</div>
+    </div>
+    <div class="cover-art">
+      <i></i><i></i><i class="hot"></i>
+      <i></i><i class="hot2"></i><i></i>
+      <i></i><i></i><i></i>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">今天</div>
+    <h1>做一个能玩的拼图</h1>
+    <ul>
+      <li>12 块拼图散落在屏幕里</li>
+      <li>拖到正确位置附近，自动吸住</li>
+      <li>全部拼完，计时停止 + 庆祝动画</li>
+    </ul>
+    <div class="sub">先跑通，再加自己的东西。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">先玩 30 秒</div>
+    <h1>规则只有三条</h1>
+    <div class="q"><span class="n">1</span>点住一块，拖到你想放的地方</div>
+    <div class="q"><span class="n">2</span>离正确位置够近，它会自己吸过去</div>
+    <div class="q"><span class="n">3</span>12 块全部归位，游戏结束</div>
+    <div class="hint reveal">先别问怎么做的。玩的时候注意：哪块已经吸住了不能再拖？</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">项目全景</div>
+    <h1>5 个角色，各干一件事</h1>
+    <table>
+      <tr><th style="width:22%">角色</th><th>它负责</th></tr>
+      <tr><td>Puzzle</td><td>12 块拼图本体：散开、拖动、吸附、判断拼完</td></tr>
+      <tr><td>Thumb</td><td>开局显示完整原图，然后淡出（给你看个样）</td></tr>
+      <tr><td>Sprite1</td><td>拼完后的庆祝：从屏幕上方滑下来</td></tr>
+      <tr><td>Sprite2</td><td>拼完显示用时</td></tr>
+      <tr><td>舞台</td><td>放变量，管背景</td></tr>
+    </table>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">变量速查</div>
+    <h1>三个必看，两个临时用</h1>
+    <table>
+      <tr><th style="width:28%">变量</th><th style="width:20%">初值</th><th>干什么</th></tr>
+      <tr><td>total pieces</td><td>12</td><td>一共几块拼图</td></tr>
+      <tr><td>pieces in place</td><td>0</td><td>已经归位几块</td></tr>
+      <tr><td>Your time</td><td>0</td><td>拼完用时</td></tr>
+      <tr><td>X Offset / Y Offset</td><td>—</td><td>拖动时的"手和拼图差多少"</td></tr>
+    </table>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">核心秘密</div>
+    <h1>12 块拼图，其实是同一个角色</h1>
+    <div class="q">为什么只看到一个 Puzzle，拼图却有 12 块？</div>
+    <div class="ans reveal">Puzzle 有 12 个造型，每个造型是一块。绿旗时克隆 12 次，每个克隆换一个造型。</div>
+    <div class="cols3 reveal">
+      <div class="card"><b>1 个角色</b><small>脚本只写一份</small></div>
+      <div class="card"><b>12 个造型</b><small>一张图切成 12 块</small></div>
+      <div class="card"><b>12 个克隆</b><small>每个克隆管一块</small></div>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 1 · 打散</div>
+    <h1>绿旗一点，12 块散开</h1>
+    <div class="code sm reveal">当绿旗被点击<br>&nbsp;&nbsp;隐藏&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>← 本体先藏起来</em><br>&nbsp;&nbsp;将 total pieces 设为 12<br>&nbsp;&nbsp;重复 12 次<br>&nbsp;&nbsp;&nbsp;&nbsp;移到 <b>随机位置</b><br>&nbsp;&nbsp;&nbsp;&nbsp;重复直到 <b>不碰到 边缘</b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;移到 <b>随机位置</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>← 落到边上就重新扔</em><br>&nbsp;&nbsp;&nbsp;&nbsp;克隆 自己<br>&nbsp;&nbsp;&nbsp;&nbsp;下一个造型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>← 下一块换下一张</em><br>&nbsp;&nbsp;&nbsp;&nbsp;播放声音 Water Drop<br>&nbsp;&nbsp;&nbsp;&nbsp;等待 0.13 秒</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 1 · 为什么</div>
+    <h1>两个容易漏的动作</h1>
+    <div class="q"><span class="n">Q1</span>为什么绿旗第一件事是"隐藏"？</div>
+    <div class="ans reveal">不藏的话，原地会多留一块"母体"，拼完永远差一块。</div>
+    <div class="q"><span class="n">Q2</span>为什么扔完要检查"碰到边缘"？</div>
+    <div class="ans reveal">半块卡在屏幕外，学生拖不出来，会以为程序坏了。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 2 · 拖动</div>
+    <h1>按住不放，拼图跟着手走</h1>
+    <div class="code sm reveal">当角色被点击<br>&nbsp;&nbsp;如果 <b>_in place? = false</b> 那么&nbsp;&nbsp;&nbsp;&nbsp; <em>← 已归位的不给拖</em><br>&nbsp;&nbsp;&nbsp;&nbsp;移到最前面<br>&nbsp;&nbsp;&nbsp;&nbsp;将 X Offset 设为 <b>x坐标 - 鼠标x坐标</b><br>&nbsp;&nbsp;&nbsp;&nbsp;将 Y Offset 设为 <b>y坐标 - 鼠标y坐标</b><br>&nbsp;&nbsp;&nbsp;&nbsp;重复直到 <b>鼠标按下 = false</b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;移到 <b>X Offset + 鼠标x坐标</b>，<b>Y Offset + 鼠标y坐标</b></div>
+    <div class="sub">X/Y Offset 记的是"你点的那一点，离拼图中心差多少"。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 2 · 为什么</div>
+    <h1>为什么不直接"移到鼠标"？</h1>
+    <div class="q"><span class="n">Q</span>如果循环里写「移到 鼠标x坐标, 鼠标y坐标」，会怎样？</div>
+    <div class="ans reveal">拼图中心会瞬间跳到鼠标尖上，你点的是边角，块就"蹦"一下，手感很怪。</div>
+    <div class="hint reveal">记下偏移量 = 保持你按下的那一点不动，像真的用手指捏着一块纸片。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 3 · 吸附</div>
+    <h1>离正确位置够近，自己吸住</h1>
+    <div class="code sm reveal">定义 snap into place if within 11 pixels from target<br>&nbsp;&nbsp;如果 <b>|x坐标| &lt; 11</b> 且 <b>|y坐标| &lt; 11</b> 那么<br>&nbsp;&nbsp;&nbsp;&nbsp;移到 x:<b>0</b> y:<b>0</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em>← 12 块都回同一个中心</em><br>&nbsp;&nbsp;&nbsp;&nbsp;移到最<b>底层</b><br>&nbsp;&nbsp;&nbsp;&nbsp;播放声音 pop<br>&nbsp;&nbsp;&nbsp;&nbsp;将 _in place? 设为 true<br>&nbsp;&nbsp;&nbsp;&nbsp;将 pieces in place 增加 1</div>
+    <div class="sub reveal">"11 像素"就是容错距离：差得不多也算你放对了。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 3 · 两个细节</div>
+    <h1>吸附之后，还有两步</h1>
+    <div class="cols">
+      <div class="card"><b>① 移到最底层</b>已经拼好的块要压在所有待拼块下面，不然会挡住别人。<small>用「移到最前面 / 移到最后面」积木</small></div>
+      <div class="card"><b>② 标记已归位</b>把 _in place? 设成 true，下次点它就不给拖了。<small>否则拼好的块又能被拎走</small></div>
+    </div>
+    <div class="q" style="margin-top:26px">少做哪一步，玩起来最明显？</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 4 · 完成判定</div>
+    <h1>数够了，就赢了</h1>
+    <div class="code sm reveal">当角色被点击<br>&nbsp;&nbsp;…拖动、吸附…<br>&nbsp;&nbsp;如果 <b>pieces in place = total pieces</b> 那么<br>&nbsp;&nbsp;&nbsp;&nbsp;播放声音 Win<br>&nbsp;&nbsp;&nbsp;&nbsp;广播 <b>WIN</b></div>
+    <div class="hint reveal">计数的必须和总数比：12 = 12。写死成 12，以后改 9 块或 16 块就得改代码。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">单元 5 · 计时与庆祝</div>
+    <h1>拼完以后发生什么</h1>
+    <div class="cols3">
+      <div class="card"><b>计时</b>绿旗时「计时器归零」<small>拼完读计时器</small></div>
+      <div class="card"><b>庆祝</b>Sprite1 收到 WIN<small>从上方滑下来</small></div>
+      <div class="card"><b>显示</b>Sprite2 收到 WIN<small>显示 Your time</small></div>
+    </div>
+    <div class="hint reveal">原项目这里有个小 bug：Your time 一直是 0。修法：收到 WIN 时，先把 Your time 设为「计时器」，再显示。这个留给进阶任务。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">易错点</div>
+    <h1>五个坑，先提醒</h1>
+    <ul>
+      <li>克隆前忘了隐藏本体 → 永远多一块</li>
+      <li>拖动没用偏移量 → 拼图"跳"到鼠标尖上</li>
+      <li>吸附后忘了置底 → 拼好的块挡住别的块</li>
+      <li>忘了 _in place? → 拼好的块能被再拎走</li>
+      <li>数到 12 不判断 → 拼完没反应，学生以为没拼对</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">课堂任务卡</div>
+    <h1>做到哪一步，看自己</h1>
+    <div class="cols3">
+      <div class="card"><b>基础 · 人人</b>打开 sb3 跑通<small>说清 12 块怎么来的<br>三个变量各管什么</small></div>
+      <div class="card"><b>进阶 · 多数</b>调吸附距离 11 → 20<small>说说手感变好还是变差<br>再改回 8 试试</small></div>
+      <div class="card"><b>挑战 · 快的</b>加一个「提示」按钮<small>点一下，原图显示 2 秒<br>再自己消失</small></div>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">拓展 · 拼完没得玩怎么办</div>
+    <h1>三层加餐，按顺序做</h1>
+    <div class="cols3">
+      <div class="card"><b>① 换图 = 换关卡</b>再加 12 个造型（另一张图），加变量「关卡」<small>拼完自动换下一张，越长越耐玩</small></div>
+      <div class="card"><b>② 提示 + 打乱</b>提示：显示原图 2 秒<br>打乱：把所有块重新扔一遍<small>两个按钮都能独立做</small></div>
+      <div class="card"><b>③ 记分板</b>用列表存每局用时<small>拼完自动记一笔<br>显示最快纪录</small></div>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">下课挑战</div>
+    <h1>带一个改动回家</h1>
+    <div class="q"><span class="n">1</span>把吸附距离改成你觉得最舒服的数</div>
+    <div class="q"><span class="n">2</span>修好"用时一直显示 0"的 bug</div>
+    <div class="q"><span class="n">3</span>（选做）加「提示」按钮，原图显示 2 秒</div>
+    <div class="sub">下节课先看谁的版本最好玩。</div>
+  </section>
+
+  <div id="foot">拼图 · 海洋｜TurboWarp 项目课</div>
+  <div id="pager"></div>
+  <div id="hint">空格 / 点击 揭晓 · ← → 翻页</div>
+</div>
+<div id="nav"><button id="prev">‹</button><button id="next">›</button></div>
+<div id="rotate">横过来看更清楚</div>
+<script>
+const stage=document.getElementById('stage');
+const slides=[...document.querySelectorAll('.slide')];
+const pager=document.getElementById('pager');
+const hint=document.getElementById('hint');
+let i=0;
+
+function view(){
+  const v=window.visualViewport;
+  // min 收口：桌面UA模式 innerWidth 会虚胖(1200+)，screen.width 才是设备真实宽
+  const w=Math.min(innerWidth, v?v.width:innerWidth,
+        screen.width||innerWidth);
+  const h=Math.min(innerHeight, v?v.height:innerHeight,
+        screen.height||innerHeight);
+  return {w,h};
+}
+function fit(){
+  const {w,h}=view();
+  const s=Math.min(w/1600,h/900);
+  stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+  const rot=document.getElementById('rotate');
+  if(rot) rot.style.display=(!rot.dataset.off && h>w && w<=1000)?'flex':'none';
+}
+addEventListener('resize',fit);
+addEventListener('orientationchange',()=>setTimeout(fit,200));
+if(window.visualViewport){
+  visualViewport.addEventListener('resize',fit);
+  visualViewport.addEventListener('scroll',fit);
+}
+fit();
+
+function paint(){
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  slides[i].querySelectorAll('.reveal').forEach(e=>e.classList.remove('show'));
+  pager.textContent=(i+1)+' / '+slides.length;
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+function go(d){ i=Math.max(0,Math.min(slides.length-1,i+d)); paint(); }
+function reveal(){
+  const n=slides[i].querySelector('.reveal:not(.show)');
+  if(n) n.classList.add('show');
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+addEventListener('keydown',e=>{
+  if(['ArrowRight','PageDown'].includes(e.key)){e.preventDefault();go(1)}
+  else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(-1)}
+  else if(e.key===' '||e.key==='Enter'){e.preventDefault();reveal()}
+  else if(e.key==='a'||e.key==='A'){e.preventDefault();slides[i].querySelectorAll('.reveal').forEach(x=>x.classList.add('show'));hint.style.opacity=0}
+  else if(e.key==='Home'){i=0;paint()}
+  else if(e.key==='End'){i=slides.length-1;paint()}
+  else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+});
+let _lastTouch=0;
+stage.addEventListener('click',()=>{ if(Date.now()-_lastTouch<600) return; reveal(); });
+let _sx=0,_sy=0;
+stage.addEventListener('touchstart',e=>{const t=e.touches[0];_sx=t.clientX;_sy=t.clientY;},{passive:true});
+stage.addEventListener('touchend',e=>{
+  _lastTouch=Date.now();
+  const t=e.changedTouches[0], dx=t.clientX-_sx, dy=t.clientY-_sy;
+  if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)){ go(dx<0?1:-1); }
+  else { reveal(); }
+},{passive:true});
+document.getElementById('prev').onclick=()=>go(-1);
+document.getElementById('next').onclick=()=>go(1);
+const _h=parseInt((location.hash||'').slice(1));
+if(_h>0 && _h<=slides.length) i=_h-1;
+paint();
+</script>
+</body>
+</html>
