@@ -19,16 +19,18 @@
   .side{flex:1;min-width:0}
   h2{font-size:16px;color:#0F4C5C;margin:0 0 8px;letter-spacing:.02em}
   table.seg{width:100%;border-collapse:collapse;font-size:13px}
-  table.seg th{background:#0F4C5C;color:#fff;font-weight:700;padding:6px 5px;font-size:12px}
-  table.seg td{border:1px solid #C9D6D9;padding:7px 5px;height:36px;vertical-align:middle}
-  table.seg td.n{text-align:center;font-weight:700;color:#E36414;width:46px;white-space:nowrap}
-  table.seg td.from{width:118px;color:#374151;font-size:12px;line-height:1.3}
-  table.seg td.tr{width:54px;text-align:center;white-space:nowrap;color:#6B7280}
-  table.seg td.res{width:46px;text-align:center}
-  .box{display:inline-block;width:15px;height:15px;border:1.5px solid #9CA3AF;border-radius:3px;margin:0 2px;vertical-align:-2px}
+  table.seg th{background:#0F4C5C;color:#fff;font-weight:700;padding:6px 4px;font-size:12px}
+  table.seg td{border:1px solid #C9D6D9;padding:7px 4px;height:36px;vertical-align:middle}
+  table.seg td.n{text-align:center;font-weight:700;color:#E36414;width:42px;white-space:nowrap}
+  table.seg td.l{text-align:center;font-weight:700;color:#0F4C5C;width:34px;font-size:15px}
+  table.seg td.from{width:112px;color:#374151;font-size:12px;line-height:1.3}
+  table.seg td.tr{width:50px;text-align:center;white-space:nowrap;color:#6B7280}
+  table.seg td.line{width:38px;text-align:center;color:#9CA3AF;font-size:11px}
+  .box{display:inline-block;width:14px;height:14px;border:1.5px solid #9CA3AF;border-radius:3px;margin:0 1px;vertical-align:-2px}
   .legend{margin-top:12px;font-size:12.5px;line-height:1.7;color:#4B5563}
   .legend b{color:#E36414}
-  .rule{margin-top:12px;background:#FBF1D8;border-left:5px solid #D9A21B;padding:9px 12px;font-size:12.5px;line-height:1.65;color:#6B5420;border-radius:0 6px 6px 0}
+  .legend .k{display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:-1px;margin-right:3px}
+  .rule{margin-top:10px;background:#FBF1D8;border-left:5px solid #D9A21B;padding:9px 12px;font-size:12.5px;line-height:1.65;color:#6B5420;border-radius:0 6px 6px 0}
   .foot{display:flex;justify-content:space-between;margin-top:14px;font-size:12.5px;color:#6B7280}
   .toolbar{width:1120px;margin:0 auto 12px;display:flex;gap:10px;align-items:center;font-size:13px;color:#4B5563}
   .toolbar button{border:0;background:#0F4C5C;color:#fff;font-size:14px;padding:9px 20px;border-radius:6px;cursor:pointer}
@@ -48,6 +50,8 @@
     table.seg th{font-size:3mm;padding:1mm}
     table.seg td{height:8mm;padding:1mm}
     table.seg td.from{font-size:3mm}
+    table.seg td.l{font-size:3.6mm}
+    table.seg td.line{font-size:2.8mm}
     h2{font-size:4mm;margin-bottom:2mm}
     .legend{font-size:3.1mm;line-height:1.55;margin-top:2.5mm}
     .rule{font-size:3.1mm;line-height:1.55;margin-top:2.5mm;padding:2mm 3mm}
@@ -66,7 +70,7 @@
 
 <div class="toolbar">
   <button onclick="window.print()">打印 / 存成 PDF（A4 横向）</button>
-  <span>打印后在图上用笔画每段的直线，跑了就勾格子。</span>
+  <span>打印后在图上画每段的线，线上写字母；做了画实线，没做画虚线。</span>
 </div>
 
 <div class="sheet">
@@ -86,13 +90,22 @@
         <rect x="0" y="225" width="300" height="225" fill="#E2EBCF"/>
         <rect x="300" y="225" width="300" height="225" fill="#E4EFD6"/>
 
-        <!-- 舒什塔尔水道 -->
-        <path d="M300 0 L360 60 L340 130 L410 160 L470 120 L520 160 L520 0 Z" fill="#BEE3EE"/>
-        <path d="M300 225 C340 240 350 290 390 300 L520 300 L520 225 Z" fill="#BFE6EF" opacity=".55"/>
-        <!-- 吴哥窟湖泊 -->
-        <ellipse cx="450" cy="345" rx="72" ry="58" fill="#A9DCEA"/>
+        <!-- 舒什塔尔 · 两条水道（从右上角流下，汇入湖泊） -->
+        <path d="M318 0 C338 40 352 68 368 96 C382 122 380 150 398 176 C412 196 420 220 420 250 C420 288 410 320 404 342"
+              fill="none" stroke="#8FCFE0" stroke-width="24" stroke-linecap="round"/>
+        <path d="M318 0 C338 40 352 68 368 96 C382 122 380 150 398 176 C412 196 420 220 420 250 C420 288 410 320 404 342"
+              fill="none" stroke="#C6E9F2" stroke-width="14" stroke-linecap="round"/>
+        <path d="M600 122 C562 126 536 150 520 182 C506 206 470 216 440 228 C432 231 426 240 420 250"
+              fill="none" stroke="#8FCFE0" stroke-width="24" stroke-linecap="round"/>
+        <path d="M600 122 C562 126 536 150 520 182 C506 206 470 216 440 228 C432 231 426 240 420 250"
+              fill="none" stroke="#C6E9F2" stroke-width="14" stroke-linecap="round"/>
 
-        <!-- 博物院区域 -->
+        <!-- 吴哥窟湖泊（浅蓝/深蓝两区，船屋要停进指定色区） -->
+        <ellipse cx="450" cy="345" rx="72" ry="58" fill="#A9DCEA"/>
+        <ellipse cx="450" cy="345" rx="38" ry="30" fill="#5FB4D6"/>
+        <text x="450" y="419" text-anchor="middle" font-size="10" fill="#1F6F8B">湖泊（浅蓝 / 深蓝）</text>
+
+        <!-- 博物馆区域（中央停靠圈） -->
         <circle cx="300" cy="225" r="74" fill="#FBF7EF" stroke="#0F4C5C" stroke-width="3"/>
         <text x="300" y="214" text-anchor="middle" font-size="15" font-weight="700" fill="#0F4C5C">博物馆</text>
         <text x="300" y="235" text-anchor="middle" font-size="13" fill="#0F4C5C">停靠圈</text>
@@ -120,59 +133,93 @@
         <rect x="96" y="368" width="18" height="18" fill="#D9A21B" stroke="#7C5A08" stroke-width="1.5"/>
         <rect x="486" y="368" width="18" height="18" fill="#3E8E55" stroke="#1E4A2B" stroke-width="1.5"/>
 
-        <!-- 奇琴伊察：球门 + 奖杯 -->
-        <circle cx="168" cy="288" r="9" fill="none" stroke="#B45309" stroke-width="3"/>
-        <circle cx="208" cy="312" r="9" fill="none" stroke="#B45309" stroke-width="3"/>
-        <text x="150" y="333" text-anchor="middle" font-size="10" fill="#7C4A08">球门×2</text>
-        <path d="M238 268 h14 v10 h-14 z" fill="#C9971B" stroke="#7C5A08"/>
-        <text x="262" y="278" font-size="10" fill="#7C5A08">奖杯</text>
+        <!-- 奇琴伊察：两个球门 + 奖杯 -->
+        <circle cx="146" cy="288" r="9" fill="none" stroke="#B45309" stroke-width="3"/>
+        <circle cx="223" cy="296" r="9" fill="none" stroke="#B45309" stroke-width="3"/>
+        <text x="146" y="313" text-anchor="middle" font-size="9" fill="#7C4A08">球门①</text>
+        <text x="223" y="321" text-anchor="middle" font-size="9" fill="#7C4A08">球门②</text>
+        <path d="M168 395 h14 v11 h-14 z" fill="#C9971B" stroke="#7C5A08"/>
+        <text x="190" y="405" font-size="10" fill="#7C5A08">奖杯</text>
 
         <!-- 万神殿石柱 -->
-        <rect x="214" y="122" width="12" height="12" fill="#B8A98F" stroke="#6E6250"/>
-        <text x="236" y="132" font-size="10" fill="#6E6250">石柱</text>
+        <rect x="168" y="121" width="12" height="12" fill="#B8A98F" stroke="#6E6250"/>
+        <text x="188" y="131" font-size="10" fill="#6E6250">石柱</text>
 
-        <!-- 水闸 -->
-        <rect x="352" y="150" width="16" height="10" fill="#C2185B"/>
-        <rect x="452" y="170" width="16" height="10" fill="#C2185B"/>
-        <text x="392" y="196" font-size="10" fill="#9C1448">水闸×2 · 水车×2</text>
+        <!-- ===== 舒什塔尔：水闸 2 个（可推开，玫红）+ 水车 2 架（不能碰，棕黄） ===== -->
+        <!-- 水车① 在闸①上游；水车② 在闸②上游 -->
+        <circle cx="352" cy="62" r="20" fill="none" stroke="#C2185B" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <circle cx="352" cy="62" r="10" fill="#FFFFFF" stroke="#8D6E63" stroke-width="3"/>
+        <line x1="352" y1="52" x2="352" y2="72" stroke="#8D6E63" stroke-width="2"/>
+        <line x1="342" y1="62" x2="362" y2="62" stroke="#8D6E63" stroke-width="2"/>
+        <line x1="345" y1="55" x2="359" y2="69" stroke="#8D6E63" stroke-width="2"/>
+        <line x1="345" y1="69" x2="359" y2="55" stroke="#8D6E63" stroke-width="2"/>
+        <text x="352" y="33" text-anchor="middle" font-size="11" font-weight="700" fill="#8D6E63">车①</text>
 
-        <!-- 船屋 + 指示器 -->
-        <rect x="516" y="340" width="22" height="13" fill="#8D6E63" stroke="#4E342E"/>
-        <text x="510" y="350" text-anchor="end" font-size="10" fill="#4E342E">船屋</text>
-        <rect x="404" y="404" width="14" height="14" fill="#37474F"/>
-        <text x="411" y="432" text-anchor="middle" font-size="10" fill="#37474F">指示器</text>
+        <g transform="translate(372 98) rotate(-24)">
+          <rect x="-10" y="-6" width="20" height="12" fill="#C2185B" stroke="#7A0F38" stroke-width="1.5"/>
+          <line x1="-5" y1="-6" x2="-5" y2="6" stroke="#fff" stroke-width="1.5"/>
+          <line x1="0" y1="-6" x2="0" y2="6" stroke="#fff" stroke-width="1.5"/>
+          <line x1="5" y1="-6" x2="5" y2="6" stroke="#fff" stroke-width="1.5"/>
+        </g>
+        <text x="392" y="106" font-size="11" font-weight="700" fill="#C2185B">闸①</text>
 
-        <!-- 边框 + 网格提示 -->
+        <circle cx="548" cy="148" r="20" fill="none" stroke="#C2185B" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <circle cx="548" cy="148" r="10" fill="#FFFFFF" stroke="#8D6E63" stroke-width="3"/>
+        <line x1="548" y1="138" x2="548" y2="158" stroke="#8D6E63" stroke-width="2"/>
+        <line x1="538" y1="148" x2="558" y2="148" stroke="#8D6E63" stroke-width="2"/>
+        <line x1="541" y1="141" x2="555" y2="155" stroke="#8D6E63" stroke-width="2"/>
+        <line x1="541" y1="155" x2="555" y2="141" stroke="#8D6E63" stroke-width="2"/>
+        <text x="560" y="128" text-anchor="middle" font-size="11" font-weight="700" fill="#8D6E63">车②</text>
+
+        <g transform="translate(516 186) rotate(28)">
+          <rect x="-10" y="-6" width="20" height="12" fill="#C2185B" stroke="#7A0F38" stroke-width="1.5"/>
+          <line x1="-5" y1="-6" x2="-5" y2="6" stroke="#fff" stroke-width="1.5"/>
+          <line x1="0" y1="-6" x2="0" y2="6" stroke="#fff" stroke-width="1.5"/>
+          <line x1="5" y1="-6" x2="5" y2="6" stroke="#fff" stroke-width="1.5"/>
+        </g>
+        <text x="492" y="198" text-anchor="end" font-size="11" font-weight="700" fill="#C2185B">闸②</text>
+
+        <!-- 船屋 + 随机指示器 -->
+        <rect x="512" y="350" width="22" height="13" fill="#8D6E63" stroke="#4E342E"/>
+        <text x="506" y="360" text-anchor="end" font-size="10" fill="#4E342E">船屋</text>
+        <rect x="384" y="404" width="14" height="14" fill="#37474F"/>
+        <text x="391" y="432" text-anchor="middle" font-size="10" fill="#37474F">指示器</text>
+
+        <!-- 边框 -->
         <rect x="0.5" y="0.5" width="599" height="449" fill="none" stroke="#9CA3AF" stroke-width="1"/>
       </svg>
     </div>
 
     <div class="side">
-      <h2>每段怎么走 · 勾记录</h2>
+      <h2>每段一条线 · 线上写字母</h2>
       <table class="seg">
         <tr>
-          <th>段</th><th>起点 → 终点</th><th>动作</th><th>跑 3 次</th><th>绿</th>
+          <th>段</th><th>字母</th><th>起点 → 终点</th><th>动作</th><th>跑3次</th><th>线</th>
         </tr>
-        <tr><td class="n">段0</td><td class="from">安全区 → 对准直线</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="res"></td></tr>
-        <tr><td class="n">段1</td><td class="from">角落 → 中央博物馆</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="res"></td></tr>
-        <tr><td class="n">段2</td><td class="from">退回停靠区</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="res"></td></tr>
-        <tr><td class="n">段3</td><td class="from">角落 → 中央博物馆</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="res"></td></tr>
-        <tr><td class="n">段4</td><td class="from">球门（先空）</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="res"></td></tr>
-        <tr><td class="n">段5</td><td class="from">奖杯（先空）</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="res"></td></tr>
-        <tr><td class="n">段6</td><td class="from">开进中央圆圈</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="res"></td></tr>
+        <tr><td class="n">段0</td><td class="l">A</td><td class="from">安全区 → 对准直线</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="line">实/虚</td></tr>
+        <tr><td class="n">段1</td><td class="l">B</td><td class="from">角落 → 中央博物馆</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="line">实/虚</td></tr>
+        <tr><td class="n">段2</td><td class="l">C</td><td class="from">退回停靠圈</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="line">实/虚</td></tr>
+        <tr><td class="n">段3</td><td class="l">D</td><td class="from">角落 → 中央博物馆</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="line">实/虚</td></tr>
+        <tr><td class="n">段4</td><td class="l">E</td><td class="from">球门（先空）</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="line">实/虚</td></tr>
+        <tr><td class="n">段5</td><td class="l">F</td><td class="from">奖杯（先空）</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="line">实/虚</td></tr>
+        <tr><td class="n">段6</td><td class="l">G</td><td class="from">开进中央圆圈</td><td class="tr"></td><td class="tr"><span class="box"></span><span class="box"></span><span class="box"></span></td><td class="line">实/虚</td></tr>
       </table>
 
       <div class="legend">
-        <b>图例：</b>■ 珍宝（每个角各 1 件）　○ 球门　▬ 水闸<br><br>
+        <b>图例：</b><span class="k" style="background:#C2185B"></span>闸 = 推到水道外（共 2 个）
+        <span class="k" style="background:#8D6E63"></span>车 = 全程不能碰（共 2 架）<br>
+        红色虚线圈 = 水车禁碰区，碰到就丢 20 分。<br>
+        <span class="k" style="background:#D64545"></span>珍宝（每角 1 件）　○ 球门　▬ 石柱　▬ 船屋<br><br>
         <b>怎么用：</b><br>
-        1. 在左边图上，用不同颜色画每段的直线（起点 → 终点）。<br>
-        2. 每跑一次勾一格；同一段 <b>3 次成 2 次</b> → 「绿」里打勾。<br>
-        3. 全部会的段画实线，暂时放弃的段画虚线并写「弃」。<br>
-        4. 下课把做成的段涂绿，连同程序快照一起存档。
+        1. 每段画一条线，线旁写字母：A=段0，B=段1 …… G=段6。<br>
+        2. <b>实线 = 做成了</b>；<b>虚线 = 没做 / 放弃</b>。<br>
+        3. 同一段跑 3 次成 2 次，就在「跑3次」勾两格。<br>
+        4. 下课把实线段圈一下，拍照，和程序快照一起存档。
       </div>
       <div class="rule">
         <b>比赛</b>：一轮 2 分钟，打两轮，两轮相加。<br>
-        只认结束时的场地状态；在安全区以外碰车或任务品，每次 −1；撞飞奇琴伊察的环，每个 −15。
+        只认结束时的场地状态；在安全区以外碰车或任务品，每次 −1；撞飞奇琴伊察的环，每个 −15。<br>
+        <b>水车</b>：两架都没被碰 → 白拿 20 分；<b>水闸</b>：推到完全不碰蓝色水道才算分。
       </div>
     </div>
   </div>
