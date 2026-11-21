@@ -61,12 +61,12 @@
 
 <div class="toolbar">
   <button onclick="window.print()">打印 / 存成 PDF（A4 横向）</button>
-  <span>双面打印正合适：第 1 页是场地图，第 2 页是说明（选「长边翻转」）。图上已标三条参考路线（红=难点），其余段落自己画，线上写字母。</span>
+  <span>场地图每人一张，配一支铅笔、一块橡皮；规则页老师一份或贴墙。图上自己画线、自己编数字。</span>
 </div>
 
 <div class="sheet">
   <div class="head">
-    <h1>古迹文明 · 路线图 v1</h1>
+    <h1>古迹文明 · 路线图（自己画）</h1>
     <div class="meta">
       版本 <span class="blank"></span>　日期 <span class="blank"></span>　队员 <span class="blank"></span>
     </div>
@@ -177,33 +177,12 @@
         <text x="450" y="341" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">湖泊</text>
         <text x="450" y="357" text-anchor="middle" font-size="8.5" fill="#E8F6FB">浅蓝 / 深蓝</text>
 
-        <!-- ===== 三条参考路线（2026-11-21 集训3 课堂定） ===== -->
-        <defs>
-          <marker id="aR" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#D93025"/></marker>
-          <marker id="aG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2E7D32"/></marker>
-          <marker id="aP" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6A1B9A"/></marker>
-        </defs>
-
         <!-- 半场分界 -->
         <line x1="300" y1="0" x2="300" y2="147" stroke="#9CA3AF" stroke-width="2" stroke-dasharray="7 5" opacity=".9"/>
         <line x1="300" y1="303" x2="300" y2="450" stroke="#9CA3AF" stroke-width="2" stroke-dasharray="7 5" opacity=".9"/>
         <text x="306" y="446" font-size="9" fill="#6B7280">半场分界 · 一轮只打一半</text>
 
-        <!-- ① 难点（红）：奇琴伊察 → 两球门中间 → 击落两球 → 回安全区 -->
-        <line x1="107" y1="353" x2="184" y2="292" stroke="#D93025" stroke-width="4" marker-end="url(#aR)"/>
-        <line x1="184" y1="292" x2="151" y2="288" stroke="#D93025" stroke-width="3" marker-end="url(#aR)"/>
-        <line x1="184" y1="292" x2="220" y2="295" stroke="#D93025" stroke-width="3" marker-end="url(#aR)"/>
-        <line x1="189" y1="298" x2="112" y2="358" stroke="#D93025" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#aR)" opacity=".9"/>
-        <text x="130" y="370" font-size="11" font-weight="700" fill="#D93025" stroke="#fff" stroke-width="3" paint-order="stroke">① 击落两球（难点）</text>
-
-        <!-- ② 奇琴伊察 → 顺带四方珍宝 → 万神殿 -->
-        <line x1="100" y1="352" x2="100" y2="100" stroke="#2E7D32" stroke-width="4" marker-end="url(#aG)"/>
-        <text x="108" y="238" font-size="11" font-weight="700" fill="#2E7D32" stroke="#fff" stroke-width="3" paint-order="stroke">② 带四方珍宝 → 万神殿</text>
-
-        <!-- ③ 万神殿 → 石柱放下手臂 → 回万神殿 -->
-        <line x1="112" y1="89" x2="162" y2="118" stroke="#6A1B9A" stroke-width="4" marker-end="url(#aP)"/>
-        <line x1="165" y1="123" x2="108" y2="95" stroke="#6A1B9A" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#aP)" opacity=".9"/>
-        <text x="186" y="96" font-size="11" font-weight="700" fill="#6A1B9A" stroke="#fff" stroke-width="3" paint-order="stroke">③ 到石柱放下手臂</text>
+        <!-- 图面留白：路线由学生用铅笔自己画、自己编号 -->
 
         <!-- 边框 -->
         <rect x="0.5" y="0.5" width="599" height="449" fill="none" stroke="#9CA3AF" stroke-width="1"/>
@@ -218,16 +197,13 @@
         <span class="k" style="background:#8D6E63"></span>车 = 全程不能碰（共 2 架）<br>
         红色虚线圈 = 水车禁碰区，碰到就丢 20 分。<br>
         <span class="k" style="background:#D64545"></span>珍宝（每角 1 件）　○ 球门　▬ 石柱　▬ 船屋<br>
-        <span style="display:inline-block;width:20px;height:3px;background:#D93025;vertical-align:3px"></span> <b style="color:#D93025">①难点</b>：奇琴伊察 → 两球门中间 → 击落两球 → 回安全区<br>
-        <span style="display:inline-block;width:20px;height:3px;background:#2E7D32;vertical-align:3px"></span> <b style="color:#2E7D32">②</b>：奇琴伊察 →（顺带四方珍宝）→ 万神殿<br>
-        <span style="display:inline-block;width:20px;height:3px;background:#6A1B9A;vertical-align:3px"></span> <b style="color:#6A1B9A">③</b>：万神殿 → 石柱放下手臂 → 回万神殿<br>
         灰色虚线 = 半场分界：<b>一轮只打一半</b>，先打左半场（万神殿＋奇琴伊察）。<br><br>
-        <b>怎么用：</b><br>
-        1. 每段程序 = 一个字母：从安全区出发，到另一个安全区或中央博物馆结束。<br>
-        2. 在图上画这条线，线旁写字母：A=段0，B=段1 …… G=段6。<br>
-        3. <b>实线 = 做成了</b>；<b>虚线 = 没做 / 放弃</b>。<br>
-        4. 同一段连跑 3 次成 2 次，再把它改成实线。<br>
-        5. 下课把实线段圈一下，拍照，和程序快照一起存档。
+        <b>怎么画（铅笔 + 橡皮）：</b><br>
+        1. 每人一张图、一支铅笔、一块橡皮；一律用铅笔，画错就擦，不用涂改带。<br>
+        2. <b>一段程序 = 一个数字</b>：1、2、3……按跑的先后写；数字写在线的起点或线旁，和程序里第几段一一对应。<br>
+        3. 每段从安全区出发，到下一个安全区或博物馆停靠圈结束；直线就画直，拐弯画一个拐点。<br>
+        4. <b>实线 = 做成了</b>，<b>虚线 = 没做 / 放弃</b>；要改就擦干净重画，不叠着画。<br>
+        5. 同一段连跑 3 次成 2 次，再改成实线；下课前把做成的段拍照，和程序快照一起存档。
       </div>
       <div class="rule">
         <b>比赛</b>：一轮 2 分钟，打两轮，两轮相加。<br>
