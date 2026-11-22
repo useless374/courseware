@@ -115,6 +115,14 @@
     align-items:center;justify-content:center;font-size:20px;z-index:20}
   @media (max-width:900px){#nav{display:flex}}
   @media (max-width:900px) and (orientation:portrait){#rotate{display:flex}}
+
+  .zoomable svg{width:100%;height:auto;display:block}
+  #zoom{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;z-index:999;
+    overflow:auto;-webkit-overflow-scrolling:touch;padding:18px 12px 40px}
+  #zoom.on{display:block}
+  #zoom svg{display:block;margin:0 auto;background:#fff;border-radius:12px;width:96vw;height:auto}
+  #zoom .bar2{position:sticky;top:0;display:flex;gap:12px;justify-content:flex-end;padding:6px 6px 12px;z-index:2}
+  #zoom .bar2 button{font-size:22px;padding:8px 16px;border:0;border-radius:10px;background:#E36414;color:#fff}
 </style>
 </head>
 <body>
@@ -171,17 +179,51 @@
     </table>
   </section>
 
+
   <section class="slide pad">
     <div class="bar"></div>
     <div class="kicker">变量速查</div>
-    <h1>三个必看，两个临时用</h1>
+    <h1>四个必看，两个临时用</h1>
     <table>
       <tr><th style="width:28%">变量</th><th style="width:20%">初值</th><th>干什么</th></tr>
       <tr><td>total pieces</td><td>12</td><td>一共几块拼图</td></tr>
       <tr><td>pieces in place</td><td>0</td><td>已经归位几块</td></tr>
+      <tr><td>_in place?</td><td>false</td><td>这一块拼图归位了没（true / false）</td></tr>
       <tr><td>Your time</td><td>0</td><td>拼完用时</td></tr>
       <tr><td>X Offset / Y Offset</td><td>—</td><td>拖动时的"手和拼图差多少"</td></tr>
     </table>
+  </section>
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">思维导图</div>
+    <h1>两张图：怎么讲 · 程序怎么转</h1>
+    <div style="display:flex;gap:40px;align-items:flex-start">
+      <div style="flex:1;background:#F2F8F9;border-radius:14px;padding:18px;cursor:zoom-in" class="zoomable" data-title="图1 · 讲课思路">
+        <svg viewBox="0 0 1180 760" xmlns="http://www.w3.org/2000/svg" font-family="Microsoft YaHei,PingFang SC,sans-serif"><rect width="100%" height="100%" fill="#FFFFFF"/><text x="30" y="42" font-size="26" font-weight="700" fill="#0F4C5C">图1 · 讲课思路（课堂节奏）</text><rect x="40" y="80" width="500" height="64" rx="12" fill="#FDF0E6" stroke="#E36414" stroke-width="2"/><text x="62" y="120" font-size="24" fill="#1F2937">① 开场：玩 30 秒成品</text><line x1="290" y1="144" x2="290" y2="180" stroke="#E36414" stroke-width="3"/><polygon points="290,185 282,172 298,172" fill="#E36414"/><rect x="40" y="185" width="500" height="64" rx="12" fill="#FDF0E6" stroke="#E36414" stroke-width="2"/><text x="62" y="225" font-size="24" fill="#1F2937">② 三条规则：拖、吸、齐</text><line x1="290" y1="249" x2="290" y2="285" stroke="#E36414" stroke-width="3"/><polygon points="290,290 282,277 298,277" fill="#E36414"/><rect x="40" y="290" width="500" height="64" rx="12" fill="#FDF0E6" stroke="#E36414" stroke-width="2"/><text x="62" y="330" font-size="24" fill="#1F2937">③ 认 5 个角色</text><line x1="290" y1="354" x2="290" y2="390" stroke="#E36414" stroke-width="3"/><polygon points="290,395 282,382 298,382" fill="#E36414"/><rect x="40" y="395" width="500" height="64" rx="12" fill="#FDF0E6" stroke="#E36414" stroke-width="2"/><text x="62" y="435" font-size="24" fill="#1F2937">④ 变量：总数 / 已归位 / 时间 / 偏移</text><line x1="290" y1="459" x2="290" y2="495" stroke="#E36414" stroke-width="3"/><polygon points="290,500 282,487 298,487" fill="#E36414"/><rect x="40" y="500" width="500" height="64" rx="12" fill="#FDF0E6" stroke="#E36414" stroke-width="2"/><text x="62" y="540" font-size="24" fill="#1F2937">⑤ 克隆 12 块（一个角色）</text><line x1="290" y1="564" x2="290" y2="600" stroke="#E36414" stroke-width="3"/><polygon points="290,605 282,592 298,592" fill="#E36414"/><rect x="40" y="605" width="500" height="64" rx="12" fill="#FDF0E6" stroke="#E36414" stroke-width="2"/><text x="62" y="645" font-size="24" fill="#1F2937">⑥ 打散：不贴边、随机</text><rect x="620" y="80" width="500" height="64" rx="12" fill="#E6F2F4" stroke="#E36414" stroke-width="2"/><text x="642" y="120" font-size="24" fill="#1F2937">⑦ 点击拖动：先记偏移</text><line x1="870" y1="144" x2="870" y2="180" stroke="#E36414" stroke-width="3"/><polygon points="870,185 862,172 878,172" fill="#E36414"/><rect x="620" y="185" width="500" height="64" rx="12" fill="#E6F2F4" stroke="#E36414" stroke-width="2"/><text x="642" y="225" font-size="24" fill="#1F2937">⑧ 松开：11 像素内吸附</text><line x1="870" y1="249" x2="870" y2="285" stroke="#E36414" stroke-width="3"/><polygon points="870,290 862,277 878,277" fill="#E36414"/><rect x="620" y="290" width="500" height="64" rx="12" fill="#E6F2F4" stroke="#E36414" stroke-width="2"/><text x="642" y="330" font-size="24" fill="#1F2937">⑨ 标记 _in place?=true</text><line x1="870" y1="354" x2="870" y2="390" stroke="#E36414" stroke-width="3"/><polygon points="870,395 862,382 878,382" fill="#E36414"/><rect x="620" y="395" width="500" height="64" rx="12" fill="#E6F2F4" stroke="#E36414" stroke-width="2"/><text x="642" y="435" font-size="24" fill="#1F2937">⑩ pieces in place +1</text><line x1="870" y1="459" x2="870" y2="495" stroke="#E36414" stroke-width="3"/><polygon points="870,500 862,487 878,487" fill="#E36414"/><rect x="620" y="500" width="500" height="64" rx="12" fill="#E6F2F4" stroke="#E36414" stroke-width="2"/><text x="642" y="540" font-size="24" fill="#1F2937">⑪ = total？→ Win + 停表</text><line x1="870" y1="564" x2="870" y2="600" stroke="#E36414" stroke-width="3"/><polygon points="870,605 862,592 878,592" fill="#E36414"/><rect x="620" y="605" width="500" height="64" rx="12" fill="#E6F2F4" stroke="#E36414" stroke-width="2"/><text x="642" y="645" font-size="24" fill="#1F2937">⑫ 挑战：换图 / 加块</text><line x1="540" y1="505" x2="580" y2="505" stroke="#E36414" stroke-width="3"/><polygon points="585,505 572,497 572,513" fill="#E36414"/></svg>
+        <div style="text-align:center;font-size:22px;color:#0F4C5C;margin-top:8px">点图放大</div>
+      </div>
+      <div style="flex:1;background:#F2F8F9;border-radius:14px;padding:18px;cursor:zoom-in" class="zoomable" data-title="图2 · 程序关系">
+        <svg viewBox="0 0 1180 760" xmlns="http://www.w3.org/2000/svg" font-family="Microsoft YaHei,PingFang SC,sans-serif"><rect width="100%" height="100%" fill="#FFFFFF"/><text x="30" y="42" font-size="26" font-weight="700" fill="#0F4C5C">图2 · 程序关系（箭头=关联，方向=先后）</text><rect x="430" y="80" width="320" height="76" rx="10" fill="#FDF0E6" stroke="#0F4C5C" stroke-width="2"/><text x="590.0" y="113.0" font-size="22" text-anchor="middle" fill="#1F2937">Puzzle 克隆体</text><text x="590.0" y="139.0" font-size="22" text-anchor="middle" fill="#1F2937">（12 个，同一角色）</text><rect x="60" y="220" width="320" height="76" rx="10" fill="#E6F2F4" stroke="#0F4C5C" stroke-width="2"/><text x="220.0" y="253.0" font-size="21" text-anchor="middle" fill="#1F2937">点击拼图块</text><text x="220.0" y="279.0" font-size="21" text-anchor="middle" fill="#1F2937">记录偏移 X/Y Offset</text><rect x="430" y="220" width="320" height="76" rx="10" fill="#E6F2F4" stroke="#0F4C5C" stroke-width="2"/><text x="590.0" y="253.0" font-size="21" text-anchor="middle" fill="#1F2937">拖动跟随</text><text x="590.0" y="279.0" font-size="21" text-anchor="middle" fill="#1F2937">坐标 = 鼠标 + 偏移</text><rect x="800" y="220" width="320" height="76" rx="10" fill="#E6F2F4" stroke="#0F4C5C" stroke-width="2"/><text x="960.0" y="253.0" font-size="21" text-anchor="middle" fill="#1F2937">松开</text><text x="960.0" y="279.0" font-size="21" text-anchor="middle" fill="#1F2937">11 像素内 → 吸附对齐</text><rect x="800" y="370" width="320" height="76" rx="10" fill="#E6F2F4" stroke="#0F4C5C" stroke-width="2"/><text x="960.0" y="403.0" font-size="21" text-anchor="middle" fill="#1F2937">标记 _in place? = true</text><text x="960.0" y="429.0" font-size="21" text-anchor="middle" fill="#1F2937">这块拼图不给再拖</text><rect x="430" y="370" width="320" height="76" rx="10" fill="#E6F2F4" stroke="#0F4C5C" stroke-width="2"/><text x="590.0" y="403.0" font-size="21" text-anchor="middle" fill="#1F2937">pieces in place +1</text><text x="590.0" y="429.0" font-size="21" text-anchor="middle" fill="#1F2937">已归位几块</text><rect x="430" y="520" width="320" height="76" rx="10" fill="#E6F2F4" stroke="#0F4C5C" stroke-width="2"/><text x="590.0" y="553.0" font-size="21" text-anchor="middle" fill="#1F2937">= total pieces？</text><text x="590.0" y="579.0" font-size="21" text-anchor="middle" fill="#1F2937">→ Win + 停表</text><rect x="60" y="370" width="320" height="76" rx="10" fill="#E6F2F4" stroke="#0F4C5C" stroke-width="2"/><text x="220.0" y="403.0" font-size="21" text-anchor="middle" fill="#1F2937">Your time</text><text x="220.0" y="429.0" font-size="21" text-anchor="middle" fill="#1F2937">每秒 +1（舞台计时）</text><rect x="60" y="600" width="320" height="76" rx="10" fill="#E6F2F4" stroke="#0F4C5C" stroke-width="2"/><text x="220.0" y="633.0" font-size="21" text-anchor="middle" fill="#1F2937">克隆启动：隐藏本体</text><text x="220.0" y="659.0" font-size="21" text-anchor="middle" fill="#1F2937">打散 12 块，不贴边</text><line x1="590" y1="156" x2="220" y2="220" stroke="#E36414" stroke-width="3"/><circle cx="220" cy="220" r="5" fill="#E36414"/><line x1="590" y1="156" x2="590" y2="220" stroke="#E36414" stroke-width="3"/><circle cx="590" cy="220" r="5" fill="#E36414"/><line x1="590" y1="156" x2="960" y2="220" stroke="#E36414" stroke-width="3"/><circle cx="960" cy="220" r="5" fill="#E36414"/><line x1="380" y1="258" x2="430" y2="258" stroke="#E36414" stroke-width="3"/><circle cx="430" cy="258" r="5" fill="#E36414"/><line x1="750" y1="258" x2="800" y2="258" stroke="#E36414" stroke-width="3"/><circle cx="800" cy="258" r="5" fill="#E36414"/><line x1="960" y1="296" x2="960" y2="370" stroke="#E36414" stroke-width="3"/><circle cx="960" cy="370" r="5" fill="#E36414"/><line x1="800" y1="408" x2="750" y2="408" stroke="#E36414" stroke-width="3"/><circle cx="750" cy="408" r="5" fill="#E36414"/><line x1="590" y1="446" x2="590" y2="520" stroke="#E36414" stroke-width="3"/><circle cx="590" cy="520" r="5" fill="#E36414"/><line x1="220" y1="258" x2="220" y2="370" stroke="#E36414" stroke-width="3"/><circle cx="220" cy="370" r="5" fill="#E36414"/><line x1="220" y1="446" x2="430" y2="558" stroke="#E36414" stroke-width="3"/><circle cx="430" cy="558" r="5" fill="#E36414"/><line x1="430" y1="296" x2="430" y2="370" stroke="#E36414" stroke-width="3"/><circle cx="430" cy="370" r="5" fill="#E36414"/><text x="60" y="740" font-size="18" fill="#8A6A16">环路：拖 → 吸 → 标记 → 计数 → 判完成；没拼完就继续拖下一块。</text></svg>
+        <div style="text-align:center;font-size:22px;color:#0F4C5C;margin-top:8px">点图放大</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">教师教案 · 90 分钟</div>
+    <h1>时间分配与卡点</h1>
+    <table>
+      <tr><th style="width:16%">时段</th><th style="width:34%">干什么</th><th>卡点 / 提醒</th></tr>
+      <tr><td>0-5</td><td>玩成品 30 秒，说出三条规则</td><td>先体验，不急着讲积木</td></tr>
+      <tr><td>5-15</td><td>认 5 个角色、四个变量</td><td>_in place? 是每块自己的开关</td></tr>
+      <tr><td>15-30</td><td>克隆 12 块、打散</td><td>本体隐藏；随机位置别贴边</td></tr>
+      <tr><td>30-55</td><td>拖动偏移 → 松开吸附</td><td>先记偏移，再跟随；吸附阈值 11 像素</td></tr>
+      <tr><td>55-70</td><td>归位标记、计数、完成判定</td><td>少了标记，拼好还能被拎走</td></tr>
+      <tr><td>70-85</td><td>计时、音效、挑战</td><td>先跑通再美化</td></tr>
+      <tr><td>85-90</td><td>展示 + 一句话复盘</td><td>讲清“克隆 + 状态变量”这套思路</td></tr>
+    </table>
+    <div class="hint">学生分两档：基础=跑通原版并说清三个变量；进阶=换图或加块、改 11 像素阈值试手感。</div>
   </section>
 
   <section class="slide pad">
@@ -387,6 +429,23 @@ document.getElementById('prev').onclick=()=>go(-1);
 document.getElementById('next').onclick=()=>go(1);
 const _h=parseInt((location.hash||'').slice(1));
 if(_h>0 && _h<=slides.length) i=_h-1;
+
+// 思维导图点击放大（手机可上下滚，+/− 调大小）
+const _z=document.createElement('div'); _z.id='zoom';
+_z.innerHTML='<div class="bar2"><button data-z="out">−</button><button data-z="in">＋</button><button data-z="close">关闭</button></div><div id="zbody"></div>';
+document.body.appendChild(_z);
+let _zw=96;
+function _apply(){const s=_z.querySelector('svg'); if(s) s.style.width=_zw+'vw';}
+document.querySelectorAll('.zoomable').forEach(el=>el.addEventListener('click',()=>{
+  _zw=96; _z.querySelector('#zbody').innerHTML=el.querySelector('svg').outerHTML;
+  _z.classList.add('on'); _apply();
+}));
+_z.addEventListener('click',e=>{
+  const act=e.target.getAttribute('data-z');
+  if(act==='close'||e.target===_z){ _z.classList.remove('on'); return; }
+  if(act==='in'){ _zw=Math.min(260,_zw+20); _apply(); }
+  if(act==='out'){ _zw=Math.max(60,_zw-20); _apply(); }
+});
 paint();
 </script>
 </body>
