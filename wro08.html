@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>古迹文明 · 摆位对位课</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#1A1A1A;overflow:hidden;
+    font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+  #stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;
+    transform-origin:center center;background:#FFFFFF;
+    box-shadow:0 0 60px rgba(0,0,0,.5);overflow:hidden}
+  .slide{position:absolute;inset:0;padding:64px 110px;display:none;
+    flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .bar{position:absolute;left:0;top:0;width:100%;height:14px;background:#E36414}
+  .kicker{font-size:20px;font-weight:700;color:#E36414;letter-spacing:.04em;margin:0 0 10px}
+  h1{font-size:48px;font-weight:700;color:#0F4C5C;line-height:1.2;margin-bottom:34px}
+  ul{list-style:none;margin-top:6px}
+  li{font-size:33px;line-height:1.5;color:#1F2937;margin-bottom:20px;padding-left:44px;position:relative}
+  li:before{content:"▪";position:absolute;left:2px;top:-2px;color:#E36414;font-weight:700}
+  .hint{font-size:31px;line-height:1.55;color:#8A6A16;background:#FBF1D8;
+    border-left:8px solid #D9A21B;padding:18px 26px;margin:16px 0;border-radius:0 8px 8px 0}
+  .ans{font-size:33px;line-height:1.5;color:#0F4C5C;background:#F2F8F9;
+    border-left:8px solid #E36414;padding:18px 26px;margin:10px 0 18px 26px;border-radius:0 8px 8px 0}
+  .cols{display:flex;gap:30px;margin-top:8px}
+  .card{flex:1;background:#F2F8F9;border-radius:12px;padding:24px 28px;font-size:30px;line-height:1.5;color:#1F2937}
+  .card b{display:block;color:#0F4C5C;font-size:30px;margin-bottom:10px}
+  .card.warn{background:#FBF1D8}
+  .card.warn b{color:#8A6A16}
+  .big{font-size:60px;font-weight:700;color:#E36414;line-height:1.1}
+  .reveal{color:transparent!important;user-select:none;position:relative;transition:color .25s ease}
+  .reveal::after{content:"?";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    color:#BCC9CD;font-size:30px;font-weight:300;background-color:#F1F6F7;
+    background-image:repeating-linear-gradient(135deg,rgba(15,76,92,.05) 0 12px,transparent 12px 24px);border-radius:8px}
+  .reveal.show{color:inherit!important;user-select:auto!important}
+  .reveal.show::after{display:none}
+
+  .cover{background:#0F4C5C;flex-direction:row;align-items:center;justify-content:space-between;padding:0 110px 0 140px}
+  .cover h1{color:#FFFFFF;font-size:68px;margin-bottom:22px}
+  .cover .kicker{color:#BFD9DF;font-size:22px;margin-bottom:18px;letter-spacing:.1em}
+  .cover .sub{color:#BFD9DF;font-size:28px;line-height:1.6}
+  .cover .bar{background:#E36414}
+
+  /* 发车位总览页 */
+  .poswrap{display:flex;gap:22px;flex:1;min-height:0}
+  .poscol{flex:1;display:flex;flex-direction:column;min-width:0;border:1.5px solid #D7E2E5;border-radius:10px;overflow:hidden}
+  .poscol h3{font-size:23px;color:#fff;padding:9px 14px}
+  .poscol.cR h3{background:#D64545}.poscol.cL h3{background:#3B6FB6}.poscol.cG h3{background:#3E8E55}
+  .poscol svg{width:100%;height:auto;display:block;background:#fff;border-bottom:1.5px solid #D7E2E5}
+  .poslist{padding:8px 12px;font-size:17.5px;line-height:1.4;color:#1F2937}
+  .poslist .row{display:flex;gap:7px;padding:5px 0;border-bottom:1px dashed #E3ECEE}
+  .poslist .row:last-child{border-bottom:0}
+  .poslist .tag{flex:0 0 21px;height:21px;border-radius:50%;color:#fff;font-weight:700;font-size:14px;
+    display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .cR .tag{background:#D64545}.cL .tag{background:#3B6FB6}.cG .tag{background:#3E8E55}
+  .poslist .t1{font-weight:700;color:#0F4C5C;white-space:nowrap}
+  .poslist .t2{color:#6B7280}
+  .tapenote{font-size:18px;color:#8A6A16;margin-top:8px}
+
+  /* 流程页时间轴 */
+  .flow{display:flex;gap:18px;margin-top:10px}
+  .step{flex:1;background:#F2F8F9;border-radius:12px;padding:22px 22px;font-size:27px;line-height:1.5}
+  .step .t{display:block;font-size:46px;font-weight:700;color:#E36414;margin-bottom:8px}
+  .step b{color:#0F4C5C}
+
+  #foot{position:absolute;left:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #pager{position:absolute;right:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #hint{position:absolute;right:72px;bottom:52px;font-size:15px;color:#C2C9CB;letter-spacing:.12em;transition:opacity .3s}
+  #nav{position:fixed;right:18px;bottom:18px;display:none;gap:12px;z-index:10}
+  #nav button{width:64px;height:64px;border-radius:50%;border:0;background:rgba(15,76,92,.85);color:#fff;font-size:34px;line-height:1}
+  #rotate{position:fixed;inset:0;background:#0F4C5C;color:#fff;display:none;align-items:center;justify-content:center;font-size:20px;z-index:20}
+  @media (max-width:900px){#nav{display:flex}}
+  @media (max-width:900px) and (orientation:portrait){#rotate{display:flex}}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- 1 封面 -->
+  <section class="slide cover on">
+    <div class="bar"></div>
+    <div>
+      <div class="kicker">WRO 2026 · 古迹文明 · 集训</div>
+      <h1>发车位：一贴一瞄</h1>
+      <div class="sub">初始位置和角度，10 秒摆成一模一样<br>路线已定，程序框架已搭好——赢在起点</div>
+    </div>
+    <svg viewBox="0 0 300 300" style="width:360px;height:360px" fill="none">
+      <circle cx="150" cy="150" r="120" stroke="#E36414" stroke-width="6" opacity=".85"/>
+      <path d="M60 200 L150 150 L240 100" stroke="#BFD9DF" stroke-width="5" stroke-dasharray="10 8"/>
+      <rect x="132" y="138" width="40" height="24" rx="4" fill="#E36414"/>
+      <path d="M172 150 L188 142 L188 158 z" fill="#BFD9DF"/>
+      <path d="M120 210 h28 M120 210 v-28" stroke="#F5C518" stroke-width="9" stroke-linecap="round"/>
+      <circle cx="240" cy="100" r="12" fill="#BFD9DF"/>
+    </svg>
+  </section>
+
+  <!-- 2 问题演示 -->
+  <section class="slide">
+    <div class="bar"></div>
+    <div class="kicker">先看一个现象</div>
+    <h1>同一个程序，连跑两次，落点为什么差一截？</h1>
+    <div class="cols">
+      <div class="card"><b>第一次</b>车摆得正，到点正好。</div>
+      <div class="card warn"><b>第二次</b>程序没动，只车头随手歪了一点点，落点偏了一大截，任务没做成。</div>
+    </div>
+    <div class="ans reveal" style="margin-top:26px">程序没毛病。起点歪 5°，跑得越远偏得越多——<b>摆位决定结果，不是参数。</b></div>
+    <div class="hint reveal">今天只解决一件事：不管谁摆、摆几次，起点的位置和角度都一模一样。</div>
+  </section>
+
+  <!-- 3 一贴一瞄 -->
+  <section class="slide">
+    <div class="bar"></div>
+    <div class="kicker">方法只有两个动作</div>
+    <h1>一贴锁位置，一瞄锁角度</h1>
+    <div class="cols">
+      <div class="card">
+        <b>① 一贴（位置）</b>
+        车屁股/后轮轴<b>贴死</b>场地现成的东西，推到推不动为止：<br>
+        场地垫外沿直角 → 安全区圆边 → 贴纸交界线。<br>
+        <span style="color:#6B7280;font-size:26px">贴死了，位置唯一，不用量。</span>
+      </div>
+      <div class="card">
+        <b>② 一瞄（角度）</b>
+        沿边走：车身与边线平行，看两条缝等宽；<br>
+        斜着冲：<b>车头尖直接对住目标中心</b>（球门圆心/洋红块/博物馆圈）。<br>
+        <span style="color:#6B7280;font-size:26px">两点一线，不记角度数字。</span>
+      </div>
+    </div>
+    <div class="hint" style="margin-top:24px">摆好以后不许再碰车；按启动的人固定同一个人，同一姿势。</div>
+  </section>
+
+  <!-- 4 胶带与天然参照 -->
+  <section class="slide">
+    <div class="bar"></div>
+    <div class="kicker">练习期的笨办法，最有效</div>
+    <h1>先贴 L 形美纹纸，练熟再撕掉</h1>
+    <div class="cols">
+      <div class="card warn">
+        <b>练习时（可以贴）</b>
+        每个起点地上贴 L 形美纹纸：车屁股贴一条边、一个轮子贴另一条边，<b>一推到位，零思考</b>。
+        圆弧安全区出发的段，全靠它锁位置。
+      </div>
+      <div class="card">
+        <b>比赛时（不能留）</b>
+        撕掉胶带，改贴场地天然的线和角；沿边段直接贴边线。
+        撕掉前把「车在圆边的哪个位置」记进脑子和路线图。
+      </div>
+    </div>
+    <div class="hint reveal" style="margin-top:24px">顺序不能反：先靠胶带练出一模一样的摆法，再撕胶带复刻——不是一开始就凭感觉。</div>
+  </section>
+
+  <!-- 5 判断规则 -->
+  <section class="slide">
+    <div class="bar"></div>
+    <div class="kicker">跑歪了怎么办</div>
+    <h1>先回起点查摆位，别急着改秒数</h1>
+    <ul>
+      <li>车跑歪了：<b>第一步回起点重新贴、重新瞄</b>，同一个程序再跑一次。</li>
+      <li>同位置连跑 <b>3 次落点都一致</b>，摆位才算过关，之后才许调时间/功率。</li>
+      <li>时间和速度<b>一次只改一个</b>（老规矩）；摆位没定就改参数，是在追着影子跑。</li>
+    </ul>
+    <div class="hint">过关线：摆位 ≤ 10 秒，3 次落点一致。过了，这一段就进模拟赛。</div>
+  </section>
+
+  <!-- 6 十一个发车位总览 -->
+  <section class="slide pad" style="padding-top:44px;padding-bottom:40px">
+    <div class="bar"></div>
+    <div class="kicker" style="margin-bottom:6px">11 个发车位（草表，练习时对真场地微调胶带点）</div>
+    <h1 style="font-size:34px;margin-bottom:12px">贴哪、瞄哪，一段一张图</h1>
+    <div class="poswrap">
+      <!-- 红组 -->
+      <div class="poscol cR">
+        <h3>红组 · 奇琴伊察出发</h3>
+        <svg viewBox="0 0 600 450">
+          <rect x="0" y="225" width="300" height="225" fill="#E2EBCF"/>
+          <rect x="300" y="225" width="300" height="225" fill="#E4EFD6"/>
+          <circle cx="300" cy="225" r="74" fill="#FBF7EF" stroke="#0F4C5C" stroke-width="3"/>
+          <circle cx="58" cy="392" r="62" fill="#fff" fill-opacity=".85" stroke="#E36414" stroke-width="3"/>
+          <text x="58" y="388" text-anchor="middle" font-size="16" font-weight="700" fill="#0F4C5C">奇琴伊察</text>
+          <circle cx="146" cy="282" r="11" fill="none" stroke="#B45309" stroke-width="3"/>
+          <circle cx="223" cy="278" r="11" fill="none" stroke="#B45309" stroke-width="3"/>
+          <text x="146" y="262" text-anchor="middle" font-size="12" font-weight="700" fill="#B45309">球1</text>
+          <text x="223" y="305" text-anchor="middle" font-size="12" font-weight="700" fill="#B45309">球2</text>
+          <rect x="168" y="395" width="14" height="11" fill="#C9971B" stroke="#7C5A08"/>
+          <text x="190" y="422" font-size="11" fill="#7C5A08">奖杯</text>
+          <path d="M118 356 L138 296" stroke="#D64545" stroke-width="2" stroke-dasharray="6 5"/>
+          <path d="M126 372 L203 292" stroke="#D64545" stroke-width="2" stroke-dasharray="6 5"/>
+          <path d="M162 372 L178 396" stroke="#D64545" stroke-width="2" stroke-dasharray="6 5"/>
+          <g fill="none" stroke="#F5C518" stroke-width="6" stroke-linecap="round">
+            <path d="M96 344 h26 M96 344 v26"/>
+            <path d="M104 360 h26 M104 360 v26"/>
+            <path d="M146 350 h24 M146 350 v22"/>
+          </g>
+          <g font-weight="700" font-size="16" fill="#D64545">
+            <circle cx="96" cy="344" r="13" fill="#D64545"/><text x="96" y="350" text-anchor="middle" fill="#fff" font-size="14">1</text>
+            <circle cx="104" cy="360" r="13" fill="#D64545"/><text x="104" y="366" text-anchor="middle" fill="#fff" font-size="14">2</text>
+            <circle cx="186" cy="420" r="13" fill="#D64545"/><text x="186" y="426" text-anchor="middle" fill="#fff" font-size="14">6</text>
+          </g>
+          <g font-size="14" font-weight="700" fill="#B8860B">
+            <text x="66" y="330">A</text><text x="138" y="392">B</text><text x="178" y="348">E</text>
+          </g>
+        </svg>
+        <div class="poslist">
+          <div class="row"><span class="tag">1</span><span><span class="t1">贴胶带 A</span> <span class="t2">· 瞄球1圆心，直进推出、倒回</span></span></div>
+          <div class="row"><span class="tag">2</span><span><span class="t1">贴胶带 B</span> <span class="t2">· 瞄球2圆心，同①换球门</span></span></div>
+          <div class="row"><span class="tag">6</span><span><span class="t1">贴胶带 E</span> <span class="t2">· 瞄奖杯，两球落地后贴地慢推，杯要直立</span></span></div>
+        </div>
+      </div>
+      <!-- 蓝组 -->
+      <div class="poscol cL">
+        <h3>蓝组 · 左边线 / 万神殿</h3>
+        <svg viewBox="0 0 600 450">
+          <rect x="0" y="0" width="300" height="225" fill="#EFE6D8"/>
+          <rect x="0" y="225" width="300" height="225" fill="#E2EBCF"/>
+          <circle cx="300" cy="225" r="74" fill="#FBF7EF" stroke="#0F4C5C" stroke-width="3"/>
+          <text x="300" y="220" text-anchor="middle" font-size="15" font-weight="700" fill="#0F4C5C">博物馆</text>
+          <text x="300" y="238" text-anchor="middle" font-size="12" fill="#0F4C5C">停靠圈</text>
+          <circle cx="58" cy="58" r="62" fill="#fff" fill-opacity=".85" stroke="#E36414" stroke-width="3"/>
+          <text x="58" y="54" text-anchor="middle" font-size="15" font-weight="700" fill="#0F4C5C">万神殿</text>
+          <circle cx="58" cy="392" r="62" fill="#fff" fill-opacity=".7" stroke="#E36414" stroke-width="2" stroke-dasharray="6 5"/>
+          <rect x="168" y="121" width="12" height="12" fill="#B8A98F" stroke="#6E6250"/>
+          <text x="186" y="131" font-size="11" fill="#6E6250">石柱</text>
+          <path d="M72 330 L72 122" stroke="#3B6FB6" stroke-width="2.5"/>
+          <path d="M104 100 L162 122" stroke="#3B6FB6" stroke-width="2" stroke-dasharray="6 5"/>
+          <path d="M110 104 L250 192" stroke="#3B6FB6" stroke-width="2" stroke-dasharray="6 5"/>
+          <rect x="2" y="318" width="14" height="24" fill="none" stroke="#F5C518" stroke-width="5"/>
+          <g fill="none" stroke="#F5C518" stroke-width="6" stroke-linecap="round">
+            <path d="M92 92 h24 M92 92 v22"/>
+            <path d="M118 110 h24 M118 110 v-20"/>
+          </g>
+          <g font-weight="700" fill="#3B6FB6">
+            <circle cx="58" cy="225" r="13" fill="#3B6FB6"/><text x="58" y="231" text-anchor="middle" fill="#fff" font-size="14">3</text>
+            <circle cx="132" cy="92" r="13" fill="#3B6FB6"/><text x="132" y="98" text-anchor="middle" fill="#fff" font-size="14">4</text>
+            <circle cx="186" cy="140" r="13" fill="#3B6FB6"/><text x="186" y="146" text-anchor="middle" fill="#fff" font-size="14">5</text>
+          </g>
+          <g font-size="14" font-weight="700" fill="#B8860B">
+            <text x="24" y="356">边线</text><text x="122" y="80">C</text><text x="150" y="100">D</text>
+          </g>
+        </svg>
+        <div class="poslist">
+          <div class="row"><span class="tag">3</span><span><span class="t1">车左肋贴死左边线</span> <span class="t2">· 边与线平行，直上到万神殿</span></span></div>
+          <div class="row"><span class="tag">4</span><span><span class="t1">贴胶带 C</span> <span class="t2">· 瞄石柱，伸臂勾、倒带回、柱直立</span></span></div>
+          <div class="row"><span class="tag">5</span><span><span class="t1">贴胶带 D</span> <span class="t2">· 带珍宝瞄博物馆圈中心直进</span></span></div>
+        </div>
+      </div>
+      <!-- 绿组 -->
+      <div class="poscol cG">
+        <h3>绿组 · 吴哥窟 / 舒什塔尔</h3>
+        <svg viewBox="0 0 600 450">
+          <rect x="300" y="0" width="300" height="225" fill="#E7EACB"/>
+          <rect x="300" y="225" width="300" height="225" fill="#E4EFD6"/>
+          <path d="M600 122 C562 126 536 150 520 182 C506 206 470 216 440 228 C432 231 426 240 420 250" fill="none" stroke="#8FCFE0" stroke-width="16"/>
+          <ellipse cx="450" cy="345" rx="72" ry="58" fill="#A9DCEA"/>
+          <ellipse cx="450" cy="345" rx="36" ry="28" fill="#5FB4D6"/>
+          <text x="450" y="342" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">湖泊</text>
+          <circle cx="300" cy="225" r="74" fill="#FBF7EF" stroke="#0F4C5C" stroke-width="3"/>
+          <circle cx="542" cy="58" r="62" fill="#fff" fill-opacity=".85" stroke="#E36414" stroke-width="3"/>
+          <text x="542" y="54" text-anchor="middle" font-size="14" font-weight="700" fill="#0F4C5C">舒什塔尔</text>
+          <circle cx="542" cy="392" r="62" fill="#fff" fill-opacity=".85" stroke="#E36414" stroke-width="3"/>
+          <text x="542" y="388" text-anchor="middle" font-size="14" font-weight="700" fill="#0F4C5C">吴哥窟</text>
+          <g transform="translate(378 90) rotate(-24)"><rect x="-13" y="-4" width="26" height="8" rx="2" fill="#7A2A44"/><rect x="-9" y="-1.4" width="18" height="2.8" fill="#EC1C8A"/></g>
+          <rect x="352" y="104" width="10" height="10" fill="#EC1C8A"/>
+          <g transform="translate(524 172) rotate(28)"><rect x="-13" y="-4" width="26" height="8" rx="2" fill="#7A2A44"/><rect x="-9" y="-1.4" width="18" height="2.8" fill="#EC1C8A"/></g>
+          <rect x="500" y="192" width="10" height="10" fill="#EC1C8A"/>
+          <g fill="#F5C518" stroke="#8A6A16" stroke-width="1.2">
+            <circle cx="575" cy="30" r="7"/><circle cx="586" cy="78" r="7"/>
+          </g>
+          <path d="M496 356 L460 344" stroke="#3E8E55" stroke-width="2" stroke-dasharray="6 5"/>
+          <path d="M500 338 L522 186" stroke="#3E8E55" stroke-width="2" stroke-dasharray="6 5"/>
+          <path d="M582 332 L582 120" stroke="#3E8E55" stroke-width="2.5"/>
+          <path d="M498 98 L372 90" stroke="#3E8E55" stroke-width="2" stroke-dasharray="6 5"/>
+          <path d="M492 106 L368 190" stroke="#3E8E55" stroke-width="2" stroke-dasharray="6 5"/>
+          <rect x="586" y="318" width="12" height="24" fill="none" stroke="#F5C518" stroke-width="5"/>
+          <g fill="none" stroke="#F5C518" stroke-width="6" stroke-linecap="round">
+            <path d="M484 348 h22 M484 348 v-20"/>
+            <path d="M498 322 h20 M498 322 v-20"/>
+            <path d="M492 96 h-22 M492 96 v22"/>
+            <path d="M472 128 h-20 M472 128 v-18"/>
+          </g>
+          <g font-weight="700" fill="#3E8E55">
+            <circle cx="480" cy="330" r="12" fill="#3E8E55"/><text x="480" y="335" text-anchor="middle" fill="#fff" font-size="13">7</text>
+            <circle cx="486" cy="252" r="12" fill="#3E8E55"/><text x="486" y="257" text-anchor="middle" fill="#fff" font-size="13">8</text>
+            <circle cx="586" cy="300" r="12" fill="#3E8E55"/><text x="586" y="305" text-anchor="middle" fill="#fff" font-size="13">9</text>
+            <circle cx="440" cy="66" r="12" fill="#3E8E55"/><text x="440" y="71" text-anchor="middle" fill="#fff" font-size="13">10</text>
+            <circle cx="420" cy="150" r="12" fill="#3E8E55"/><text x="420" y="155" text-anchor="middle" fill="#fff" font-size="13">11</text>
+          </g>
+          <g font-size="13" font-weight="700" fill="#B8860B">
+            <text x="512" y="366">F</text><text x="524" y="316">G</text><text x="500" y="92">H</text><text x="442" y="122">I</text><text x="560" y="106">边线</text>
+          </g>
+        </svg>
+        <div class="poslist">
+          <div class="row"><span class="tag">7</span><span><span class="t1">贴胶带 F</span> <span class="t2">· 瞄湖泊标记，原套路倒回</span></span></div>
+          <div class="row"><span class="tag">8</span><span><span class="t1">贴溪边胶带 G</span> <span class="t2">· 瞄闸1洋红块推离水道</span></span></div>
+          <div class="row"><span class="tag">9</span><span><span class="t1">车右肋贴死右边线</span> <span class="t2">· 直上到舒什塔尔</span></span></div>
+          <div class="row"><span class="tag">10</span><span><span class="t1">贴胶带 H</span> <span class="t2">· 瞄闸2洋红块，水车别碰</span></span></div>
+          <div class="row"><span class="tag">11</span><span><span class="t1">贴胶带 I</span> <span class="t2">· 带珍宝瞄博物馆圈直进</span></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="tapenote">黄色 └ 形 = 练习用美纹纸卡位；虚线 = 车头尖瞄的方向。A–I 九个胶带点，两人练习时按真场地微调后定死。</div>
+  </section>
+
+  <!-- 7 课堂流程 -->
+  <section class="slide">
+    <div class="bar"></div>
+    <div class="kicker">这节课怎么上</div>
+    <h1>讲 10 分钟，剩下全是练</h1>
+    <div class="flow">
+      <div class="step"><span class="t">10′</span><b>讲+演</b><br>歪车演示，一贴一瞄，胶带怎么贴。</div>
+      <div class="step"><span class="t">40′</span><b>分段练</b><br>每人 3 段，贴→瞄→连跑 3 次落点一致，过了换下一段。</div>
+      <div class="step"><span class="t">40′</span><b>模拟赛</b><br>撕胶带按比赛摆位，11 段接力跑全，按 3 次成 2 记分。</div>
+    </div>
+    <div class="hint">两人分工照老规矩：一人操作、一人看表记录（背面表格），每轮交换。</div>
+  </section>
+
+  <!-- 8 结尾 -->
+  <section class="slide cover">
+    <div class="bar"></div>
+    <div>
+      <div class="kicker">今天的过关线</div>
+      <h1>10 秒摆好，3 次一样</h1>
+      <div class="sub">程序是死的，起点是活的——<br>谁的车每次都从同一个点、同一个方向出发，谁就稳。</div>
+    </div>
+    <svg viewBox="0 0 300 300" style="width:340px;height:340px" fill="none">
+      <circle cx="150" cy="150" r="110" stroke="#BFD9DF" stroke-width="4"/>
+      <path d="M120 210 h30 M120 210 v-30" stroke="#F5C518" stroke-width="10" stroke-linecap="round"/>
+      <rect x="132" y="146" width="40" height="24" rx="4" fill="#E36414"/>
+      <path d="M172 158 L188 150 L188 166 z" fill="#BFD9DF"/>
+      <path d="M150 146 L150 60" stroke="#BFD9DF" stroke-width="4" stroke-dasharray="9 7"/>
+      <circle cx="150" cy="52" r="9" fill="#BFD9DF"/>
+    </svg>
+  </section>
+
+</div>
+
+<div id="hint">空格 揭晓答案 · ← → 翻页</div>
+<div id="pager"></div>
+<div id="foot">WRO 古迹文明集训 · 发车位 v1 · 2026-11-28</div>
+<div id="nav"><button id="prev">‹</button><button id="next">›</button></div>
+<div id="rotate">请横过手机使用</div>
+
+<script>
+const stage=document.getElementById('stage');
+const slides=[...document.querySelectorAll('.slide')];
+const pager=document.getElementById('pager');
+const hint=document.getElementById('hint');
+let i=0;
+function view(){
+  const v=window.visualViewport;
+  const w=Math.min(innerWidth,v?v.width:innerWidth,screen.width||innerWidth);
+  const h=Math.min(innerHeight,v?v.height:innerHeight,screen.height||innerHeight);
+  return {w,h};
+}
+function fit(){
+  const {w,h}=view();
+  const s=Math.min(w/1600,h/900);
+  stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+  const rot=document.getElementById('rotate');
+  if(rot) rot.style.display=(!rot.dataset.off && h>w && w<=1000)?'flex':'none';
+}
+addEventListener('resize',fit);
+addEventListener('orientationchange',()=>setTimeout(fit,200));
+if(window.visualViewport){visualViewport.addEventListener('resize',fit);visualViewport.addEventListener('scroll',fit);}
+fit();
+function paint(){
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  slides[i].querySelectorAll('.reveal').forEach(e=>e.classList.remove('show'));
+  pager.textContent=(i+1)+' / '+slides.length;
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+function go(d){i=Math.max(0,Math.min(slides.length-1,i+d));paint();}
+function reveal(){
+  const n=slides[i].querySelector('.reveal:not(.show)');
+  if(n)n.classList.add('show');
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+addEventListener('keydown',e=>{
+  if(['ArrowRight','PageDown'].includes(e.key)){e.preventDefault();go(1)}
+  else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(-1)}
+  else if(e.key===' '||e.key==='Enter'){e.preventDefault();reveal()}
+  else if(e.key==='a'||e.key==='A'){e.preventDefault();slides[i].querySelectorAll('.reveal').forEach(x=>x.classList.add('show'));hint.style.opacity=0}
+  else if(e.key==='Home'){i=0;paint()}
+  else if(e.key==='End'){i=slides.length-1;paint()}
+  else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+});
+let _lastTouch=0;
+stage.addEventListener('click',()=>{if(Date.now()-_lastTouch<600)return;reveal();});
+let _sx=0,_sy=0;
+stage.addEventListener('touchstart',e=>{const t=e.touches[0];_sx=t.clientX;_sy=t.clientY;},{passive:true});
+stage.addEventListener('touchend',e=>{
+  _lastTouch=Date.now();
+  const t=e.changedTouches[0],dx=t.clientX-_sx,dy=t.clientY-_sy;
+  if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){go(dx<0?1:-1);}else{reveal();}
+},{passive:true});
+document.getElementById('prev').onclick=()=>go(-1);
+document.getElementById('next').onclick=()=>go(1);
+paint();
+</script>
+</body>
+</html>
