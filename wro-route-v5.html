@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>古迹文明 · 赛道路线 11 段（双面打印版 v5）</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#fff;font-family:"Microsoft YaHei","PingFang SC",sans-serif;color:#1F2937}
+  .page{width:1600px;height:900px;padding:26px 40px 22px;display:flex;flex-direction:column;
+    page-break-after:always;position:relative}
+  .bar{position:absolute;left:0;top:0;width:100%;height:12px;background:#E36414}
+  header{display:flex;align-items:baseline;gap:18px;margin-bottom:10px;flex:0 0 auto}
+  header h1{font-size:32px;color:#0F4C5C}
+  header .sub{font-size:17px;color:#6B7280}
+  .ver{display:inline-block;background:#E36414;color:#fff;font-size:19px;font-weight:700;
+    border-radius:8px;padding:4px 14px;margin-left:2px}
+
+  /* ========== 正面：大地图 + 窄侧栏 ========== */
+  .front-main{flex:1;display:flex;gap:22px;min-height:0}
+  .mapwrap{flex:1;display:flex;align-items:center;justify-content:center;min-width:0}
+  .mapwrap svg{height:100%;width:auto;max-width:100%}
+  .sidecol{flex:0 0 292px;display:flex;flex-direction:column;gap:10px}
+  .sidecard{border:1.5px solid #D7E2E5;border-radius:8px;padding:10px 14px}
+  .sidecard h3{font-size:17px;color:#0F4C5C;margin-bottom:6px}
+  .sidecard p,.sidecard li{font-size:15px;line-height:1.55;color:#374151}
+  .sidecard ul{padding-left:18px}
+  .legendline{font-size:15px;color:#374151;line-height:1.9}
+  .legendline i{display:inline-block;width:26px;height:6px;border-radius:3px;vertical-align:4px;margin:0 7px 0 4px}
+  .swatch{display:inline-block;width:13px;height:13px;border-radius:3px;vertical-align:-2px;margin-right:5px}
+  .warn{border-color:#E0B341;background:#FFFBEF}
+  .warn h3{color:#8A6A16}
+  .warn p{font-size:14.5px}
+
+  /* ========== 背面：记录表 + 规则 ========== */
+  .namerow{font-size:18px;color:#374151;margin:2px 0 10px;flex:0 0 auto}
+  .namerow u{display:inline-block;min-width:200px;border-bottom:1.5px solid #6B7280;text-decoration:none}
+  .back-table{width:100%;border-collapse:collapse;font-size:17px;flex:0 0 auto}
+  .back-table th{background:#0F4C5C;color:#fff;padding:7px 9px;text-align:left;font-size:16.5px}
+  .back-table td{border-bottom:1.5px solid #C9D6D9;padding:0 9px;height:49px;vertical-align:middle}
+  .back-table tr:nth-child(even) td{background:#F7FAFA}
+  .back-table td.n{text-align:center;font-weight:700;width:42px;font-size:19px}
+  .back-table td.r{width:190px;font-weight:700;color:#0F4C5C;white-space:nowrap}
+  .back-table td.a{font-size:15.5px;color:#374151}
+  .back-table td.t,.back-table td.p{width:130px}
+  .back-table td.k{width:150px;font-size:18px;color:#9CA3AF;letter-spacing:4px}
+  .L{color:#3B6FB6}.R{color:#3E8E55}.G{color:#D64545}
+  .rules{flex:1;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;margin-top:14px;min-height:0}
+  .rule{border:1.5px solid #D7E2E5;border-radius:8px;padding:12px 16px;display:flex;flex-direction:column;justify-content:flex-start}
+  .rule h3{font-size:16.5px;color:#0F4C5C;margin-bottom:5px}
+  .rule p{font-size:14.5px;line-height:1.5;color:#374151}
+  .rule.warn2{border-color:#E0B341;background:#FFFBEF}
+  .rule.warn2 h3{color:#8A6A16}
+
+  @media print{@page{size:A4 landscape;margin:6mm}html,body{background:#fff}.page{page-break-after:always}}
+  .print-only{position:absolute;left:-9999px;top:0}
+  @media print{.print-only{position:relative;left:auto;page-break-after:always}}
+</style>
+</head>
+<body>
+
+<!-- ================= 第 1 页（正面）：大地图 + 11 条路线 ================= -->
+<div class="page">
+  <div class="bar"></div>
+  <header>
+    <h1>古迹文明 · 赛道路线 11 段</h1>
+    <span class="ver">版本 v5</span>
+    <span class="sub">正面 · 照图跑：数字=程序段号，▬▶=车头出发朝向，实线=去程 虚线=回程</span>
+  </header>
+
+  <div class="front-main">
+    <div class="mapwrap">
+      <svg viewBox="0 0 600 450" font-family="Microsoft YaHei,PingFang SC,sans-serif">
+        <!-- 场地底图 -->
+        <rect x="0" y="0" width="300" height="225" fill="#EFE6D8"/>
+        <rect x="300" y="0" width="300" height="225" fill="#E7EACB"/>
+        <rect x="0" y="225" width="300" height="225" fill="#E2EBCF"/>
+        <rect x="300" y="225" width="300" height="225" fill="#E4EFD6"/>
+        <path d="M318 0 C338 40 352 68 368 96 C382 122 380 150 398 176 C412 196 420 220 420 250 C420 288 410 320 404 342" fill="none" stroke="#8FCFE0" stroke-width="24" stroke-linecap="round"/>
+        <path d="M318 0 C338 40 352 68 368 96 C382 122 380 150 398 176 C412 196 420 220 420 250 C420 288 410 320 404 342" fill="none" stroke="#C6E9F2" stroke-width="14" stroke-linecap="round"/>
+        <path d="M600 122 C562 126 536 150 520 182 C506 206 470 216 440 228 C432 231 426 240 420 250" fill="none" stroke="#8FCFE0" stroke-width="24" stroke-linecap="round"/>
+        <path d="M600 122 C562 126 536 150 520 182 C506 206 470 216 440 228 C432 231 426 240 420 250" fill="none" stroke="#C6E9F2" stroke-width="14" stroke-linecap="round"/>
+        <ellipse cx="450" cy="345" rx="72" ry="58" fill="#A9DCEA"/>
+        <ellipse cx="450" cy="345" rx="38" ry="30" fill="#5FB4D6"/>
+        <text x="450" y="341" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">湖泊</text>
+        <text x="450" y="357" text-anchor="middle" font-size="8.5" fill="#E8F6FB">浅蓝 / 深蓝</text>
+        <circle cx="300" cy="225" r="74" fill="#FBF7EF" stroke="#0F4C5C" stroke-width="3"/>
+        <text x="300" y="210" text-anchor="middle" font-size="15" font-weight="700" fill="#0F4C5C">博物馆</text>
+        <text x="300" y="231" text-anchor="middle" font-size="13" fill="#0F4C5C">停靠圈</text>
+
+        <circle cx="58" cy="58" r="62" fill="#FFFFFF" fill-opacity=".82" stroke="#E36414" stroke-width="3"/>
+        <text x="58" y="52" text-anchor="middle" font-size="14" font-weight="700" fill="#0F4C5C">万神殿</text>
+        <text x="58" y="70" text-anchor="middle" font-size="11" fill="#6B7280">安全区</text>
+        <circle cx="542" cy="58" r="62" fill="#FFFFFF" fill-opacity=".82" stroke="#E36414" stroke-width="3"/>
+        <text x="542" y="52" text-anchor="middle" font-size="14" font-weight="700" fill="#0F4C5C">舒什塔尔</text>
+        <text x="542" y="70" text-anchor="middle" font-size="11" fill="#6B7280">安全区</text>
+        <circle cx="58" cy="392" r="62" fill="#FFFFFF" fill-opacity=".82" stroke="#E36414" stroke-width="3"/>
+        <text x="58" y="386" text-anchor="middle" font-size="14" font-weight="700" fill="#0F4C5C">奇琴伊察</text>
+        <text x="58" y="404" text-anchor="middle" font-size="11" fill="#6B7280">安全区</text>
+        <circle cx="542" cy="392" r="62" fill="#FFFFFF" fill-opacity=".82" stroke="#E36414" stroke-width="3"/>
+        <text x="542" y="386" text-anchor="middle" font-size="14" font-weight="700" fill="#0F4C5C">吴哥窟</text>
+        <text x="542" y="404" text-anchor="middle" font-size="11" fill="#6B7280">安全区</text>
+
+        <!-- 球门 -->
+        <circle cx="146" cy="282" r="11" fill="none" stroke="#B45309" stroke-width="3"/>
+        <circle cx="223" cy="278" r="11" fill="none" stroke="#B45309" stroke-width="3"/>
+        <text x="146" y="262" text-anchor="middle" font-size="11" font-weight="700" fill="#B45309">球1（下方球门）</text>
+        <text x="223" y="305" text-anchor="middle" font-size="11" font-weight="700" fill="#B45309">球2（上方球门）</text>
+        <path d="M168 395 h14 v11 h-14 z" fill="#C9971B" stroke="#7C5A08"/>
+        <text x="190" y="422" font-size="10" fill="#7C5A08">奖杯（两球落地后）</text>
+        <rect x="168" y="121" width="12" height="12" fill="#B8A98F" stroke="#6E6250"/>
+        <text x="186" y="131" font-size="10" fill="#6E6250">石柱</text>
+
+        <!-- 水闸：深红坝体横在水道中 + 洋红推块（推离水道得分） -->
+        <!-- 上方水闸 闸2：西北溪弯 -->
+        <g transform="translate(378 90) rotate(-24)">
+          <rect x="-15" y="-5" width="30" height="10" rx="2" fill="#7A2A44"/>
+          <rect x="-11" y="-1.6" width="22" height="3.2" fill="#EC1C8A"/>
+        </g>
+        <rect x="352" y="104" width="11" height="11" fill="#EC1C8A"/>
+        <text x="318" y="28" text-anchor="middle" font-size="11" font-weight="700" fill="#C2185B">闸2（上方水闸·推离水道）</text>
+        <!-- 下方水闸 闸1：东溪 -->
+        <g transform="translate(524 172) rotate(28)">
+          <rect x="-15" y="-5" width="30" height="10" rx="2" fill="#7A2A44"/>
+          <rect x="-11" y="-1.6" width="22" height="3.2" fill="#EC1C8A"/>
+        </g>
+        <rect x="499" y="192" width="11" height="11" fill="#EC1C8A"/>
+        <text x="566" y="150" text-anchor="end" font-size="11" font-weight="700" fill="#C2185B">闸1（下方水闸）</text>
+        <!-- 水车 ×2：舒什塔尔区内，黄色轮子，全程禁碰（碰了丢分） -->
+        <g>
+          <g transform="translate(575 30)">
+            <circle r="9" fill="#F5C518" stroke="#8A6A16" stroke-width="1.4"/>
+            <circle r="2.2" fill="#8A6A16"/>
+            <path d="M-6.5 0 H6.5 M0 -6.5 V6.5 M-4.6 -4.6 L4.6 4.6 M4.6 -4.6 L-4.6 4.6" stroke="#8A6A16" stroke-width="1.1"/>
+            <circle cy="-7" r="3.2" fill="#F5C518" stroke="#8A6A16" stroke-width="1.1"/>
+            <line x1="-6.5" y1="6.5" x2="6.5" y2="-6.5" stroke="#D62828" stroke-width="2.4" stroke-linecap="round"/>
+          </g>
+          <g transform="translate(586 80)">
+            <circle r="9" fill="#F5C518" stroke="#8A6A16" stroke-width="1.4"/>
+            <circle r="2.2" fill="#8A6A16"/>
+            <path d="M-6.5 0 H6.5 M0 -6.5 V6.5 M-4.6 -4.6 L4.6 4.6 M4.6 -4.6 L-4.6 4.6" stroke="#8A6A16" stroke-width="1.1"/>
+            <circle cy="-7" r="3.2" fill="#F5C518" stroke="#8A6A16" stroke-width="1.1"/>
+            <line x1="-6.5" y1="6.5" x2="6.5" y2="-6.5" stroke="#D62828" stroke-width="2.4" stroke-linecap="round"/>
+          </g>
+          <text x="586" y="16" text-anchor="end" font-size="11" font-weight="700" fill="#B8860B">水车×2 · 全程禁碰</text>
+        </g>
+        <rect x="512" y="350" width="22" height="13" fill="#8D6E63"/>
+        <text x="523" y="345" text-anchor="middle" font-size="9" fill="#4E342E">船屋</text>
+
+        <defs>
+          <marker id="aL" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="3.5" markerHeight="3.5"><path d="M0 0 L10 5 L0 10 z" fill="#3B6FB6"/></marker>
+          <marker id="aR" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="3.5" markerHeight="3.5"><path d="M0 0 L10 5 L0 10 z" fill="#3E8E55"/></marker>
+          <marker id="aG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="3.5" markerHeight="3.5"><path d="M0 0 L10 5 L0 10 z" fill="#D64545"/></marker>
+        </defs>
+
+        <!-- ① 奇→球1→奇 -->
+        <path d="M104 352 L134 304" fill="none" stroke="#D64545" stroke-width="4" marker-end="url(#aG)"/>
+        <path d="M134 304 L104 352" fill="none" stroke="#D64545" stroke-width="2.2" stroke-dasharray="7 6" opacity=".7"/>
+        <g transform="translate(104 352) rotate(-58)"><rect x="-11" y="-7" width="22" height="14" rx="2" fill="#D64545"/><path d="M11 0 L19 -5 L19 5 z" fill="#7A2020"/></g>
+        <circle cx="126" cy="322" r="12" fill="#D64545"/><text x="126" y="327" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">1</text>
+
+        <!-- ② 奇→球2→奇 -->
+        <path d="M112 372 L205 296" fill="none" stroke="#D64545" stroke-width="4" marker-end="url(#aG)"/>
+        <path d="M205 296 L112 372" fill="none" stroke="#D64545" stroke-width="2.2" stroke-dasharray="7 6" opacity=".7"/>
+        <g transform="translate(112 372) rotate(-41)"><rect x="-11" y="-7" width="22" height="14" rx="2" fill="#D64545"/><path d="M11 0 L19 -5 L19 5 z" fill="#7A2020"/></g>
+        <circle cx="172" cy="322" r="12" fill="#D64545"/><text x="172" y="327" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">2</text>
+
+        <!-- ③ 奇→万 -->
+        <path d="M72 330 L72 122" fill="none" stroke="#3B6FB6" stroke-width="4" marker-end="url(#aL)"/>
+        <g transform="translate(72 330) rotate(-90)"><rect x="-11" y="-7" width="22" height="14" rx="2" fill="#3B6FB6"/><path d="M11 0 L19 -5 L19 5 z" fill="#1E3F6E"/></g>
+        <circle cx="58" cy="225" r="12" fill="#3B6FB6"/><text x="58" y="230" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">3</text>
+
+        <!-- ④ 万→石→万 -->
+        <path d="M104 100 L158 120" fill="none" stroke="#3B6FB6" stroke-width="4" marker-end="url(#aL)"/>
+        <path d="M158 120 L104 100" fill="none" stroke="#3B6FB6" stroke-width="2.2" stroke-dasharray="7 6" opacity=".7"/>
+        <g transform="translate(104 100) rotate(20)"><rect x="-11" y="-7" width="22" height="14" rx="2" fill="#3B6FB6"/><path d="M11 0 L19 -5 L19 5 z" fill="#1E3F6E"/></g>
+        <circle cx="136" cy="96" r="12" fill="#3B6FB6"/><text x="136" y="101" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">4</text>
+
+        <!-- ⑤ 万→中 -->
+        <path d="M110 104 L238 188" fill="none" stroke="#3B6FB6" stroke-width="4" marker-end="url(#aL)"/>
+        <g transform="translate(110 104) rotate(34)"><rect x="-11" y="-7" width="22" height="14" rx="2" fill="#3B6FB6"/><path d="M11 0 L19 -5 L19 5 z" fill="#1E3F6E"/></g>
+        <circle cx="180" cy="150" r="12" fill="#3B6FB6"/><text x="180" y="155" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">5</text>
+
+        <!-- ⑥ 推奖杯回奇琴伊察 -->
+        <path d="M186 400 L118 392" fill="none" stroke="#D64545" stroke-width="4" marker-end="url(#aG)"/>
+        <g transform="translate(186 400) rotate(180)"><rect x="-11" y="-7" width="22" height="14" rx="2" fill="#D64545"/><path d="M11 0 L19 -5 L19 5 z" fill="#7A2020"/></g>
+        <circle cx="150" cy="424" r="12" fill="#D64545"/><text x="150" y="429" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">6</text>
+
+        <!-- ⑦ 吴→湖→吴 -->
+        <path d="M496 356 L466 346" fill="none" stroke="#3E8E55" stroke-width="4" marker-end="url(#aR)"/>
+        <path d="M466 346 L496 356" fill="none" stroke="#3E8E55" stroke-width="2.2" stroke-dasharray="7 6" opacity=".7"/>
+        <g transform="translate(496 356) rotate(-162)"><rect x="-11" y="-7" width="22" height="14" rx="2" fill="#3E8E55"/><path d="M11 0 L19 -5 L19 5 z" fill="#1E4A2B"/></g>
+        <circle cx="480" cy="328" r="12" fill="#3E8E55"/><text x="480" y="333" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">7</text>
+
+        <!-- ⑧ 吴→闸1→吴（贴溪流） -->
+        <path d="M500 338 L522 176" fill="none" stroke="#3E8E55" stroke-width="4" marker-end="url(#aR)"/>
+        <path d="M522 176 L500 338" fill="none" stroke="#3E8E55" stroke-width="2.2" stroke-dasharray="7 6" opacity=".7"/>
+        <g transform="translate(500 338) rotate(-98)"><rect x="-11" y="-7" width="22" height="14" rx="2" fill="#3E8E55"/><path d="M11 0 L19 -5 L19 5 z" fill="#1E4A2B"/></g>
+        <circle cx="486" cy="250" r="12" fill="#3E8E55"/><text x="486" y="255" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">8</text>
+
+        <!-- ⑨ 吴→舒（贴最右边框） -->
+        <path d="M582 332 L582 120" fill="none" stroke="#3E8E55" stroke-width="4" marker-end="url(#aR)"/>
+        <g transform="translate(582 332) rotate(-90)"><rect x="-11" y="-7" width="22" height="14" rx="2" fill="#3E8E55"/><path d="M11 0 L19 -5 L19 5 z" fill="#1E4A2B"/></g>
+        <circle cx="586" cy="300" r="12" fill="#3E8E55"/><text x="586" y="305" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">9</text>
+
+        <!-- ⑩ 舒→闸2→舒 -->
+        <path d="M498 98 L378 72" fill="none" stroke="#3E8E55" stroke-width="4" marker-end="url(#aR)"/>
+        <path d="M378 72 L498 98" fill="none" stroke="#3E8E55" stroke-width="2.2" stroke-dasharray="7 6" opacity=".7"/>
+        <g transform="translate(498 98) rotate(167)"><rect x="-11" y="-7" width="22" height="14" rx="2" fill="#3E8E55"/><path d="M11 0 L19 -5 L19 5 z" fill="#1E4A2B"/></g>
+        <circle cx="442" cy="62" r="12" fill="#3E8E55"/><text x="442" y="67" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">10</text>
+
+        <!-- ⑪ 舒→中 -->
+        <path d="M492 106 L362 190" fill="none" stroke="#3E8E55" stroke-width="4" marker-end="url(#aR)"/>
+        <g transform="translate(492 106) rotate(147)"><rect x="-11" y="-7" width="22" height="14" rx="2" fill="#3E8E55"/><path d="M11 0 L19 -5 L19 5 z" fill="#1E4A2B"/></g>
+        <circle cx="420" cy="150" r="12" fill="#3E8E55"/><text x="420" y="155" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">11</text>
+
+        <rect x="0.5" y="0.5" width="599" height="449" fill="none" stroke="#9CA3AF"/>
+      </svg>
+    </div>
+
+    <div class="sidecol">
+      <div class="sidecard">
+        <h3>路线分组</h3>
+        <p class="legendline"><i style="background:#D64545"></i>红 ①②⑥ 奇琴伊察出发：两球 + 奖杯</p>
+        <p class="legendline"><i style="background:#3B6FB6"></i>蓝 ③④⑤ 奇→万后，石柱 + 进馆</p>
+        <p class="legendline"><i style="background:#3E8E55"></i>绿 ⑦–⑪ 吴哥窟/舒什塔尔出发</p>
+        <p class="legendline" style="margin-top:6px;color:#6B7280;font-size:14px">实线=去程　虚线=回程<br>▬ 矩形=车身，小尖=车头方向</p>
+      </div>
+      <div class="sidecard">
+        <h3>怎么用这张图</h3>
+        <ul>
+          <li>路线已定死，照图上 1→11 顺序写程序段。</li>
+          <li>每段出发先看小尖方向，车身贴死边角。</li>
+          <li>跑通一段，参数记到背面表格。</li>
+        </ul>
+      </div>
+      <div class="sidecard warn">
+        <h3>水闸要推，水车别碰</h3>
+        <p>深红河坝 + 洋红块 = <b>水闸×2</b>：⑧⑩把它推离水道，每个 15 分。<br>黄色轮子带红斜杠 = <b>水车×2</b>：在舒什塔尔区内，全程禁碰，没碰白拿 20 分。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 第 2 页（背面）：调参记录表 + 规则 ================= -->
+<div class="page print-only">
+  <div class="bar"></div>
+  <header>
+    <h1 style="font-size:29px">调参记录表 · 规则说明</h1>
+    <span class="ver" style="background:#0F4C5C">版本 v5 · 背面</span>
+    <span class="sub">照正面图跑，每段实测的秒数和功率记在这页</span>
+  </header>
+
+  <div class="namerow">姓名：<u></u>　　日期：<u style="min-width:140px"></u>　　车号（左/右）：<u style="min-width:80px"></u></div>
+
+  <table class="back-table">
+    <tr><th style="width:42px">#</th><th style="width:190px">路线</th><th>动作要点</th><th style="width:130px">时间(秒)</th><th style="width:130px">功率</th><th style="width:150px">3 次成 2</th></tr>
+    <tr><td class="n G">1</td><td class="r">奇→球1→奇</td><td class="a">对准球门直进、把球推出、倒车回安全区</td><td class="t"></td><td class="p"></td><td class="k">□ □ □</td></tr>
+    <tr><td class="n G">2</td><td class="r">奇→球2→奇</td><td class="a">同①，换另一球门，重新量方向和距离</td><td class="t"></td><td class="p"></td><td class="k">□ □ □</td></tr>
+    <tr><td class="n L">3</td><td class="r">奇→万</td><td class="a">贴左边线直上，到万神殿安全区停</td><td class="t"></td><td class="p"></td><td class="k">□ □ □</td></tr>
+    <tr><td class="n L">4</td><td class="r">万→石柱→万</td><td class="a">伸臂勾住石柱、倒车带回、石柱保持直立</td><td class="t"></td><td class="p"></td><td class="k">□ □ □</td></tr>
+    <tr><td class="n L">5</td><td class="r">万→博物馆</td><td class="a">带珍宝直进中央博物馆停靠圈</td><td class="t"></td><td class="p"></td><td class="k">□ □ □</td></tr>
+    <tr><td class="n G">6</td><td class="r">奇→奖杯→奇</td><td class="a">①②两球都推出后，贴地慢推奖杯回奇琴伊察，奖杯须直立</td><td class="t"></td><td class="p"></td><td class="k">□ □ □</td></tr>
+    <tr><td class="n R">7</td><td class="r">吴→湖泊→吴</td><td class="a">出发到湖泊标记点，原程序套路倒回吴哥窟</td><td class="t"></td><td class="p"></td><td class="k">□ □ □</td></tr>
+    <tr><td class="n R">8</td><td class="r">吴→闸1→吴</td><td class="a">贴溪边上行，把下方水闸（洋红块）推离水道，原路回</td><td class="t"></td><td class="p"></td><td class="k">□ □ □</td></tr>
+    <tr><td class="n R">9</td><td class="r">吴→舒</td><td class="a">贴最右边线直上，到舒什塔尔安全区停</td><td class="t"></td><td class="p"></td><td class="k">□ □ □</td></tr>
+    <tr><td class="n R">10</td><td class="r">舒→闸2→舒</td><td class="a">把上方水闸推离水道，原路回；区内水车不能碰</td><td class="t"></td><td class="p"></td><td class="k">□ □ □</td></tr>
+    <tr><td class="n R">11</td><td class="r">舒→博物馆</td><td class="a">带珍宝直进中央博物馆停靠圈</td><td class="t"></td><td class="p"></td><td class="k">□ □ □</td></tr>
+  </table>
+
+  <div class="rules">
+    <div class="rule">
+      <h3>基础要求</h3>
+      <p>两台车左右对称、结构相同。赛前调试电池必须满电；换过电池，所有参数重新量一遍。水闸推离水道各 15 分；两个水车全程别碰，白拿 20 分。</p>
+    </div>
+    <div class="rule warn2">
+      <h3>调试规则（最重要）</h3>
+      <p>变量只有<b>时间</b>和<b>速度</b>两个。一次只改一个，改完连跑 3 次；3 次成 2 次才算这段过，不许两个数一起改。</p>
+    </div>
+    <div class="rule">
+      <h3>出发对位（难点）</h3>
+      <p>每段出发：车身贴死同一条边线/角，车头按正面图小尖摆。每次位置角度一模一样，调出来的数才作数。跑歪了先查摆位，别急着改秒数。</p>
+    </div>
+    <div class="rule">
+      <h3>记法</h3>
+      <p>第 1 次试跑把秒数、功率写进格；后两次在旁边补实测值。成功 2 次在右边框里打 ✓，这一段就过了，接下一段。</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
