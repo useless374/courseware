@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>智驾小车 第9课 · 自动跟车</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#1A1A1A;overflow:hidden;font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+#stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:center center;background:#fff;box-shadow:0 0 60px rgba(0,0,0,.5);overflow:hidden}
+.slide{position:absolute;inset:0;padding:64px 120px;display:none;flex-direction:column;justify-content:center}
+.slide.on{display:flex}
+.bar{position:absolute;left:0;top:0;width:100%;height:14px;background:#E36414}
+.kicker{font-size:20px;font-weight:700;color:#E36414;letter-spacing:.04em;margin:6px 0 10px}
+h1{font-size:48px;font-weight:700;color:#0F4C5C;line-height:1.2;margin-bottom:34px}
+ul{list-style:none;margin-top:6px}
+li{font-size:35px;line-height:1.45;color:#1F2937;margin-bottom:22px;padding-left:40px;position:relative}
+li:before{content:"\25AA";position:absolute;left:2px;top:-2px;color:#E36414;font-weight:700}
+.q{font-size:35px;line-height:1.45;color:#1F2937;background:#E6F2F4;border-radius:10px;padding:16px 28px;margin-bottom:12px}
+.q .n{color:#E36414;font-weight:700;margin-right:12px}
+.ans{font-size:32px;line-height:1.5;color:#0F4C5C;background:#F2F8F9;border-left:8px solid #E36414;padding:14px 24px;margin:-2px 0 20px 24px;border-radius:0 8px 8px 0}
+.hint{font-size:32px;line-height:1.5;color:#8A6A16;background:#FBF1D8;border-left:8px solid #D9A21B;padding:16px 24px;margin:12px 0;border-radius:0 8px 8px 0}
+.code{font-family:Consolas,"Courier New",monospace;font-size:30px;line-height:1.65;background:#0B121A;border-radius:12px;padding:26px 34px;color:#D7E3EA;white-space:pre-wrap}
+.sub{font-size:31px;color:#6B7280;line-height:1.5;margin-top:16px}
+.sub b{color:#E36414}
+.reveal{color:transparent!important;user-select:none;position:relative;transition:color .25s ease}
+.reveal::after{content:"?";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#BCC9CD;font-size:28px;background-color:#F1F6F7;background-image:repeating-linear-gradient(135deg,rgba(15,76,92,.05) 0 12px,transparent 12px 24px);border-radius:8px}
+.reveal.show{color:inherit!important}
+.reveal.show::after{display:none}
+.cover{background:#0F4C5C;flex-direction:row;align-items:center;justify-content:space-between;padding:0 120px 0 150px}
+.cover h1{color:#fff;font-size:76px;margin-bottom:24px}
+.cover .kicker{color:#BFD9DF;font-size:22px;margin-bottom:16px;letter-spacing:.1em}
+.cover .sub{color:#BFD9DF;font-size:30px;margin-top:0}
+#foot{position:absolute;left:60px;bottom:18px;font-size:16px;color:#6B7280}
+#pager{position:absolute;right:60px;bottom:18px;font-size:16px;color:#6B7280}
+#hint{position:absolute;right:60px;bottom:46px;font-size:14px;color:#C2C9CB;letter-spacing:.12em}
+#nav{position:fixed;right:18px;bottom:18px;display:none;gap:12px;z-index:10}
+#nav button{width:64px;height:64px;border-radius:50%;border:0;background:rgba(15,76,92,.85);color:#fff;font-size:34px}
+#rotate{position:fixed;inset:0;background:#0F4C5C;color:#fff;display:none;align-items:center;justify-content:center;text-align:center;font-size:20px;z-index:20}
+img.shot{max-height:520px;max-width:100%;display:block;margin:0 auto;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.15)}
+@media (max-width:900px){#nav{display:flex}}
+@media (max-width:900px) and (orientation:portrait){#rotate{display:flex}}
+</style></head>
+<body><div id="stage">
+
+<section class="slide cover on"><div class="bar"></div><div><div class="kicker">智驾小车 · 第 9 课</div><h1>自动跟车</h1><div class="sub">让小车自己跟着前面的目标走<br>太远就追 · 太近就停 · 越近越温柔</div></div><svg width="420" height="420" viewBox="0 0 420 420"><circle cx="210" cy="120" r="46" stroke="#BFD9DF" stroke-width="8" fill="none"/><rect x="150" y="250" width="120" height="90" rx="18" stroke="#E36414" stroke-width="10" fill="none"/><path d="M210 166 L210 240" stroke="#E36414" stroke-width="8" stroke-dasharray="4 14" stroke-linecap="round"/><circle cx="178" cy="350" r="14" fill="#0F4C5C"/><circle cx="242" cy="350" r="14" fill="#0F4C5C"/></svg></section>
+
+<section class="slide"><div class="bar"></div><div class="kicker">今天</div><h1>给小车装一只"测距眼睛"</h1><ul><li>超声波读出前车有多远，把<b>距离</b>变成<b>动作</b></li><li>4 个任务，一个比一个聪明，每步都能单独演示</li><li>核心升级：从上节课的"if 开关"到这节课的"公式连续调速"</li></ul><p class="hint">上节课指南小车靠电子罗盘读<b>方向</b>；这节课换超声波，读的是<b>距离</b>。</p></section>
+
+<section class="slide"><div class="bar"></div><div class="kicker">复习 · 上节课</div><h1>三个问题</h1><div class="q"><span class="n">Q1</span>上节课小车怎么知道自己朝南？</div><div class="ans reveal">电子罗盘读方向角，转小车角度值跟着变（0~359）。</div><div class="q"><span class="n">Q2</span>罗盘为什么每次上传程序后要重新校准？</div><div class="ans reveal">周围有磁场干扰（音箱、磁铁、金属桌），不校准数值会乱跳。</div><div class="q"><span class="n">Q3</span>这节课换一只"眼睛"——超声波量的是什么？</div><div class="ans reveal">距离。它发超声波、算回声时间，测出前面物体离它多少厘米。</div></section>
+
+<section class="slide"><div class="bar"></div><div class="kicker">准备 · 接线先查</div><h1>接错线，整节课报废</h1><ul><li>超声波 <b>Trig → P8</b>，<b>Echo → P7</b>，单位选 <b>cm</b></li><li>每组在车前方放一个"前车"目标：纸板 / 书本都行</li><li>空地：车正前方至少留 <b>1 米</b>，挡住桌沿台阶</li></ul><p class="hint">超声波对着光滑面、斜面、或不到 2cm 会读数异常——演示时避开。线松是这节课头号事故。</p></section>
+
+<section class="slide"><div class="bar"></div><div class="kicker">任务 1 · 距离过近停车</div><h1>8 厘米是条安全线</h1><div class="code">循环执行：
+  屏幕第1行 显示 [超声波距离 Trig P8 Echo P7 单位cm]
+  如果 &lt;距离 &gt; 8&gt; ：Valon 前进 速度 100
+  否则：Valon 停止</div><p class="sub">做完这步：拿纸板慢慢逼近，车在 8cm 处自己刹停</p><p class='hint'>阈值别填反：是"距离 &gt; 8 才前进"，写成 &lt; 8 行为正好相反。</p></section>
+
+<section class="slide"><div class="bar"></div><div class="kicker">任务 2 · 加开关</div><h1>A 挂挡，B 熄火</h1><div class="code">ESP32 主程序
+  等待直到 [按键 A 按下]      ← 放在循环外面，只启动一次
+  重复执行 直到 [按键 B 按下]：
+      （任务1 的读数 + 判断 整段搬进来）
+  Valon 停止                 ← 退出后补一句，否则车继续跑</div><p class="sub">做完这步：按 A 才开始跟，随时按 B 停下</p><p class='hint'>"等待 A"要放在循环<b>外面</b>；放进循环里每圈都等一次，车就一卡一卡。</p></section>
+
+<section class="slide"><div class="bar"></div><div class="kicker">任务 3 · 全课核心</div><h1>从"猛走猛停"到"连续调速"</h1><ul><li>真实辅助驾驶不会一脚油门一脚刹车，乘客会晕</li><li>让车速和"还差多远"挂钩：<b>差距大追得猛，差距小慢慢靠</b></li><li>先建两个变量：<b>车距</b>（目标=8）、<b>车速</b></li></ul><p class="hint">这里的 8 不再是刹车线，而是我们想<b>一直保持</b>的目标车距。</p></section>
+
+<section class="slide"><div class="bar"></div><div class="kicker">任务 3 · 三个数</div><h1>车速公式怎么来的</h1><div class="code">差距 = 超声波距离 − 车距(8)
+车速 = 差距 × 15 + 20
+如果 &lt;差距 &gt; 0&gt;：前进 车速；屏幕第3行 显示 车速
+否则：停止</div><ul style="margin-top:18px"><li><b>车距 8</b>：想保持的目标距离</li><li><b>×15</b>：差距只有几厘米，放大 15 倍才够驱动（灵敏度）</li><li><b>+20</b>：电机转太慢不转，补 20 保证能慢慢挪（起步低保）</li></ul></section>
+
+<section class="slide"><div class="bar"></div><div class="kicker">任务 3 · 动手探究</div><h1>改两个数，看车的脾气</h1><ul><li>把 ×15 改成 <b>5</b> 试一次，再改成 <b>30</b> 试一次</li><li>哪种"太肉"追不上？哪种"太窜"容易撞？</li><li>为什么差距 ≤ 0 必须停车？</li></ul><p class="hint">×15、+20 是经验值，<b>不同小车不一样</b>，这节课要现场调出你这台的值，不是背答案。</p><div class="ans reveal">车不会自动驾驶倒车——差距≤0 说明已经贴进目标距离以内，再追就撞了，所以停。</div></section>
+
+<section class="slide"><div class="bar"></div><div class="kicker">任务 4 · 辅助驾驶灯</div><h1>告诉周围：我在自动驾驶</h1><div class="code">按 A 进入跟车时：灯号 0、2 点亮（指定颜色）
+循环里"差距 ≤ 0 停车"那一出口：关闭全部 LED
+按 B 退出时：关闭全部 LED</div><p class="sub">做完这步：跟车时亮灯，停下、退出时熄灯</p><p class='hint'>停车和退出是<b>两个出口</b>，两个出口都要关灯，否则灯一直亮。</p></section>
+
+<section class="slide"><div class="bar"></div><div class="kicker">卡住了看这里</div><h1>五个最常见的坑</h1><ul class="reveal"><li>屏幕没数 / 数乱跳 → 先查 Trig-P8、Echo-P7 接线和单位 cm</li><li>车行为正好相反 → 阈值或差距的大于号填反</li><li>按 A 没反应 / 一卡一卡 → "等待 A"被放进了循环里</li><li>车贴着目标还在拱 → 差距≤0 的停车分支没写，或没关灯</li><li>电机不转 / 追不上 → 调 +20 低保和 ×15 系数</li></ul></section>
+
+<section class="slide"><div class="bar"></div><div class="kicker">收尾</div><h1>三个问题</h1><div class="q"><span class="n">Q1</span>这节课和第5课超声波报警器，用的同一只眼睛，差别在哪？</div><div class="ans reveal">报警器只用距离做"if 开关"（超线就响）；这节课把距离放进公式，连续控制车速。</div><div class="q"><span class="n">Q2</span>车速 = 差距×15+20 里，15 和 20 各管什么？</div><div class="ans reveal">15 是放大灵敏度（越大越窜），20 是起步低保（保证电机转得动）。</div><div class="q"><span class="n">Q3</span>为什么真实车企要研究"平顺跟车"，而不是猛走猛停？</div><div class="ans reveal">速度突变乘客会不适、也觉得功能不可靠；连续调速才像真正的辅助驾驶。</div></section>
+
+<div id="nav"><button id="prev">‹</button><button id="next">›</button></div>
+<div id="rotate" onclick="this.style.display='none'">把手机横过来看，更清楚<br><br><span style="font-size:15px;opacity:.7">点一下继续</span></div>
+<div id="foot">智驾小车 第9课 · 自动跟车 · 博世凯 2026-11-27</div>
+<div id="hint">空格 揭晓</div><div id="pager"></div>
+</div>
+<script>
+const stage=document.getElementById('stage'),slides=[...document.querySelectorAll('.slide')],pager=document.getElementById('pager');
+let i=0;
+function view(){slides.forEach((s,k)=>s.classList.toggle('on',k===i));pager.textContent=(i+1)+' / '+slides.length}
+function go(n){i=Math.max(0,Math.min(slides.length-1,n));view()}
+function resize(){const s=Math.min(innerWidth/1600,innerHeight/900);stage.style.transform='translate(-50%,-50%) scale('+s+')'}
+addEventListener('resize',resize);resize();view();
+addEventListener('keydown',function(e){
+ if(e.key==='ArrowRight'||e.key==='PageDown'){e.preventDefault();go(i+1)}
+ if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(i-1)}
+ if(e.key===' '){e.preventDefault();var r=[...slides[i].querySelectorAll('.reveal')].find(function(x){return !x.classList.contains('show')});if(r){r.classList.add('show')}else{go(i+1)}}
+});
+document.getElementById('prev').onclick=function(){go(i-1)};
+document.getElementById('next').onclick=function(){go(i+1)};
+stage.addEventListener('click',function(e){if(e.clientX>innerWidth*0.6)go(i+1);else if(e.clientX<innerWidth*0.4)go(i-1)});
+</script></body></html>
