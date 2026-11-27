@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>机器人编程 · 遥控小车</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#1A1A1A;overflow:hidden;
+    font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+  #stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;
+    transform-origin:center center;background:#FFFFFF;
+    box-shadow:0 0 60px rgba(0,0,0,.5);overflow:hidden}
+  .slide{position:absolute;inset:0;padding:74px 150px;display:none;
+    flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .slide.pad{padding-top:60px;padding-bottom:60px}
+
+  .bar{position:absolute;left:0;top:0;width:100%;height:14px;background:#5A8F29}
+
+  .kicker{font-size:20px;font-weight:700;color:#5A8F29;letter-spacing:.04em;
+    margin:6px 0 10px}
+  h1{font-size:50px;font-weight:700;color:#0F4C5C;line-height:1.2;margin-bottom:40px}
+
+  ul{list-style:none;margin-top:6px}
+  li{font-size:36px;line-height:1.45;color:#1F2937;margin-bottom:24px;
+    padding-left:44px;position:relative}
+  li:before{content:"▪";position:absolute;left:2px;top:-2px;color:#5A8F29;
+    font-weight:700}
+
+  .q{font-size:36px;line-height:1.45;color:#1F2937;background:#EDF5E1;
+    border-radius:10px;padding:18px 30px;margin-bottom:14px;font-weight:400}
+  .q .n{color:#5A8F29;font-weight:700;margin-right:14px}
+
+  .ans{font-size:33px;line-height:1.5;color:#0F4C5C;background:#F2F8F9;
+    border-left:8px solid #5A8F29;padding:16px 26px;margin:-2px 0 22px 26px;
+    border-radius:0 8px 8px 0}
+  .hint{font-size:33px;line-height:1.5;color:#8A6A16;background:#FBF1D8;
+    border-left:8px solid #D9A21B;padding:18px 26px;margin:14px 0;
+    border-radius:0 8px 8px 0}
+
+  .code{font-family:Consolas,"Courier New",monospace;font-size:32px;line-height:1.7;
+    background:#0B121A;border-radius:12px;padding:30px 40px;color:#D7E3EA}
+
+  .cols{display:flex;gap:38px;margin-top:10px;margin-bottom:10px}
+  .card{flex:1;background:#F4F9EC;border-radius:12px;padding:28px 32px;
+    font-size:32px;line-height:1.5;color:#1F2937}
+  .card b{display:block;color:#0F4C5C;font-size:28px;margin-bottom:10px}
+
+  .sub{font-size:32px;color:#6B7280;line-height:1.5;margin-top:16px}
+
+  /* 遮挡 */
+  .reveal{color:transparent!important;user-select:none;position:relative;
+    transition:color .25s ease}
+  .reveal::after{content:"?";position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    color:#BCC9CD;font-size:30px;font-weight:300;
+    background-color:#F1F6F7;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(15,76,92,.05) 0 12px,transparent 12px 24px);
+    border-radius:8px}
+  .code.reveal::after{color:#46606E;background-color:#0E1822;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(255,255,.05) 0 12px,transparent 12px 24px)}
+  ul.reveal::after{color:#C6D1D4;background-color:#FFFFFF;
+    background-image:repeating-linear-gradient(135deg,
+      rgba(15,76,92,.04) 0 12px,transparent 12px 24px)}
+  .reveal.show{color:inherit!important;user-select:auto!important}
+  .ans.reveal.show{color:#0F4C5C!important}
+  .code.reveal.show{color:#D7E3EA!important}
+  .hint.reveal.show{color:#8A6A16!important}
+  ul.reveal.show li{color:#1F2937!important}
+  .reveal.show::after{display:none}
+
+  /* 封面 */
+  .cover{background:#0F4C5C;flex-direction:row;align-items:center;
+    justify-content:space-between;padding:0 120px 0 150px}
+  .cover-left{max-width:760px}
+  .cover-art{width:430px;height:430px;flex:0 0 auto}
+  .cover h1{color:#FFFFFF;font-size:78px;margin-bottom:26px}
+  .cover .kicker{color:#BFD9DF;font-size:22px;margin-bottom:18px;letter-spacing:.1em}
+  .cover .sub{color:#BFD9DF;font-size:29px;margin-top:0}
+  .cover .bar{background:#5A8F29}
+
+  /* 搭建图页：左文字 右大图 */
+  .build{position:absolute;right:80px;top:50%;transform:translateY(-50%);
+    width:600px;border-radius:12px;box-shadow:0 10px 34px rgba(15,76,92,.22)}
+  .withimg h1,.withimg ul,.withimg .hint,.withimg .sub{max-width:820px}
+  .withimg li{font-size:33px;margin-bottom:20px}
+  .prog{position:absolute;right:80px;top:50%;transform:translateY(-50%);
+    width:680px;border-radius:12px;box-shadow:0 10px 34px rgba(15,76,92,.22)}
+  .withprog h1,.withprog ul,.withprog .hint,.withprog .sub{max-width:620px}
+  .withprog li{font-size:30px;margin-bottom:18px}
+
+  /* 返回入口 */
+  #home{position:absolute;right:10px;top:8px;width:52px;height:44px;z-index:5;
+    display:flex;align-items:flex-start;justify-content:flex-end;text-decoration:none}
+  #home i{width:9px;height:9px;border-radius:50%;background:#E36414;
+    opacity:.18;margin:6px 8px 0 0;font-style:normal}
+  #home:hover i{opacity:.55}
+  #foot{position:absolute;left:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #pager{position:absolute;right:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #hint{position:absolute;right:72px;bottom:52px;font-size:15px;color:#C2C9CB;
+    letter-spacing:.12em;transition:opacity .3s}
+  #nav{position:fixed;right:18px;bottom:18px;display:none;gap:12px;z-index:10}
+  #nav button{width:64px;height:64px;border-radius:50%;border:0;
+    background:rgba(15,76,92,.85);color:#fff;font-size:34px;line-height:1}
+  #rotate{position:fixed;inset:0;background:#0F4C5C;color:#fff;display:none;
+    align-items:center;justify-content:center;text-align:center;font-size:20px;z-index:20}
+  @media (max-width:900px){#nav{display:flex}}
+  @media (max-width:900px) and (orientation:portrait){#rotate{display:flex}}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="slide cover on">
+    <div class="bar"></div>
+    <div class="cover-left">
+      <div class="kicker">机器人编程 · 高级班</div>
+      <h1>遥控小车</h1>
+      <div class="sub">先搭一辆车，再做一个遥控器<br>推摇杆，车就跟着走</div>
+    </div>
+    <div class="cover-art">
+      <svg viewBox="0 0 420 420" fill="none">
+        <rect x="70" y="190" width="230" height="90" rx="18" stroke="#9CCC52" stroke-width="10"/>
+        <circle cx="115" cy="300" r="42" stroke="#9CCC52" stroke-width="12"/>
+        <circle cx="300" cy="300" r="42" stroke="#9CCC52" stroke-width="12"/>
+        <circle cx="207" cy="300" r="30" stroke="#BFD9DF" stroke-width="9"/>
+        <path d="M150 196 L150 150 L235 150 L235 196" stroke="#E36414" stroke-width="10" stroke-linejoin="round"/>
+        <path d="M330 120 L360 90" stroke="#E36414" stroke-width="10" stroke-linecap="round"/>
+        <circle cx="368" cy="82" r="12" fill="#E36414"/>
+        <path d="M330 120 L330 190" stroke="#E36414" stroke-width="10" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">今天</div>
+    <h1>这节课做三件事</h1>
+    <div class="cols">
+      <div class="card"><b>① 搭车</b>两个电机 + 三个轮子<br>一个集线器当大脑</div>
+      <div class="card"><b>② 搭遥控器</b>集线器 + 倾斜传感器<br>加一根摇杆</div>
+      <div class="card"><b>③ 配对编程</b>5 个方向<br>5 组动作</div>
+    </div>
+    <p class="sub">做完的标准：推动摇杆，车能前进、后退、左转、右转、停下。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">导入 · 先想一想</div>
+    <h1>三个问题</h1>
+    <div class="q"><span class="n">Q1</span>一辆车有两个电机，怎么让它拐弯？</div>
+    <div class="ans reveal">两个轮子转得不一样：一边快一边慢，车就往慢的那边拐。</div>
+    <div class="q"><span class="n">Q2</span>你推摇杆，遥控器怎么知道方向？</div>
+    <div class="ans reveal">摇杆底下装的是倾斜传感器，摇杆一推，传感器就跟着歪。</div>
+    <div class="q"><span class="n">Q3</span>传感器在遥控器上，车怎么收到命令？</div>
+    <div class="ans reveal">两个集线器先配对，程序里一个发、一个收，方向就变成动作。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">认识零件</div>
+    <h1>先认人，再动手</h1>
+    <ul>
+      <li><b>智能集线器</b>：白色大块，电池、开关、蓝牙都在里面</li>
+      <li><b>电机 ×2</b>：一个管左边轮子，一个管右边轮子</li>
+      <li><b>倾斜传感器</b>：能感知「往哪边歪」，遥控器的核心</li>
+      <li><b>摇杆零件</b>：9 号轴 + 橘色球头，插在遥控器上</li>
+    </ul>
+    <p class="hint">先清点：集线器 2 个、电机 2 个、倾斜传感器 1 个、连接线若干。少一个都做不完。</p>
+  </section>
+
+  <section class="slide pad withimg">
+    <div class="bar"></div>
+    <div class="kicker">搭建 单元1 · 第 1-3 步</div>
+    <img class="build" src="images/wedo-remote/p02.jpg" alt="第1步">
+    <h1>先拼车架</h1>
+    <ul>
+      <li>集线器放中间，两根长梁一左一右夹住</li>
+      <li>白色小块封两头，绿色长梁补侧边</li>
+      <li>翻过来看：底面要平，四角不翘</li>
+    </ul>
+    <p class="hint">❌ 两根长梁一前一后错开 → 后面电机装不上，现在就对齐。</p>
+  </section>
+
+  <section class="slide pad withimg">
+    <div class="bar"></div>
+    <div class="kicker">搭建 单元2 · 第 4-6 步</div>
+    <img class="build" src="images/wedo-remote/p05.jpg" alt="第4步">
+    <h1>装两个电机</h1>
+    <ul>
+      <li>两根黑梁先固定在车架两侧，当电机的「座位」</li>
+      <li>蓝色梁竖着卡住电机，橘色板从上下夹紧</li>
+      <li>绿色板盖顶，电机只露出输出轴</li>
+    </ul>
+    <p class="sub">装完用手推一下电机轴：能转、不刮梁，才算装对。</p>
+  </section>
+
+  <section class="slide pad withimg">
+    <div class="bar"></div>
+    <div class="kicker">搭建 单元3 · 第 7-10 步</div>
+    <img class="build" src="images/wedo-remote/p09.jpg" alt="第8步">
+    <h1>装轮子 · 三只脚站稳</h1>
+    <ul>
+      <li>两个大轮子分别压到左右电机的轴上</li>
+      <li>中间前方插一根 <b>4 号轴钉</b>，当万向轮</li>
+      <li>把车放桌上推一推：三轮着地、不歪不倒</li>
+    </ul>
+    <p class="hint">两个驱动轮必须一左一右，装到同一侧就只会转圈。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">原理 · 本课核心</div>
+    <h1>两个轮子转不一样，车就拐弯</h1>
+    <ul>
+      <li>两个电机各管一边：都正转 = 直行</li>
+      <li>左边慢、右边快 = 往左拐；反过来往右拐</li>
+      <li>一边停、一边转 = 原地打转</li>
+    </ul>
+    <p class="sub">这叫<b>差速转弯</b>：不靠方向盘，靠两个轮子的速度差。汽车、坦克都是这个道理。</p>
+  </section>
+
+  <section class="slide pad withimg">
+    <div class="bar"></div>
+    <div class="kicker">搭建 单元4 · 第 11-14 步</div>
+    <img class="build" src="images/wedo-remote/p14.jpg" alt="第13步">
+    <h1>搭遥控器</h1>
+    <ul>
+      <li>第二个集线器当底座，绿砖垫高</li>
+      <li>倾斜传感器竖着固定在中间，负责「感知方向」</li>
+      <li>9 号轴穿过绿砖，顶端装橘色球头，当摇杆</li>
+    </ul>
+    <p class="hint">摇杆要能前后左右晃、松手回中间；卡住就拔出来重新插。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">原理 · 倾斜传感器</div>
+    <h1>摇杆往哪歪，它就知道往哪开</h1>
+    <ul>
+      <li>倾斜传感器能分辨 5 种状态：上、下、左、右、摇一摇</li>
+      <li>摇杆一推，传感器跟着倾斜，程序读到方向</li>
+      <li>松手回中间 = 没有方向 = 车停下</li>
+    </ul>
+    <p class="sub">这就是遥控器的秘密：不是发信号，是「量自己歪了多少」。</p>
+  </section>
+
+  <section class="slide pad withimg">
+    <div class="bar"></div>
+    <div class="kicker">连接 · 第 15 步</div>
+    <img class="build" src="images/wedo-remote/p16.jpg" alt="第15步">
+    <h1>接好线，再配对</h1>
+    <ul>
+      <li>车上的集线器：两个电机分别插 A、B 口</li>
+      <li>遥控器的集线器：插倾斜传感器</li>
+      <li>两个集线器都开机，和平板配对，绿灯常亮 = 连上</li>
+    </ul>
+    <p class="hint">灯一闪一闪 = 没连上；先关掉重开，再配一次。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">编程</div>
+    <h1>5 个方向，5 组动作</h1>
+    <img src="images/wedo-remote/program.jpg" alt="程序"
+         style="display:block;width:820px;margin:0 auto;border-radius:12px;box-shadow:0 10px 34px rgba(15,76,92,.22)">
+    <p class="sub" style="text-align:center">每组都是「当倾斜传感器…」开头，条件下面放两个电机块。<br>先摆「直行」那一组，跑通了再补其他方向。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">调试</div>
+    <h1>车不动，或者不听话</h1>
+    <ul>
+      <li class="reveal">完全不动：集线器没连上／电机没插紧／没点运行</li>
+      <li class="reveal">方向反了：那一组两个电机块，换成反方向</li>
+      <li class="reveal">只会直走：左右两组没配对，检查两个轮子是不是分别接 A、B</li>
+      <li class="reveal">一直抖／乱转：摇杆没回中，倾斜传感器没固定牢</li>
+    </ul>
+    <p class="sub">先自己找两分钟，再来找老师。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">挑战</div>
+    <h1>三关，一关比一关难</h1>
+    <div class="cols">
+      <div class="card"><b>第一关 · 直行</b>直线冲过 2 米<br>不跑偏</div>
+      <div class="card"><b>第二关 · 绕障</b>绕过两个瓶子<br>不碰倒</div>
+      <div class="card"><b>第三关 · 入库</b>倒进纸箱「车库」<br>车尾先进</div>
+    </div>
+    <p class="sub">三关都过 = 遥控小车合格。过不了的，回头查轮子和方向。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">收尾</div>
+    <h1>三个问题</h1>
+    <div class="q"><span class="n">Q1</span>车为什么会拐弯？</div>
+    <div class="ans reveal">左右两个轮子转速不一样，车就往慢的一边拐。</div>
+    <div class="q"><span class="n">Q2</span>遥控器靠什么感知方向？</div>
+    <div class="ans reveal">倾斜传感器。摇杆把传感器推歪，程序读倾斜方向。</div>
+    <div class="q"><span class="n">Q3</span>为什么搭完要先测直行？</div>
+    <div class="ans reveal">直行是基准。直行都不对，说明轮子或接线有问题，先修基础再加方向。</div>
+  </section>
+
+  <div id="nav"><button id="prev" aria-label="上一页">‹</button><button id="next" aria-label="下一页">›</button></div>
+  <div id="rotate" onclick="this.dataset.off=1;this.style.display='none'">把手机横过来看，更清楚<br><br><span style="font-size:15px;opacity:.7">点一下继续</span></div>
+  <div id="foot">机器人编程 · 高级班 · 遥控小车 · 2026-11-28</div>
+  <a id="home" href="index.html"><i></i></a>
+  <div id="hint">空格 揭晓</div>
+  <div id="pager"></div>
+</div>
+
+<script>
+const stage=document.getElementById('stage');
+const slides=[...document.querySelectorAll('.slide')];
+const pager=document.getElementById('pager');
+const hint=document.getElementById('hint');
+let i=0;
+{const _h=parseInt((location.hash||'').replace('#',''),10);if(!isNaN(_h))i=Math.min(Math.max(_h-1,0),slides.length-1);}
+function view(){
+  const v=window.visualViewport;
+  const w=Math.min(innerWidth, v?v.width:innerWidth, screen.width||innerWidth);
+  const h=Math.min(innerHeight, v?v.height:innerHeight, screen.height||innerHeight);
+  return {w,h};
+}
+function fit(){
+  const {w,h}=view();
+  const s=Math.min(w/1600,h/900);
+  stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+  const rot=document.getElementById('rotate');
+  if(rot) rot.style.display=(!rot.dataset.off && h>w && w<=1000)?'flex':'none';
+}
+addEventListener('resize',fit);
+addEventListener('orientationchange',()=>setTimeout(fit,200));
+if(window.visualViewport){
+  visualViewport.addEventListener('resize',fit);
+  visualViewport.addEventListener('scroll',fit);
+}
+fit();
+function paint(){
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  slides[i].querySelectorAll('.reveal').forEach(e=>e.classList.remove('show'));
+  pager.textContent=(i+1)+' / '+slides.length;
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+function go(d){ i=Math.max(0,Math.min(slides.length-1,i+d)); paint(); try{history.replaceState(null,'','#'+(i+1));}catch(e){} }
+function reveal(){
+  const n=slides[i].querySelector('.reveal:not(.show)');
+  if(n) n.classList.add('show');
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+addEventListener('keydown',e=>{
+  if(['ArrowRight','PageDown'].includes(e.key)){e.preventDefault();go(1)}
+  else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(-1)}
+  else if(e.key===' '||e.key==='Enter'){e.preventDefault();reveal()}
+  else if(e.key==='a'||e.key==='A'){e.preventDefault();slides[i].querySelectorAll('.reveal').forEach(x=>x.classList.add('show'));hint.style.opacity=0}
+  else if(e.key==='Home'){i=0;paint()}
+  else if(e.key==='End'){i=slides.length-1;paint()}
+  else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+});
+let _lastTouch=0;
+stage.addEventListener('click',()=>{ if(Date.now()-_lastTouch<600) return; reveal(); });
+let _sx=0,_sy=0;
+stage.addEventListener('touchstart',e=>{const t=e.touches[0];_sx=t.clientX;_sy=t.clientY;},{passive:true});
+stage.addEventListener('touchend',e=>{
+  _lastTouch=Date.now();
+  const t=e.changedTouches[0], dx=t.clientX-_sx, dy=t.clientY-_sy;
+  if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)){ go(dx<0?1:-1); }
+  else { reveal(); }
+},{passive:true});
+document.getElementById('prev').onclick=()=>go(-1);
+document.getElementById('next').onclick=()=>go(1);
+paint();
+</script>
+</body>
+</html>

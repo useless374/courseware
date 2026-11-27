@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>科创探究 · 3D打印第6课 雪人收官</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#1A1A1A;overflow:hidden;font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+  #stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:center center;background:#FFFFFF;box-shadow:0 0 60px rgba(0,0,0,.5);overflow:hidden}
+  .slide{position:absolute;inset:0;padding:70px 150px;display:none;flex-direction:column;justify-content:center}
+  .slide.on{display:flex}
+  .slide.pad{padding-top:58px;padding-bottom:58px}
+  .bar{position:absolute;left:0;top:0;width:100%;height:14px;background:#E36414}
+  .kicker{font-size:20px;font-weight:700;color:#E36414;letter-spacing:.04em;margin:6px 0 10px}
+  h1{font-size:48px;font-weight:700;color:#0F4C5C;line-height:1.2;margin-bottom:36px}
+  ul{list-style:none;margin-top:6px}
+  li{font-size:35px;line-height:1.45;color:#1F2937;margin-bottom:22px;padding-left:44px;position:relative}
+  li:before{content:"▪";position:absolute;left:2px;top:-2px;color:#E36414;font-weight:700}
+  .q{font-size:35px;line-height:1.4;color:#1F2937;background:#E6F2F4;border-radius:10px;padding:16px 28px;margin-bottom:12px}
+  .q .n{color:#E36414;font-weight:700;margin-right:14px}
+  .ans{font-size:32px;line-height:1.45;color:#0F4C5C;background:#F2F8F9;border-left:8px solid #E36414;padding:14px 26px;margin:-2px 0 18px 26px;border-radius:0 8px 8px 0}
+  .hint{font-size:32px;line-height:1.45;color:#8A6A16;background:#FBF1D8;border-left:8px solid #D9A21B;padding:16px 26px;margin:12px 0;border-radius:0 8px 8px 0}
+  .code{font-family:Consolas,"Courier New",monospace;font-size:31px;line-height:1.7;background:#0B121A;border-radius:12px;padding:28px 38px;color:#D7E3EA}
+  .cols{display:flex;gap:34px;margin-top:8px;margin-bottom:8px}
+  .card{flex:1;background:#F2F8F9;border-radius:12px;padding:24px 28px;font-size:30px;line-height:1.45;color:#1F2937}
+  .card b{display:block;color:#0F4C5C;font-size:27px;margin-bottom:8px}
+  .sub{font-size:32px;color:#6B7280;line-height:1.5;margin-top:14px}
+  .num{color:#E36414;font-weight:700}
+  table{width:100%;border-collapse:collapse;font-size:28px;color:#1F2937;margin-top:8px}
+  th{background:#0F4C5C;color:#fff;font-weight:700;padding:12px 16px;text-align:left}
+  td{padding:10px 16px;border-bottom:1px solid #E3ECEE}
+  tr:nth-child(even) td{background:#F5FAFB}
+  td.c{text-align:center;color:#E36414;font-weight:700;white-space:nowrap}
+  .reveal{color:transparent!important;user-select:none;position:relative;transition:color .25s ease}
+  .reveal::after{content:"?";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#BCC9CD;font-size:30px;font-weight:300;background-color:#F1F6F7;background-image:repeating-linear-gradient(135deg,rgba(15,76,92,.05) 0 12px,transparent 12px 24px);border-radius:8px}
+  .code.reveal::after{color:#46606E;background-color:#0E1822;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 12px,transparent 12px 24px)}
+  ul.reveal::after{color:#C6D1D4;background-color:#FFFFFF;background-image:repeating-linear-gradient(135deg,rgba(15,76,92,.04) 0 12px,transparent 12px 24px)}
+  .reveal.show{color:inherit!important}
+  .ans.reveal.show{color:#0F4C5C!important}
+  .code.reveal.show{color:#D7E3EA!important}
+  .hint.reveal.show{color:#8A6A16!important}
+  ul.reveal.show li{color:#1F2937!important}
+  .reveal.show{user-select:auto!important}
+  .reveal.show::after{display:none}
+  .cover{background:#0F4C5C;flex-direction:row;align-items:center;justify-content:space-between;padding:0 110px 0 150px}
+  .cover-left{max-width:800px}
+  .cover-art{width:440px;height:440px;flex:0 0 auto}
+  .cover h1{color:#FFFFFF;font-size:72px;margin-bottom:24px}
+  .cover .kicker{color:#BFD9DF;font-size:22px;margin-bottom:18px;letter-spacing:.1em}
+  .cover .sub{color:#BFD9DF;font-size:29px;margin-top:0}
+  .cover .bar{background:#E36414}
+  #home{position:absolute;right:10px;top:8px;width:52px;height:44px;z-index:5;display:flex;align-items:flex-start;justify-content:flex-end;text-decoration:none}
+  #home i{width:9px;height:9px;border-radius:50%;background:#E36414;display:block;margin:10px 14px 0 0}
+  #foot{position:absolute;left:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #pager{position:absolute;right:72px;bottom:22px;font-size:17px;color:#6B7280}
+  #hint{position:absolute;right:72px;bottom:52px;font-size:15px;color:#C2C9CB;letter-spacing:.12em;transition:opacity .3s}
+  #nav{position:fixed;right:18px;bottom:18px;display:none;gap:12px;z-index:10}
+  #nav button{width:64px;height:64px;border-radius:50%;border:0;background:rgba(15,76,92,.85);color:#fff;font-size:34px;line-height:1}
+  #rotate{position:fixed;inset:0;background:#0F4C5C;color:#fff;display:none;align-items:center;justify-content:center;text-align:center;font-size:20px;z-index:20}
+  @media (max-width:900px){#nav{display:flex}}
+  @media (max-width:900px) and (orientation:portrait){#rotate{display:flex}}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <section class="slide cover on">
+    <div class="bar"></div>
+    <div class="cover-left">
+      <div class="kicker">科创探究 · 3D 打印 第 6 课</div>
+      <h1>雪人收官</h1>
+      <div class="sub">底座 · 名字 · 帽子卡扣<br>做完这三件，雪人就是一件完整的作品</div>
+    </div>
+    <div class="cover-art">
+      <svg viewBox="0 0 420 420" fill="none">
+        <circle cx="210" cy="300" r="72" stroke="#BFD9DF" stroke-width="8"/>
+        <circle cx="210" cy="188" r="52" stroke="#BFD9DF" stroke-width="8"/>
+        <circle cx="210" cy="110" r="38" stroke="#BFD9DF" stroke-width="8"/>
+        <path d="M214 110 L256 102" stroke="#E36414" stroke-width="9" stroke-linecap="round"/>
+        <rect x="158" y="332" width="104" height="14" rx="6" fill="#E36414"/>
+        <rect x="150" y="346" width="120" height="8" rx="4" fill="#E36414"/>
+        <circle cx="244" cy="78" r="9" fill="#E36414"/>
+        <circle cx="176" cy="78" r="9" fill="#E36414"/>
+        <rect x="188" y="372" width="44" height="6" rx="3" fill="#E36414"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">今天</div>
+    <h1>给雪人加三个细节</h1>
+    <div class="cols">
+      <div class="card"><b>① 加底座</b>雪人底下长凸台<br>底座挖凹槽，插上去能站</div>
+      <div class="card"><b>② 刻名字</b>文字变成有厚度的实体<br>刻在底座上</div>
+      <div class="card"><b>③ 帽子卡扣</b>帽子里挖凹坑<br>头上长凸点，扣上「咔哒」</div>
+    </div>
+    <p class="sub">做完的标准：雪人插上底座不晃、名字看得清、帽子扣上甩不掉。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">导入 · 先想一想</div>
+    <h1>三个问题</h1>
+    <div class="q"><span class="n">Q1</span>两块零件，不用胶水怎么拼在一起？</div>
+    <div class="ans reveal">靠形状卡住：一块长凸、一块挖凹，合起来就锁住了。</div>
+    <div class="q"><span class="n">Q2</span>帽子和头，怎么才能扣住又拿得下来？</div>
+    <div class="ans reveal">用卡扣：凸点挤进凹坑，扣上「咔哒」，用力能拔开。</div>
+    <div class="q"><span class="n">Q3</span>输入的文字，怎么能变成看得见的厚度？</div>
+    <div class="ans reveal">把文字转成实体，再和零件组合，字就「长」出来了。</div>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">知识点 ① · 插接</div>
+    <h1>一凸一凹，就像插头和插座</h1>
+    <ul>
+      <li>雪人底下：长一个凸台</li>
+      <li>底座上面：挖一个凹槽</li>
+      <li>凸台插进凹槽 → 站得稳</li>
+      <li>要拿下来 → 直接拔出来</li>
+    </ul>
+    <p class="sub">这就是「插接」：靠形状卡住，不靠胶水。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">知识点 ① · 关键数字</div>
+    <h1>插接要留 0.3mm 的缝</h1>
+    <div class="code">凸台  φ30<br>凹槽  φ30.6</div>
+    <p class="sub" style="margin-top:24px">为什么不是一样大？</p>
+    <div class="hint reveal">打印机打印的时候，会把东西打胖一点点。凹槽留大 0.3mm，凸台才插得进去。</div>
+    <p class="sub reveal">这就是「间隙」：单边 0.3mm。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">知识点 ② · 卡扣</div>
+    <h1>凸点卡进凹坑，「咔哒」一下</h1>
+    <ul>
+      <li>头上：左右各一个凸点</li>
+      <li>帽子里：对应位置挖两个凹坑</li>
+      <li>扣下去 → 凸点挤进凹坑 → 锁住</li>
+      <li>要拔 → 得用点力气</li>
+    </ul>
+    <p class="sub">卡扣和插接不一样：插接轻松拔，卡扣要用力拔。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">知识点 ② · 五步做法</div>
+    <h1>卡扣怎么做</h1>
+    <ul>
+      <li>拖球体，直径 <span class="num">6</span>，放到头两侧</li>
+      <li>一半埋进头里，和头组合</li>
+      <li>再拖球体，直径 <span class="num">6.6</span>，点「孔」</li>
+      <li>放到帽子里、同高度，左右对称</li>
+      <li>组合，扣上试；紧了调 6.3，松了调 6.8</li>
+    </ul>
+    <p class="hint">两个凸点必须左右对称，不对称就扣不上。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">知识点 ③ · 文字转实体</div>
+    <h1>字不是画上去的，是「长」出来的</h1>
+    <ul>
+      <li>拖「文字」→ 打字 → 它变成一块有厚度的积木</li>
+      <li>想凹进去：把字设成「孔」，挖掉一层</li>
+      <li>想凸出来：把字直接和底座组合</li>
+      <li>试试：刻自己的名字，深度 <span class="num">1.5mm</span> 就够</li>
+    </ul>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">尺寸表</div>
+    <h1>记住这几个数</h1>
+    <table>
+      <tr><th>部位</th><th>尺寸</th><th>说明</th></tr>
+      <tr><td>凸台 / 凹槽</td><td class="c">φ30 / φ30.6</td><td>单边留 0.3mm 间隙</td></tr>
+      <tr><td>凸点 / 凹坑</td><td class="c">φ6 / φ6.6</td><td>紧了 6.3，松了 6.8</td></tr>
+      <tr><td>文字深度</td><td class="c">1.5mm</td><td>刻名字够清楚</td></tr>
+      <tr><td>文字高度</td><td class="c">2mm</td><td>太高容易断</td></tr>
+      <tr><td>底球直径</td><td class="c">60mm</td><td>基准尺寸，按比例改</td></tr>
+    </table>
+    <p class="sub">你的底球不是 60mm？所有数字按比例换算，拿不准就问老师。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">调试</div>
+    <h1>常见问题</h1>
+    <table>
+      <tr><th>现象</th><th>怎么办</th></tr>
+      <tr><td>插不进去</td><td>凹槽每边再放大 0.2mm</td></tr>
+      <tr><td>插上晃</td><td>凹槽缩小 0.2，或凸台加高</td></tr>
+      <tr><td>扣不上</td><td>凹坑球调成 6.8 再挖</td></tr>
+      <tr><td>太松会掉</td><td>凹坑球调成 6.3，或凸点加高</td></tr>
+      <tr><td>字贴不上去</td><td>先把文字转方向立起来，再移到表面</td></tr>
+    </table>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">下课前检查</div>
+    <h1>五条都过了才算完成</h1>
+    <ul>
+      <li>雪人底部有凸台，底座有凹槽，能插上</li>
+      <li>插上不晃、不穿模</li>
+      <li>帽子里有两个凹坑，扣上「咔哒」</li>
+      <li>底座上刻了自己的名字</li>
+      <li>三个零件都导出 STL，拍照留档</li>
+    </ul>
+    <p class="hint">底座单独打、雪人单独打、帽子单独打——分开才能插拔。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">导出</div>
+    <h1>导出三个文件</h1>
+    <div class="code reveal">雪人 → 导出 STL → 雪人-你的名字.stl<br>帽子 → 导出 STL → 帽子-你的名字.stl<br>底座 → 导出 STL → 底座-你的名字.stl</div>
+    <p class="sub">导出前看一眼：模型是不是躺平、有没有悬空的部分。</p>
+  </section>
+
+  <section class="slide pad">
+    <div class="bar"></div>
+    <div class="kicker">收尾</div>
+    <h1>三个问题</h1>
+    <div class="q"><span class="n">Q1</span>插接和卡扣，最大的区别是什么？</div>
+    <div class="ans reveal">插接轻松拔，卡扣要用力拔。一个能拆、一个锁得住。</div>
+    <div class="q"><span class="n">Q2</span>为什么凹槽要比凸台大 0.6mm？</div>
+    <div class="ans reveal">打印会胀一点点，留 0.3mm 单边间隙才插得进去。</div>
+    <div class="q"><span class="n">Q3</span>文字怎么从「平面」变成「实体」？</div>
+    <div class="ans reveal">拖文字 → 打字 → 设厚度 → 和零件组合，字就长出来了。</div>
+  </section>
+
+  <div id="nav"><button id="prev" aria-label="上一页">‹</button><button id="next" aria-label="下一页">›</button></div>
+  <div id="rotate" onclick="this.dataset.off=1;this.style.display='none'">把手机横过来看，更清楚<br><br><span style="font-size:15px;opacity:.7">点一下继续</span></div>
+  <div id="foot">科创探究 · 3D打印第6课 · 雪人收官 · 2026-11-28</div>
+  <a id="home" href="index.html"><i></i></a>
+  <div id="hint">空格 揭晓</div>
+  <div id="pager"></div>
+</div>
+
+<script>
+const stage=document.getElementById('stage');
+const slides=[...document.querySelectorAll('.slide')];
+const pager=document.getElementById('pager');
+const hint=document.getElementById('hint');
+let i=0;
+{const _h=parseInt((location.hash||'').replace('#',''),10);if(!isNaN(_h))i=Math.min(Math.max(_h-1,0),slides.length-1);}
+function view(){
+  const v=window.visualViewport;
+  const w=Math.min(innerWidth, v?v.width:innerWidth, screen.width||innerWidth);
+  const h=Math.min(innerHeight, v?v.height:innerHeight, screen.height||innerHeight);
+  return {w,h};
+}
+function fit(){
+  const {w,h}=view();
+  const s=Math.min(w/1600,h/900);
+  stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+  const rot=document.getElementById('rotate');
+  if(rot) rot.style.display=(!rot.dataset.off && h>w && w<=1000)?'flex':'none';
+}
+addEventListener('resize',fit);
+addEventListener('orientationchange',()=>setTimeout(fit,200));
+if(window.visualViewport){
+  visualViewport.addEventListener('resize',fit);
+  visualViewport.addEventListener('scroll',fit);
+}
+fit();
+function paint(){
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  slides[i].querySelectorAll('.reveal').forEach(e=>e.classList.remove('show'));
+  pager.textContent=(i+1)+' / '+slides.length;
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+function go(d){ i=Math.max(0,Math.min(slides.length-1,i+d)); paint(); try{history.replaceState(null,'','#'+(i+1));}catch(e){} }
+function reveal(){
+  const n=slides[i].querySelector('.reveal:not(.show)');
+  if(n) n.classList.add('show');
+  hint.style.opacity=slides[i].querySelector('.reveal:not(.show)')?1:0;
+}
+addEventListener('keydown',e=>{
+  if(['ArrowRight','PageDown'].includes(e.key)){e.preventDefault();go(1)}
+  else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(-1)}
+  else if(e.key===' '||e.key==='Enter'){e.preventDefault();reveal()}
+  else if(e.key==='a'||e.key==='A'){e.preventDefault();slides[i].querySelectorAll('.reveal').forEach(x=>x.classList.add('show'));hint.style.opacity=0}
+  else if(e.key==='Home'){i=0;paint()}
+  else if(e.key==='End'){i=slides.length-1;paint()}
+  else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+});
+let _lastTouch=0;
+stage.addEventListener('click',()=>{ if(Date.now()-_lastTouch<600) return; reveal(); });
+let _sx=0,_sy=0;
+stage.addEventListener('touchstart',e=>{const t=e.touches[0];_sx=t.clientX;_sy=t.clientY;},{passive:true});
+stage.addEventListener('touchend',e=>{
+  _lastTouch=Date.now();
+  const t=e.changedTouches[0], dx=t.clientX-_sx, dy=t.clientY-_sy;
+  if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)){ go(dx<0?1:-1); }
+  else { reveal(); }
+},{passive:true});
+document.getElementById('prev').onclick=()=>go(-1);
+document.getElementById('next').onclick=()=>go(1);
+paint();
+</script>
+</body>
+</html>
